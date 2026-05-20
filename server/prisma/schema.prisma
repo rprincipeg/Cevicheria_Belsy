@@ -1,0 +1,142 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─── CATEGORY ────────────────────────────────────────────────────────────────
+
+model Category {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  sortOrder Int
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  items MenuItem[]
+
+  @@map("categories")
+}
+
+// ─── MENU ITEM ────────────────────────────────────────────────────────────────
+
+model MenuItem {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  price       Decimal  @db.Decimal(10, 2)
+  stockStatus String   @default("available")
+  isPreparable Boolean @default(true)
+  imageUrl    String?
+  categoryId  String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  category   Category    @relation(fields: [categoryId], references: [id])
+  orderItems OrderItem[]
+
+  @@map("menu_items")
+}
+
+// ─── DINING TABLE ─────────────────────────────────────────────────────────────
+
+model DiningTable {
+  id        Int      @id @default(autoincrement())
+  number    Int      @unique
+  status    String   @default("available")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  orders Order[]
+
+  @@map("dining_tables")
+}
+
+// ─── USER ─────────────────────────────────────────────────────────────────────
+
+model User {
+  id           String   @id @default(cuid())
+  username     String   @unique
+  passwordHash String
+  role         String   @default("waiter")
+  status       String   @default("active")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  orders   Order[]
+  payments Payment[]
+
+  @@map("users")
+}
+
+// ─── ORDER ────────────────────────────────────────────────────────────────────
+
+model Order {
+  id          String    @id @default(cuid())
+  code        String    @unique
+  tableId     Int
+  createdById String
+  status      String    @default("pending")
+  total       Decimal   @db.Decimal(10, 2) @default(0)
+  isTakeaway  Boolean   @default(false)
+  notes       String?
+  paidAt      DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  table     DiningTable @relation(fields: [tableId], references: [id])
+  createdBy User        @relation(fields: [createdById], references: [id])
+  items     OrderItem[]
+  payments  Payment[]
+
+  @@map("orders")
+}
+
+// ─── ORDER ITEM ───────────────────────────────────────────────────────────────
+
+model OrderItem {
+  id         String    @id @default(cuid())
+  orderId    String
+  menuItemId String    @map("menuitemid")
+  quantity   Int
+  unitPrice  Decimal   @db.Decimal(10, 2)
+  subtotal   Decimal   @db.Decimal(10, 2)
+  status     String    @default("pending")
+  isTakeaway Boolean   @default(false)
+  notes      String?
+  readyAt    DateTime?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  order    Order    @relation(fields: [orderId], references: [id])
+  menuItem MenuItem @relation(fields: [menuItemId], references: [id])
+
+  @@map("order_items")
+}
+
+// ─── PAYMENT ──────────────────────────────────────────────────────────────────
+
+model Payment {
+  id               String   @id @default(cuid())
+  orderId          String
+  receivedById     String
+  amount           Decimal  @db.Decimal(10, 2)
+  receivedAmount   Decimal  @db.Decimal(10, 2)
+  changeAmount     Decimal  @db.Decimal(10, 2)
+  method           String
+  mode             String
+  documentType     String?
+  customerDocument String?
+  customerName     String?
+  customerEmail    String?
+  createdAt        DateTime @default(now())
+
+  order      Order @relation(fields: [orderId], references: [id])
+  receivedBy User  @relation(fields: [receivedById], references: [id])
+
+  @@map("payments")
+}
