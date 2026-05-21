@@ -8,7 +8,7 @@ import { startKitchenJob } from './controllers/kitchen.controller';
 const httpServer = createServer(app);
 
 const io = new Server(httpServer, {
-  cors: { origin: process.env.CLIENT_URL ?? 'http://localhost:5173', credentials: true },
+  cors: { origin: process.env.CLIENT_URL ?? 'http://localhost:3001', credentials: true },
 });
 
 initSocket(io);

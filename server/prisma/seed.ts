@@ -62,6 +62,15 @@ async function upsertMenuItem(name: string, categoryId: string) {
   });
 }
 
+async function upsertUser(username: string, password: string, role: 'ADMIN' | 'MESERO' | 'COCINERO') {
+  const passwordHash = await bcrypt.hash(password, 10);
+  return prisma.user.upsert({
+    where: { username },
+    update: { passwordHash, role, status: 'ACTIVE' },
+    create: { username, passwordHash, role, status: 'ACTIVE' },
+  });
+}
+
 async function main() {
   console.log('Seeding database...');
 
@@ -73,17 +82,17 @@ async function main() {
   for (const name of FONDOS) await upsertMenuItem(name, fondos.id);
   for (const name of BEBIDAS) await upsertMenuItem(name, bebidas.id);
 
-  const passwordHash = await bcrypt.hash('admin123', 10);
-  await prisma.user.upsert({
-    where: { username: 'admin' },
-    update: {},
-    create: {
-      username: 'admin',
-      passwordHash,
-      role: 'ADMIN',
-      status: 'ACTIVE',
-    },
-  });
+  await upsertUser('admin', '12345', 'ADMIN');
+  await upsertUser('mesero', '12345', 'MESERO');
+  await upsertUser('cocinero', '12345', 'COCINERO');
+
+  for (let i = 1; i <= 10; i++) {
+    await prisma.diningTable.upsert({
+      where: { number: i },
+      update: {},
+      create: { number: i, status: 'FREE' },
+    });
+  }
 
   console.log('Seed completed.');
 }
