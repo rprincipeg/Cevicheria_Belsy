@@ -7,6 +7,36 @@ datasource db {
   provider = "postgresql"
 }
 
+enum UserRole {
+  MESERO
+  COCINERO
+  ADMIN
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum StockStatus {
+  AVAILABLE
+  OUT_OF_STOCK
+}
+
+enum OrderStatus {
+  PENDING
+  IN_PROGRESS
+  READY
+  DELIVERED
+  PAID
+}
+
+enum OrderItemStatus {
+  PENDING
+  IN_PROGRESS
+  READY
+}
+
 // ─── CATEGORY ────────────────────────────────────────────────────────────────
 
 model Category {
@@ -25,16 +55,16 @@ model Category {
 // ─── MENU ITEM ────────────────────────────────────────────────────────────────
 
 model MenuItem {
-  id          String   @id @default(cuid())
-  name        String   @unique
-  description String?
-  price       Decimal  @db.Decimal(10, 2)
-  stockStatus String   @default("available")
-  isPreparable Boolean @default(true)
-  imageUrl    String?
-  categoryId  String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id           String      @id @default(cuid())
+  name         String      @unique
+  description  String?
+  price        Decimal     @db.Decimal(10, 2)
+  stockStatus  StockStatus @default(AVAILABLE)
+  isPreparable Boolean     @default(true)
+  imageUrl     String?
+  categoryId   String
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
 
   category   Category    @relation(fields: [categoryId], references: [id])
   orderItems OrderItem[]
@@ -47,7 +77,7 @@ model MenuItem {
 model DiningTable {
   id        Int      @id @default(autoincrement())
   number    Int      @unique
-  status    String   @default("available")
+  status    String   @default("FREE")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -59,13 +89,13 @@ model DiningTable {
 // ─── USER ─────────────────────────────────────────────────────────────────────
 
 model User {
-  id           String   @id @default(cuid())
-  username     String   @unique
+  id           String     @id @default(cuid())
+  username     String     @unique
   passwordHash String
-  role         String   @default("waiter")
-  status       String   @default("active")
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  role         UserRole   @default(MESERO)
+  status       UserStatus @default(ACTIVE)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
 
   orders   Order[]
   payments Payment[]
@@ -76,20 +106,20 @@ model User {
 // ─── ORDER ────────────────────────────────────────────────────────────────────
 
 model Order {
-  id          String    @id @default(cuid())
-  code        String    @unique
-  tableId     Int
+  id          String      @id @default(cuid())
+  code        String      @unique
+  tableId     Int?
   createdById String
-  status      String    @default("pending")
-  total       Decimal   @db.Decimal(10, 2) @default(0)
-  isTakeaway  Boolean   @default(false)
+  status      OrderStatus @default(PENDING)
+  total       Decimal     @db.Decimal(10, 2) @default(0)
+  isTakeaway  Boolean     @default(false)
   notes       String?
   paidAt      DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
 
-  table     DiningTable @relation(fields: [tableId], references: [id])
-  createdBy User        @relation(fields: [createdById], references: [id])
+  table     DiningTable? @relation(fields: [tableId], references: [id])
+  createdBy User         @relation(fields: [createdById], references: [id])
   items     OrderItem[]
   payments  Payment[]
 
@@ -99,18 +129,16 @@ model Order {
 // ─── ORDER ITEM ───────────────────────────────────────────────────────────────
 
 model OrderItem {
-  id         String    @id @default(cuid())
+  id         String          @id @default(cuid())
   orderId    String
-  menuItemId String    @map("menuitemid")
+  menuItemId String          @map("menuitemid")
   quantity   Int
-  unitPrice  Decimal   @db.Decimal(10, 2)
-  subtotal   Decimal   @db.Decimal(10, 2)
-  status     String    @default("pending")
-  isTakeaway Boolean   @default(false)
-  notes      String?
+  unitPrice  Decimal         @db.Decimal(10, 2)
+  subtotal   Decimal         @db.Decimal(10, 2)
+  status     OrderItemStatus @default(PENDING)
   readyAt    DateTime?
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
+  createdAt  DateTime        @default(now())
+  updatedAt  DateTime        @updatedAt
 
   order    Order    @relation(fields: [orderId], references: [id])
   menuItem MenuItem @relation(fields: [menuItemId], references: [id])
