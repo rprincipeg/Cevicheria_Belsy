@@ -25,7 +25,7 @@ app.use('/api/orders', ordersRoutes);
 app.use('/api/kitchen', kitchenRoutes);
 
 // Serve frontend static files
-const clientRoot = path.join(__dirname, '..', '..', 'cevicheria_v2_propio_modified');
+const clientRoot = path.join(__dirname, '..', '..', 'client');
 app.use(express.static(clientRoot));
 app.get('/', (_req, res) => res.redirect('/Login/Login.html'));
 

@@ -1,0 +1,411 @@
+<!DOCTYPE html><html lang="es"><head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Cevicheria Belsy - Carta / Tomar Pedido</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    <style>
+        .material-symbols-outlined { font-family: 'Material Symbols Outlined'; font-weight: normal; font-style: normal; font-size: 24px; line-height: 1; letter-spacing: normal; text-transform: none; display: inline-block; white-space: nowrap; word-wrap: normal; direction: ltr; -webkit-font-smoothing: antialiased; }
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+    <script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "primary-container": "#1e40af", "primary": "#00288e", "outline-variant": "#c4c5d5",
+                "surface-container-low": "#f0f4f8", "on-primary-fixed-variant": "#173bab",
+                "on-primary-fixed": "#001453", "on-surface": "#171c1f", "on-primary": "#ffffff",
+                "secondary": "#006a61", "on-background": "#171c1f", "tertiary-container": "#872d00",
+                "surface-container": "#eaeef2", "on-surface-variant": "#444653", "surface": "#f6fafe",
+                "surface-container-high": "#e4e9ed", "background": "#f6fafe",
+                "surface-container-lowest": "#ffffff", "surface-variant": "#dfe3e7",
+                "on-secondary-fixed": "#00201d", "secondary-fixed-dim": "#6bd8cb",
+                "on-tertiary-container": "#ffa582", "tertiary-fixed": "#ffdbce",
+                "on-tertiary-fixed-variant": "#7f2b00", "secondary-container": "#86f2e4",
+                "outline": "#757684", "surface-tint": "#3755c3", "on-tertiary": "#ffffff",
+                "on-secondary": "#ffffff", "tertiary": "#611e00", "on-primary-container": "#a8b8ff",
+                "error": "#ba1a1a", "error-container": "#ffdad6", "on-error-container": "#93000a",
+                "on-error": "#ffffff"
+              },
+              borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+              spacing: { "touch-target-min": "48px", "container-max-width": "1280px", "margin": "32px", "unit": "8px", "gutter": "24px" },
+              fontFamily: { "headline-md": ["Inter"], "label-md": ["Inter"], "body-lg": ["Inter"], "display-lg": ["Inter"], "headline-lg": ["Inter"], "body-md": ["Inter"], "label-lg": ["Inter"] },
+              fontSize: {
+                "headline-md": ["24px", { lineHeight: "32px", fontWeight: "600" }],
+                "label-md": ["12px", { lineHeight: "16px", fontWeight: "500" }],
+                "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }],
+                "display-lg": ["40px", { lineHeight: "48px", letterSpacing: "-0.02em", fontWeight: "700" }],
+                "headline-lg": ["32px", { lineHeight: "40px", fontWeight: "600" }],
+                "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+                "label-lg": ["14px", { lineHeight: "20px", fontWeight: "600" }]
+              }
+            }
+          }
+        }
+    </script>
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js" crossorigin="anonymous"></script>
+    <script src="../Login/js/auth.js"></script>
+</head>
+<body class="bg-background text-on-background h-screen overflow-hidden flex flex-col antialiased">
+    <!-- TopNavBar -->
+    <header class="flex justify-between items-center w-full px-margin py-4 h-touch-target-min bg-surface shadow-sm flex-shrink-0 relative z-10">
+        <div class="flex items-center gap-4">
+            <button id="btn-back" class="flex items-center gap-2 text-on-surface-variant hover:bg-surface-container-high transition-colors px-4 py-2 rounded-lg h-touch-target-min">
+                <span class="material-symbols-outlined">arrow_back</span>
+                <span class="font-label-lg text-label-lg">Volver al mapa de mesas</span>
+            </button>
+            <div class="h-6 w-px bg-outline-variant mx-2"></div>
+            <h1 class="font-headline-md text-headline-md text-primary" id="page-title">Mesa — Tomar pedido</h1>
+        </div>
+        <div class="flex items-center gap-4">
+            <div class="hidden md:flex items-center gap-2 px-4">
+                <span class="font-body-md text-body-md text-on-surface-variant" id="user-label">Mesero</span>
+            </div>
+            <button id="btn-logout" class="text-error hover:bg-error-container hover:text-on-error-container transition-colors px-4 py-2 rounded-lg font-label-lg text-label-lg h-touch-target-min flex items-center gap-2">
+                <span class="material-symbols-outlined">logout</span>
+                Cerrar sesión
+            </button>
+        </div>
+    </header>
+
+    <div class="flex flex-1 overflow-hidden">
+        <!-- Main Content Area -->
+        <main class="flex-1 flex flex-col bg-surface-container-low overflow-hidden">
+            <!-- Category Tabs -->
+            <div class="px-margin py-unit flex-shrink-0 bg-surface shadow-sm z-10 overflow-x-auto">
+                <div id="category-tabs" class="flex items-center gap-gutter min-w-max">
+                    <span class="font-label-md text-on-surface-variant px-4 py-3">Cargando categorías...</span>
+                </div>
+            </div>
+            <!-- Menu Items Grid -->
+            <div class="flex-1 overflow-y-auto p-margin">
+                <div id="menu-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+                    <!-- Items rendered by JS -->
+                </div>
+            </div>
+        </main>
+
+        <!-- Pedido Actual Sidebar -->
+        <aside class="w-96 bg-surface shadow-[-4px_0_15px_-3px_rgba(0,0,0,0.05)] z-20 flex flex-col border-l border-surface-variant">
+            <div class="p-4 border-b border-surface-variant bg-surface-container-lowest">
+                <h2 class="font-headline-lg text-headline-lg text-on-surface flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary">receipt_long</span>
+                    Pedido Actual
+                </h2>
+                <p class="font-body-md text-body-md text-on-surface-variant" id="sidebar-subtitle">Mesa</p>
+                <!-- Takeaway toggle (only for table orders) -->
+                <label id="takeaway-toggle-wrap" class="flex items-center gap-2 cursor-pointer group mt-3 p-2 bg-surface-container-low rounded-lg border border-surface-variant hidden">
+                    <div class="relative">
+                        <input id="takeaway-toggle" class="sr-only peer" type="checkbox">
+                        <div class="w-10 h-6 bg-surface-container-high peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                    </div>
+                    <span class="font-label-md text-label-md text-on-surface flex items-center gap-1">
+                        <span class="material-symbols-outlined text-[16px]">takeout_dining</span>
+                        Todo el pedido "Para llevar"
+                    </span>
+                </label>
+                <!-- Order notes -->
+                <textarea id="order-notes" class="mt-3 w-full text-sm bg-surface-container border border-surface-variant rounded-lg p-2 font-body-md text-on-surface resize-none focus:outline-none focus:ring-1 focus:ring-primary" rows="2" placeholder="Notas del pedido (opcional)..."></textarea>
+            </div>
+
+            <!-- Cart items -->
+            <div class="flex-1 overflow-y-auto p-4 space-y-3" id="cart-items">
+                <div class="text-center py-8 text-on-surface-variant font-body-md" id="cart-empty">
+                    <span class="material-symbols-outlined text-4xl block mb-2">shopping_cart</span>
+                    Ningún ítem agregado aún
+                </div>
+            </div>
+
+            <!-- Totals & Actions -->
+            <div class="p-4 border-t border-surface-variant bg-surface-container-lowest">
+                <div class="space-y-2 mb-4">
+                    <div class="flex justify-between text-on-surface-variant font-body-md text-body-md">
+                        <span id="cart-count-label">0 ítems</span>
+                        <span id="cart-subtotal">S/ 0.00</span>
+                    </div>
+                    <div class="flex justify-between text-on-surface font-headline-md text-headline-md text-xl border-t border-surface-variant pt-2">
+                        <span>Total</span>
+                        <span id="cart-total">S/ 0.00</span>
+                    </div>
+                </div>
+                <button id="btn-confirm" class="w-full h-[56px] bg-[#d97706] hover:bg-[#b45309] text-white rounded-xl font-label-lg text-label-lg shadow-md flex items-center justify-center gap-2 transition-all" disabled>
+                    <span class="material-symbols-outlined">send</span>
+                    Confirmar pedido
+                </button>
+            </div>
+        </aside>
+    </div>
+
+<script>
+(function () {
+  if (!CB.protectPage(['mesero', 'admin'])) return;
+
+  var sess = CB.getSession();
+  var userLabel = document.getElementById('user-label');
+  if (sess && userLabel) userLabel.textContent = sess.rol.charAt(0).toUpperCase() + sess.rol.slice(1);
+
+  document.getElementById('btn-logout').addEventListener('click', function () { CB.logout(); });
+  document.getElementById('btn-back').addEventListener('click', function () {
+    window.location.href = '../Mesero/Mapa_mesas.html';
+  });
+
+  // Parse URL params
+  var params = new URLSearchParams(window.location.search);
+  var tableId = params.get('tableId') ? parseInt(params.get('tableId'), 10) : null;
+  var tableNumber = params.get('tableNumber');
+  var existingOrderId = params.get('orderId') || null;
+  var isTakeaway = params.get('isTakeaway') === 'true';
+
+  // Update header
+  var pageTitle = document.getElementById('page-title');
+  var sidebarSubtitle = document.getElementById('sidebar-subtitle');
+  if (isTakeaway) {
+    pageTitle.textContent = 'Para Llevar — Tomar pedido';
+    sidebarSubtitle.textContent = 'Para llevar';
+  } else if (tableNumber) {
+    pageTitle.textContent = 'Mesa ' + tableNumber + (existingOrderId ? ' — Añadir ítems' : ' — Tomar pedido');
+    sidebarSubtitle.textContent = 'Mesa ' + tableNumber;
+  }
+
+  // Show takeaway toggle only for table orders (not takeaway, not add-to-existing)
+  if (!isTakeaway && !existingOrderId) {
+    document.getElementById('takeaway-toggle-wrap').classList.remove('hidden');
+  }
+
+  // API helper
+  function apiReq(method, path, body) {
+    var token = sessionStorage.getItem(CB.CONFIG.STORAGE_KEY_TOKEN);
+    var opts = {
+      method: method,
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token }
+    };
+    if (body) opts.body = JSON.stringify(body);
+    return fetch(CB.CONFIG.API_BASE + path, opts).then(function (r) {
+      return r.json().then(function (data) { return { ok: r.ok, data: data }; });
+    });
+  }
+
+  // ---- Category tabs ----
+  var categories = [];
+  var activeCategoryId = null;
+
+  function renderTabs() {
+    var container = document.getElementById('category-tabs');
+    container.innerHTML = '';
+    categories.forEach(function (cat) {
+      var btn = document.createElement('button');
+      var isActive = cat.id === activeCategoryId;
+      btn.className = 'flex flex-col items-center gap-1 px-4 py-3 border-b-2 ' +
+        (isActive ? 'border-primary text-primary' : 'border-transparent text-on-surface-variant hover:text-primary hover:bg-surface-container-high rounded-t-lg') +
+        ' transition-colors h-touch-target-min font-label-lg text-label-lg';
+      btn.textContent = cat.name;
+      btn.addEventListener('click', function () {
+        activeCategoryId = cat.id;
+        renderTabs();
+        renderItems();
+      });
+      container.appendChild(btn);
+    });
+  }
+
+  // ---- Cart state ----
+  var cart = []; // { menuItemId, name, price, quantity }
+
+  function cartTotal() {
+    return cart.reduce(function (s, c) { return s + c.price * c.quantity; }, 0);
+  }
+  function cartCount() {
+    return cart.reduce(function (s, c) { return s + c.quantity; }, 0);
+  }
+
+  function renderCart() {
+    var container = document.getElementById('cart-items');
+    var emptyMsg = document.getElementById('cart-empty');
+    var confirmBtn = document.getElementById('btn-confirm');
+    var countLabel = document.getElementById('cart-count-label');
+    var subtotalEl = document.getElementById('cart-subtotal');
+    var totalEl = document.getElementById('cart-total');
+
+    if (cart.length === 0) {
+      emptyMsg.classList.remove('hidden');
+      // Remove old items
+      Array.from(container.querySelectorAll('.cart-item')).forEach(function (el) { el.remove(); });
+    } else {
+      emptyMsg.classList.add('hidden');
+      // Rebuild list
+      Array.from(container.querySelectorAll('.cart-item')).forEach(function (el) { el.remove(); });
+      cart.forEach(function (item) {
+        var div = document.createElement('div');
+        div.className = 'cart-item bg-surface-container-lowest p-3 rounded-xl border border-surface-variant shadow-sm flex flex-col gap-2';
+        div.innerHTML =
+          '<div class="flex justify-between items-start gap-2">' +
+            '<div class="flex-1 min-w-0">' +
+              '<h4 class="font-label-lg text-label-lg text-on-surface mb-0.5">' + escHtml(item.name) + '</h4>' +
+              '<span class="font-label-md text-label-md text-on-surface-variant">S/ ' + item.price.toFixed(2) + ' c/u</span>' +
+            '</div>' +
+            '<div class="flex items-start gap-1 shrink-0">' +
+              '<span class="font-headline-md text-headline-md text-on-surface text-base">S/ ' + (item.price * item.quantity).toFixed(2) + '</span>' +
+              '<button class="h-8 w-8 rounded-full flex items-center justify-center text-error hover:bg-error-container transition-colors" data-remove="' + escHtml(item.menuItemId) + '">' +
+                '<span class="material-symbols-outlined text-[18px]">delete</span>' +
+              '</button>' +
+            '</div>' +
+          '</div>' +
+          '<div class="flex items-center justify-start">' +
+            '<div class="flex items-center bg-surface-container-low rounded-lg p-1 border border-surface-variant">' +
+              '<button class="h-8 w-8 rounded flex items-center justify-center text-on-surface hover:bg-surface-variant" data-dec="' + escHtml(item.menuItemId) + '">' +
+                '<span class="material-symbols-outlined text-sm">remove</span>' +
+              '</button>' +
+              '<span class="font-label-lg text-label-lg w-8 text-center">' + item.quantity + '</span>' +
+              '<button class="h-8 w-8 rounded flex items-center justify-center text-on-surface hover:bg-surface-variant" data-inc="' + escHtml(item.menuItemId) + '">' +
+                '<span class="material-symbols-outlined text-sm">add</span>' +
+              '</button>' +
+            '</div>' +
+          '</div>';
+        container.appendChild(div);
+      });
+
+      // Wire up cart buttons
+      container.querySelectorAll('[data-remove]').forEach(function (btn) {
+        btn.addEventListener('click', function () { removeFromCart(btn.dataset.remove); });
+      });
+      container.querySelectorAll('[data-dec]').forEach(function (btn) {
+        btn.addEventListener('click', function () { changeQty(btn.dataset.dec, -1); });
+      });
+      container.querySelectorAll('[data-inc]').forEach(function (btn) {
+        btn.addEventListener('click', function () { changeQty(btn.dataset.inc, 1); });
+      });
+    }
+
+    var total = cartTotal();
+    var count = cartCount();
+    countLabel.textContent = count + (count === 1 ? ' ítem' : ' ítems');
+    subtotalEl.textContent = 'S/ ' + total.toFixed(2);
+    totalEl.textContent = 'S/ ' + total.toFixed(2);
+    confirmBtn.disabled = cart.length === 0;
+    confirmBtn.classList.toggle('opacity-50', cart.length === 0);
+    confirmBtn.classList.toggle('cursor-not-allowed', cart.length === 0);
+  }
+
+  function addToCart(item) {
+    var existing = cart.find(function (c) { return c.menuItemId === item.id; });
+    if (existing) { existing.quantity++; }
+    else { cart.push({ menuItemId: item.id, name: item.name, price: Number(item.price), quantity: 1 }); }
+    renderCart();
+    renderItems(); // Refresh quantity shown in grid
+  }
+
+  function removeFromCart(menuItemId) {
+    cart = cart.filter(function (c) { return c.menuItemId !== menuItemId; });
+    renderCart();
+    renderItems();
+  }
+
+  function changeQty(menuItemId, delta) {
+    var item = cart.find(function (c) { return c.menuItemId === menuItemId; });
+    if (!item) return;
+    item.quantity += delta;
+    if (item.quantity <= 0) removeFromCart(menuItemId);
+    else { renderCart(); renderItems(); }
+  }
+
+  // ---- Menu Items ----
+  function renderItems() {
+    var cat = categories.find(function (c) { return c.id === activeCategoryId; });
+    var grid = document.getElementById('menu-grid');
+    grid.innerHTML = '';
+    if (!cat) return;
+    cat.items.forEach(function (item) {
+      var qtyInCart = (cart.find(function (c) { return c.menuItemId === item.id; }) || {}).quantity || 0;
+      var card = document.createElement('div');
+      card.className = 'bg-surface rounded-xl shadow-sm border border-surface-variant overflow-hidden flex flex-col';
+      card.innerHTML =
+        '<div class="h-40 w-full relative bg-surface-container-high">' +
+          (item.imageUrl
+            ? '<img alt="' + escHtml(item.name) + '" class="w-full h-full object-cover" src="' + escHtml(item.imageUrl) + '">'
+            : '<div class="w-full h-full flex items-center justify-center text-outline-variant"><span class="material-symbols-outlined text-4xl">restaurant</span></div>') +
+          '<div class="absolute top-2 right-2 bg-secondary text-on-secondary px-3 py-1 rounded-full font-label-md text-label-md shadow-sm">Disponible</div>' +
+        '</div>' +
+        '<div class="p-4 flex flex-col flex-1">' +
+          '<div class="flex justify-between items-start mb-2">' +
+            '<h3 class="font-headline-md text-headline-md text-on-surface text-lg leading-tight">' + escHtml(item.name) + '</h3>' +
+            '<span class="font-headline-md text-headline-md text-primary text-lg shrink-0 ml-2">S/ ' + Number(item.price).toFixed(2) + '</span>' +
+          '</div>' +
+          (item.description ? '<p class="font-body-md text-body-md text-on-surface-variant text-sm mb-4 flex-1">' + escHtml(item.description) + '</p>' : '<div class="flex-1 mb-4"></div>') +
+          '<div class="flex items-center justify-between mt-auto">' +
+            '<button class="h-touch-target-min w-touch-target-min rounded-lg ' + (qtyInCart > 0 ? 'bg-surface-container-high text-on-surface' : 'bg-surface-container text-outline-variant opacity-50 cursor-not-allowed') + ' flex items-center justify-center hover:bg-surface-variant transition-colors" ' + (qtyInCart === 0 ? 'disabled' : '') + ' data-dec-item="' + escHtml(item.id) + '">' +
+              '<span class="material-symbols-outlined">remove</span>' +
+            '</button>' +
+            '<span class="font-headline-md text-headline-md w-8 text-center ' + (qtyInCart > 0 ? 'text-on-surface' : 'text-on-surface-variant') + '">' + qtyInCart + '</span>' +
+            '<button class="h-touch-target-min w-touch-target-min rounded-lg bg-primary text-on-primary flex items-center justify-center hover:bg-primary-container hover:text-on-primary-container transition-colors shadow-sm" data-add-item="' + escHtml(item.id) + '">' +
+              '<span class="material-symbols-outlined">add</span>' +
+            '</button>' +
+          '</div>' +
+        '</div>';
+
+      card.querySelector('[data-add-item]').addEventListener('click', function () { addToCart(item); });
+      var decBtn = card.querySelector('[data-dec-item]');
+      if (decBtn && !decBtn.disabled) {
+        decBtn.addEventListener('click', function () { changeQty(item.id, -1); });
+      }
+      grid.appendChild(card);
+    });
+  }
+
+  // ---- Load categories ----
+  function loadCategories() {
+    apiReq('GET', '/menu/categories').then(function (res) {
+      if (!res.ok) { CB.debug('Error cargando carta:', res.data); return; }
+      categories = res.data;
+      if (categories.length > 0) activeCategoryId = categories[0].id;
+      renderTabs();
+      renderItems();
+    }).catch(function (err) { CB.debug('Error de red:', err); });
+  }
+
+  loadCategories();
+
+  // ---- Confirm order ----
+  document.getElementById('btn-confirm').addEventListener('click', function () {
+    if (cart.length === 0) return;
+    var items = cart.map(function (c) { return { menuItemId: c.menuItemId, quantity: c.quantity }; });
+    var notes = document.getElementById('order-notes').value.trim() || undefined;
+    var sendTakeaway = isTakeaway || document.getElementById('takeaway-toggle').checked;
+
+    var req;
+    if (existingOrderId) {
+      req = apiReq('POST', '/orders/' + existingOrderId + '/items', { items: items });
+    } else {
+      var body = { isTakeaway: sendTakeaway, items: items };
+      if (notes) body.notes = notes;
+      if (!sendTakeaway && tableId !== null) body.tableId = tableId;
+      req = apiReq('POST', '/orders', body);
+    }
+
+    var btn = document.getElementById('btn-confirm');
+    btn.disabled = true;
+    btn.textContent = 'Enviando...';
+
+    req.then(function (res) {
+      if (!res.ok) {
+        alert('Error: ' + (res.data.error || 'No se pudo confirmar el pedido'));
+        btn.disabled = false;
+        btn.innerHTML = '<span class="material-symbols-outlined">send</span> Confirmar pedido';
+        return;
+      }
+      window.location.href = '../Mesero/Mapa_mesas.html';
+    }).catch(function () {
+      alert('Error de conexión. Inténtalo de nuevo.');
+      btn.disabled = false;
+      btn.innerHTML = '<span class="material-symbols-outlined">send</span> Confirmar pedido';
+    });
+  });
+
+  function escHtml(str) {
+    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+})();
+</script>
+</body></html>
