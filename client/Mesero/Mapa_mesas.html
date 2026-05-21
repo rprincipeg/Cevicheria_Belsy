@@ -112,7 +112,7 @@
 
   var sess = CB.getSession();
   var userLabel = document.getElementById('user-label');
-  if (sess && userLabel) userLabel.textContent = sess.rol.charAt(0).toUpperCase() + sess.rol.slice(1);
+  if (sess && userLabel) userLabel.textContent = sess.usuario || (sess.rol.charAt(0).toUpperCase() + sess.rol.slice(1));
 
   // Show kitchen link for admin
   if (sess && sess.rol === 'admin') {

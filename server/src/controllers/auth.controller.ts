@@ -30,6 +30,11 @@ export async function login(req: Request, res: Response): Promise<void> {
       return;
     }
 
+    if (user.role === 'ADMIN') {
+      res.status(403).json({ error: 'El panel de administrador no está disponible aún' });
+      return;
+    }
+
     const token = jwt.sign(
       { userId: user.id, username: user.username, role: user.role },
       process.env.JWT_SECRET!,

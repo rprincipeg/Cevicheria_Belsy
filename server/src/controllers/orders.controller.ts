@@ -140,6 +140,29 @@ export async function createOrder(req: Request, res: Response): Promise<void> {
   }
 }
 
+export async function getOrder(req: Request, res: Response): Promise<void> {
+  try {
+    const orderId = req.params['orderId'] as string;
+    const order = await prisma.order.findUnique({
+      where: { id: orderId },
+      include: {
+        items: {
+          include: { menuItem: { select: { id: true, name: true, price: true } } },
+          orderBy: { createdAt: 'asc' },
+        },
+        table: { select: { number: true } },
+      },
+    });
+    if (!order) {
+      res.status(404).json({ error: 'Pedido no encontrado' });
+      return;
+    }
+    res.json(order);
+  } catch {
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+}
+
 export async function addOrderItems(req: Request, res: Response): Promise<void> {
   try {
     const orderId = req.params['orderId'] as string;
@@ -159,7 +182,40 @@ export async function addOrderItems(req: Request, res: Response): Promise<void> 
       return;
     }
     if (order.status === 'DELIVERED' || order.status === 'PAID') {
-      res.status(400).json({ error: 'No se pueden agregar ítems a un pedido cerrado' });
+      // El pedido ya fue cerrado — crear uno nuevo para la misma mesa
+      const total = items.reduce((sum, item) => {
+        const price = Number(menuItemMap.get(item.menuItemId)!.price);
+        return sum + price * item.quantity;
+      }, 0);
+      const newOrder = await prisma.order.create({
+        data: {
+          code: generateCode(),
+          tableId: order.tableId,
+          createdById: req.user!.userId,
+          status: 'PENDING',
+          isTakeaway: order.isTakeaway,
+          notes: null,
+          total,
+          items: {
+            create: items.map((item) => {
+              const menuItem = menuItemMap.get(item.menuItemId)!;
+              const unitPrice = Number(menuItem.price);
+              return { menuItemId: item.menuItemId, quantity: item.quantity, unitPrice, subtotal: unitPrice * item.quantity, status: 'PENDING', isTakeaway: item.isTakeaway };
+            }),
+          },
+        },
+      });
+      if (order.tableId) {
+        await prisma.diningTable.update({ where: { id: order.tableId }, data: { status: 'OCCUPIED' } });
+        await broadcastTablesUpdate();
+      }
+      const payload = await buildKitchenPayload(newOrder.id);
+      getIo().to('kitchen').emit('orders:new', payload);
+      const fullNewOrder = await prisma.order.findUniqueOrThrow({
+        where: { id: newOrder.id },
+        include: { items: { include: { menuItem: { select: { name: true } } } }, table: { select: { number: true } } },
+      });
+      res.status(201).json(fullNewOrder);
       return;
     }
 
