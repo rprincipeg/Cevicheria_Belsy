@@ -136,6 +136,7 @@ model OrderItem {
   unitPrice  Decimal         @db.Decimal(10, 2)
   subtotal   Decimal         @db.Decimal(10, 2)
   status     OrderItemStatus @default(PENDING)
+  isTakeaway Boolean         @default(false)
   readyAt    DateTime?
   createdAt  DateTime        @default(now())
   updatedAt  DateTime        @updatedAt

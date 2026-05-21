@@ -15,8 +15,8 @@ CB.CONFIG = {
   APP_NAME: 'Cevicheria Belsy',
   APP_VERSION: '1.0.0-sprint1',
   API_MODE: true,
-  API_BASE: 'http://localhost:3001/api',
-  SOCKET_URL: 'http://localhost:3001',
+  API_BASE: (window.location.protocol === 'file:' ? 'http://localhost:3001' : window.location.origin) + '/api',
+  SOCKET_URL: window.location.protocol === 'file:' ? 'http://localhost:3001' : window.location.origin,
   SESSION_TIMEOUT_MIN: 30,                 // Criterio US-01 #6
   STORAGE_KEY_USER: 'cb_usuario',
   STORAGE_KEY_ROL: 'cb_rol',
@@ -43,7 +43,8 @@ CB.DB = {
   usuarios: [
     { id: 1, username: 'admin',    passwordHash: CB.hash('12345'), nombre: 'Administrador', email: 'admin@cevicheriabelsy.pe',    rolId: 1, activo: true },
     { id: 2, username: 'cocinero', passwordHash: CB.hash('12345'), nombre: 'Cocinero',      email: 'cocinero@cevicheriabelsy.pe', rolId: 2, activo: true },
-    { id: 3, username: 'mesero',   passwordHash: CB.hash('12345'), nombre: 'Mesero',        email: 'mesero@cevicheriabelsy.pe',   rolId: 3, activo: true }
+    { id: 3, username: 'mesero',   passwordHash: CB.hash('12345'), nombre: 'Mesero',        email: 'mesero@cevicheriabelsy.pe',   rolId: 3, activo: true },
+    { id: 4, username: 'mesero2',  passwordHash: CB.hash('12345'), nombre: 'Mesero 2',      email: 'mesero2@cevicheriabelsy.pe',  rolId: 3, activo: true }
   ],
   sesiones: [],
   findUserByUsername: function (u) { return CB.DB.usuarios.find(function (x) { return x.username === u; }); },

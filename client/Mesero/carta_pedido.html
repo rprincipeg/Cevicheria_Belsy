@@ -162,7 +162,10 @@
   // Update header
   var pageTitle = document.getElementById('page-title');
   var sidebarSubtitle = document.getElementById('sidebar-subtitle');
-  if (isTakeaway) {
+  if (isTakeaway && tableNumber) {
+    pageTitle.textContent = 'Para Llevar · Mesa ' + tableNumber + ' — Tomar pedido';
+    sidebarSubtitle.textContent = 'Para llevar · Mesa ' + tableNumber;
+  } else if (isTakeaway) {
     pageTitle.textContent = 'Para Llevar — Tomar pedido';
     sidebarSubtitle.textContent = 'Para llevar';
   } else if (tableNumber) {
@@ -170,8 +173,8 @@
     sidebarSubtitle.textContent = 'Mesa ' + tableNumber;
   }
 
-  // Show takeaway toggle only for table orders (not takeaway, not add-to-existing)
-  if (!isTakeaway && !existingOrderId) {
+  // Show takeaway toggle for all table orders (so kitchen sees the table number)
+  if (!isTakeaway && tableId) {
     document.getElementById('takeaway-toggle-wrap').classList.remove('hidden');
   }
 
@@ -212,7 +215,7 @@
   }
 
   // ---- Cart state ----
-  var cart = []; // { menuItemId, name, price, quantity }
+  var cart = []; // { menuItemId, name, price, quantity, isTakeaway }
 
   function cartTotal() {
     return cart.reduce(function (s, c) { return s + c.price * c.quantity; }, 0);
@@ -240,6 +243,7 @@
       cart.forEach(function (item) {
         var div = document.createElement('div');
         div.className = 'cart-item bg-surface-container-lowest p-3 rounded-xl border border-surface-variant shadow-sm flex flex-col gap-2';
+        var toggleId = 'item-togo-' + item.menuItemId;
         div.innerHTML =
           '<div class="flex justify-between items-start gap-2">' +
             '<div class="flex-1 min-w-0">' +
@@ -263,7 +267,16 @@
                 '<span class="material-symbols-outlined text-sm">add</span>' +
               '</button>' +
             '</div>' +
-          '</div>';
+          '</div>' +
+          '<label class="flex items-center gap-2 cursor-pointer w-max">' +
+            '<div class="relative">' +
+              '<input id="' + toggleId + '" class="sr-only peer item-togo-check" type="checkbox" data-item-id="' + escHtml(item.menuItemId) + '"' + (item.isTakeaway ? ' checked' : '') + '>' +
+              '<div class="w-10 h-6 bg-surface-container-high rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[\'\'] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>' +
+            '</div>' +
+            '<span class="font-label-md text-label-md text-on-surface-variant flex items-center gap-1">' +
+              '<span class="material-symbols-outlined text-[16px]">takeout_dining</span>Para llevar' +
+            '</span>' +
+          '</label>';
         container.appendChild(div);
       });
 
@@ -276,6 +289,13 @@
       });
       container.querySelectorAll('[data-inc]').forEach(function (btn) {
         btn.addEventListener('click', function () { changeQty(btn.dataset.inc, 1); });
+      });
+      // Wire up per-item takeaway toggles
+      container.querySelectorAll('.item-togo-check').forEach(function (chk) {
+        chk.addEventListener('change', function () {
+          var cartItem = cart.find(function (c) { return c.menuItemId === chk.dataset.itemId; });
+          if (cartItem) cartItem.isTakeaway = chk.checked;
+        });
       });
     }
 
@@ -292,9 +312,9 @@
   function addToCart(item) {
     var existing = cart.find(function (c) { return c.menuItemId === item.id; });
     if (existing) { existing.quantity++; }
-    else { cart.push({ menuItemId: item.id, name: item.name, price: Number(item.price), quantity: 1 }); }
+    else { cart.push({ menuItemId: item.id, name: item.name, price: Number(item.price), quantity: 1, isTakeaway: false }); }
     renderCart();
-    renderItems(); // Refresh quantity shown in grid
+    renderItems();
   }
 
   function removeFromCart(menuItemId) {
@@ -370,17 +390,19 @@
   // ---- Confirm order ----
   document.getElementById('btn-confirm').addEventListener('click', function () {
     if (cart.length === 0) return;
-    var items = cart.map(function (c) { return { menuItemId: c.menuItemId, quantity: c.quantity }; });
+    var globalTakeaway = isTakeaway || document.getElementById('takeaway-toggle').checked;
+    var items = cart.map(function (c) {
+      return { menuItemId: c.menuItemId, quantity: c.quantity, isTakeaway: globalTakeaway || c.isTakeaway };
+    });
     var notes = document.getElementById('order-notes').value.trim() || undefined;
-    var sendTakeaway = isTakeaway || document.getElementById('takeaway-toggle').checked;
 
     var req;
     if (existingOrderId) {
       req = apiReq('POST', '/orders/' + existingOrderId + '/items', { items: items });
     } else {
-      var body = { isTakeaway: sendTakeaway, items: items };
+      var body = { isTakeaway: globalTakeaway, items: items };
       if (notes) body.notes = notes;
-      if (!sendTakeaway && tableId !== null) body.tableId = tableId;
+      if (tableId !== null) body.tableId = tableId; // always keep tableId for kitchen display
       req = apiReq('POST', '/orders', body);
     }
 

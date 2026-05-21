@@ -16,6 +16,7 @@ export async function getCategories(_req: Request, res: Response): Promise<void>
             price: true,
             imageUrl: true,
             stockStatus: true,
+            isPreparable: true,
           },
         },
       },

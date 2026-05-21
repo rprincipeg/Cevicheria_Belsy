@@ -14,9 +14,9 @@ window.CB = window.CB || {};
 CB.CONFIG = {
   APP_NAME: 'Cevicheria Belsy',
   APP_VERSION: '1.0.0-sprint1',
-  API_MODE: true,
-  API_BASE: 'http://localhost:3001/api',
-  SOCKET_URL: 'http://localhost:3001',
+  API_MODE: false,                         // ← cambiar a true cuando el backend esté corriendo
+  API_BASE: 'http://localhost:3000/api',   // Backend Express (Railway en producción)
+  SOCKET_URL: 'http://localhost:3000',
   SESSION_TIMEOUT_MIN: 30,                 // Criterio US-01 #6
   STORAGE_KEY_USER: 'cb_usuario',
   STORAGE_KEY_ROL: 'cb_rol',
@@ -43,7 +43,8 @@ CB.DB = {
   usuarios: [
     { id: 1, username: 'admin',    passwordHash: CB.hash('12345'), nombre: 'Administrador', email: 'admin@cevicheriabelsy.pe',    rolId: 1, activo: true },
     { id: 2, username: 'cocinero', passwordHash: CB.hash('12345'), nombre: 'Cocinero',      email: 'cocinero@cevicheriabelsy.pe', rolId: 2, activo: true },
-    { id: 3, username: 'mesero',   passwordHash: CB.hash('12345'), nombre: 'Mesero',        email: 'mesero@cevicheriabelsy.pe',   rolId: 3, activo: true }
+    { id: 3, username: 'mesero',   passwordHash: CB.hash('12345'), nombre: 'Mesero',        email: 'mesero@cevicheriabelsy.pe',   rolId: 3, activo: true },
+    { id: 4, username: 'mesero2',  passwordHash: CB.hash('12345'), nombre: 'Mesero 2',      email: 'mesero2@cevicheriabelsy.pe',  rolId: 3, activo: true }
   ],
   sesiones: [],
   findUserByUsername: function (u) { return CB.DB.usuarios.find(function (x) { return x.username === u; }); },
@@ -67,7 +68,7 @@ CB.initSocket = function () {
 /* -------- TAREA 5: Lógica del negocio -------- */
 CB.homeFor = function (rol) {
   switch (rol) {
-    case 'admin':    return '../Mesero/Mapa_mesas.html';
+    case 'admin':    return '../Admin/Caja_mesas.html';
     case 'cocinero': return '../Cocinero/Monitor_cocinero.html';
     case 'mesero':   return '../Mesero/Mapa_mesas.html';
     default:         return '../Login/Login.html';
@@ -82,11 +83,9 @@ CB._apiLogin = async function (username, password) {
       body: JSON.stringify({ username: username, password: password })
     });
     var data = await r.json();
-    // Backend returns { token, role: 'ADMIN'|'MESERO'|'COCINERO', username }
-    if (!r.ok || !data.token) return { ok: false, error: data.error || 'Usuario o contraseña incorrectas.' };
+    if (!r.ok || !data.ok) return { ok: false, error: data.error || 'Usuario o contraseña incorrectas.' };
     sessionStorage.setItem(CB.CONFIG.STORAGE_KEY_TOKEN, data.token);
-    var rol = data.role.toLowerCase(); // normalize to lowercase
-    return { ok: true, user: { username: data.username }, rol: rol, home: CB.homeFor(rol) };
+    return { ok: true, user: data.user, rol: data.user.rol, home: CB.homeFor(data.user.rol) };
   } catch (e) {
     CB.debug('API no disponible, fallback a mockup local:', e.message);
     return CB._mockLogin(username, password);

@@ -11,7 +11,6 @@ export async function getKitchenOrders(_req: Request, res: Response): Promise<vo
   try {
     const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
 
-    // Use OR of active statuses to avoid notIn type issues with TS6+Prisma v7
     const orders = await prisma.order.findMany({
       where: {
         OR: [
@@ -24,6 +23,7 @@ export async function getKitchenOrders(_req: Request, res: Response): Promise<vo
         table: { select: { number: true } },
         items: {
           where: {
+            menuItem: { isPreparable: true },  // drinks are excluded from kitchen
             OR: [
               { status: 'PENDING' },
               { status: 'IN_PROGRESS' },
@@ -31,7 +31,7 @@ export async function getKitchenOrders(_req: Request, res: Response): Promise<vo
             ],
           },
           orderBy: { createdAt: 'asc' },
-          include: { menuItem: { select: { name: true } } },
+          include: { menuItem: { select: { name: true, isPreparable: true } } },
         },
       },
       orderBy: { createdAt: 'asc' },
@@ -52,10 +52,9 @@ export async function getKitchenOrders(_req: Request, res: Response): Promise<vo
           name: item.menuItem.name,
           quantity: item.quantity,
           status: item.status,
+          isTakeaway: item.isTakeaway,
           readyAt: item.readyAt,
           createdAt: item.createdAt,
-          isTakeaway: order.isTakeaway,
-          orderNotes: order.notes,
         })),
       }));
 
@@ -94,7 +93,6 @@ export async function updateItemStatus(req: Request, res: Response): Promise<voi
     });
 
     if (status === 'IN_PROGRESS') {
-      // Move order from PENDING → IN_PROGRESS when first item starts
       await prisma.order.updateMany({
         where: { id: orderId, status: 'PENDING' },
         data: { status: 'IN_PROGRESS' },
@@ -102,19 +100,21 @@ export async function updateItemStatus(req: Request, res: Response): Promise<voi
     }
 
     if (status === 'READY') {
-      const allItems = await prisma.orderItem.findMany({ where: { orderId: orderId } });
+      // Only consider preparable items (drinks are excluded from kitchen logic)
+      const allItems = await prisma.orderItem.findMany({
+        where: { orderId, menuItem: { isPreparable: true } },
+        include: { menuItem: { select: { isPreparable: true } } },
+      });
       const allReady = allItems.every((i) =>
         i.id === itemId ? true : i.status === 'READY',
       );
 
       if (allReady) {
-        // Update status without include (TS6+Prisma v7 issue with update+include)
         await prisma.order.update({
           where: { id: orderId },
           data: { status: 'READY' },
         });
 
-        // Fetch with include separately (findMany-style queries work fine)
         const order = await prisma.order.findUniqueOrThrow({
           where: { id: orderId },
           include: {
@@ -126,6 +126,7 @@ export async function updateItemStatus(req: Request, res: Response): Promise<voi
         getIo().to('waiters').emit('orders:ready', {
           orderId,
           tableNumber: order.table?.number ?? null,
+          isTakeaway: order.isTakeaway,
           items: order.items.map((i) => ({
             id: i.id,
             name: i.menuItem.name,
@@ -134,6 +135,8 @@ export async function updateItemStatus(req: Request, res: Response): Promise<voi
         });
       }
     }
+
+    getIo().to('kitchen').emit('orders:updated');
 
     res.json(updatedItem);
   } catch {

@@ -189,8 +189,9 @@
     var elapsed = elapsedLabel(order.createdAt);
     var elapsedClass = (Date.now() - new Date(order.createdAt).getTime() > 10 * 60000) ? 'text-error font-bold animate-pulse' : 'text-on-surface-variant';
 
-    var tableLabel = order.isTakeaway ? '<span class="font-label-md text-on-surface-variant uppercase tracking-wider">Para Llevar</span>' :
-      '<span class="font-label-md text-on-surface-variant uppercase tracking-wider">Mesa</span><div class="font-display-lg text-display-lg ' + headerClass + ' leading-none">' + String(order.tableNumber || '?').padStart(2, '0') + '</div>';
+    var tableLabel = order.isTakeaway
+      ? '<span class="font-label-md text-on-surface-variant uppercase tracking-wider">Para Llevar' + (order.tableNumber ? ' · Mesa ' + order.tableNumber : '') + '</span>'
+      : '<span class="font-label-md text-on-surface-variant uppercase tracking-wider">Mesa</span><div class="font-display-lg text-display-lg ' + headerClass + ' leading-none">' + String(order.tableNumber || '?').padStart(2, '0') + '</div>';
 
     var progressColor = isPending ? 'text-primary' : isInProgress ? 'text-tertiary' : 'text-secondary';
 
@@ -202,7 +203,7 @@
         (item.isTakeaway ? '<span class="material-symbols-outlined text-outline text-[16px]" title="Para llevar">takeout_dining</span>' : '') +
         (isDone
           ? '<span class="text-secondary font-label-md flex items-center gap-1"><span class="material-symbols-outlined fill-icon text-[16px]">check_circle</span> Listo</span>'
-          : (!isReady
+          : (isInProgress
               ? '<button class="text-secondary hover:bg-secondary-container px-2 py-1 rounded-md font-label-md flex items-center gap-1 transition-colors item-ready-btn" data-order="' + escHtml(order.id) + '" data-item="' + escHtml(item.id) + '" title="Marcar este ítem como listo"><span class="material-symbols-outlined text-[16px]">check_circle</span> Listo</button>'
               : '')) +
         '</li>';
