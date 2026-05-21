@@ -212,24 +212,34 @@
       ? '<div class="bg-surface-container-highest text-on-surface font-label-md p-3 rounded-md flex items-start gap-2"><span class="material-symbols-outlined text-tertiary text-sm">edit_note</span><span>' + escHtml(order.notes) + '</span></div>'
       : '';
 
+    var borderClass = isInProgress ? 'border border-tertiary/30 relative overflow-hidden' : isReady ? 'border border-secondary/40 relative overflow-hidden' : 'border border-surface-variant';
+    var leftBar = (isInProgress || isReady) ? '<div class="absolute top-0 left-0 w-1 h-full ' + (isInProgress ? 'bg-tertiary' : 'bg-secondary') + '"></div>' : '';
+    var pl = (isInProgress || isReady) ? ' pl-2' : '';
+    var am = (isInProgress || isReady) ? ' ml-1' : '';
+
+    var latestReadyAt = null;
+    if (isReady) {
+      order.items.forEach(function (item) {
+        if (item.readyAt && (!latestReadyAt || new Date(item.readyAt) > new Date(latestReadyAt))) {
+          latestReadyAt = item.readyAt;
+        }
+      });
+    }
+
     var actionHtml = '';
     if (isPending) {
       actionHtml = '<button class="mt-2 bg-primary text-on-primary h-[56px] rounded-lg font-label-lg flex items-center justify-center gap-2 w-full hover:bg-surface-tint transition-colors shadow-sm start-btn" data-order="' + escHtml(order.id) + '">' +
         '<span class="material-symbols-outlined">play_arrow</span>Iniciar preparación</button>';
     } else if (isInProgress) {
-      actionHtml = '<button class="mt-2 bg-secondary text-on-secondary h-[56px] rounded-lg font-label-lg flex items-center justify-center gap-2 w-full hover:bg-on-secondary-container hover:text-secondary-container transition-colors shadow-sm all-ready-btn" data-order="' + escHtml(order.id) + '">' +
+      actionHtml = '<button class="mt-2 bg-secondary text-on-secondary h-[56px] rounded-lg font-label-lg flex items-center justify-center gap-2 w-full' + am + ' hover:bg-on-secondary-container hover:text-secondary-container transition-colors shadow-sm all-ready-btn" data-order="' + escHtml(order.id) + '">' +
         '<span class="material-symbols-outlined">check_circle</span>Marcar todo el pedido como Listo</button>';
     } else if (isReady) {
-      actionHtml = '<div class="mt-2 bg-secondary text-on-secondary h-[48px] rounded-lg font-label-lg flex items-center justify-center gap-2 w-full shadow-sm">' +
+      actionHtml = '<div class="mt-2 bg-secondary text-on-secondary h-[48px] rounded-lg font-label-lg flex items-center justify-center gap-2 w-full' + am + ' shadow-sm">' +
         '<span class="material-symbols-outlined fill-icon">room_service</span>Listo para entregar</div>' +
         '<div class="bg-surface-container-highest text-on-surface-variant font-label-md p-2 rounded-md flex items-center gap-2">' +
         '<span class="material-symbols-outlined text-[16px]">timer</span>' +
-        '<span>Desaparece en <strong class="text-on-surface countdown-label" data-ready="' + escHtml(order.items[0] && order.items[0].readyAt || '') + '">' + readyCountdown(order.items[0] && order.items[0].readyAt) + '</strong></span></div>';
+        '<span>Desaparece en <strong class="text-on-surface countdown-label" data-ready="' + escHtml(latestReadyAt || '') + '">' + readyCountdown(latestReadyAt) + '</strong></span></div>';
     }
-
-    var borderClass = isInProgress ? 'border border-tertiary/30 relative overflow-hidden' : isReady ? 'border border-secondary/40 relative overflow-hidden' : 'border border-surface-variant';
-    var leftBar = (isInProgress || isReady) ? '<div class="absolute top-0 left-0 w-1 h-full ' + (isInProgress ? 'bg-tertiary' : 'bg-secondary') + '"></div>' : '';
-    var pl = (isInProgress || isReady) ? ' pl-2' : '';
 
     var article = document.createElement('article');
     article.className = 'bg-surface rounded-lg shadow-sm ' + borderClass + ' p-4 flex flex-col gap-4';
@@ -244,7 +254,7 @@
       '</div>' +
       '<ul class="font-body-lg text-on-surface space-y-2' + (pl ? ' pl-2' : '') + '">' + itemsHtml + '</ul>' +
       notesHtml +
-      (pl ? actionHtml.replace(/w-full/g, 'w-full ml-1') : actionHtml);
+      actionHtml;
 
     return article;
   }

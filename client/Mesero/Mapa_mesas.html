@@ -136,6 +136,10 @@
   }
 
   function renderTables(tableData) {
+    if (!Array.isArray(tableData)) {
+      document.getElementById('tables-loading').textContent = 'Error al cargar mesas. Intenta de nuevo.';
+      return;
+    }
     var loading = document.getElementById('tables-loading');
     var grid = document.getElementById('tables-grid');
     var divider = document.getElementById('section-divider');

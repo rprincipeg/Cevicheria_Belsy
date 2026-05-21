@@ -93,6 +93,14 @@ export async function updateItemStatus(req: Request, res: Response): Promise<voi
       },
     });
 
+    if (status === 'IN_PROGRESS') {
+      // Move order from PENDING → IN_PROGRESS when first item starts
+      await prisma.order.updateMany({
+        where: { id: orderId, status: 'PENDING' },
+        data: { status: 'IN_PROGRESS' },
+      });
+    }
+
     if (status === 'READY') {
       const allItems = await prisma.orderItem.findMany({ where: { orderId: orderId } });
       const allReady = allItems.every((i) =>

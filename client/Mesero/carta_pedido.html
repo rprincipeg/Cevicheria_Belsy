@@ -386,7 +386,7 @@
 
     var btn = document.getElementById('btn-confirm');
     btn.disabled = true;
-    btn.textContent = 'Enviando...';
+    btn.innerHTML = '<span class="material-symbols-outlined">hourglass_empty</span> Enviando...';
 
     req.then(function (res) {
       if (!res.ok) {
