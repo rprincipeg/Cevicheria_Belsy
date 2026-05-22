@@ -18,6 +18,7 @@ const createOrderSchema = z.object({
 });
 
 const addItemsSchema = z.object({
+  notes: z.string().optional(),
   items: z.array(orderItemSchema).min(1, 'Se requiere al menos 1 ítem'),
 });
 
@@ -171,7 +172,7 @@ export async function addOrderItems(req: Request, res: Response): Promise<void> 
       res.status(400).json({ error: result.error.flatten() });
       return;
     }
-    const { items } = result.data;
+    const { items, notes } = result.data;
 
     const order = await prisma.order.findUnique({
       where: { id: orderId },
@@ -194,7 +195,7 @@ export async function addOrderItems(req: Request, res: Response): Promise<void> 
           createdById: req.user!.userId,
           status: 'PENDING',
           isTakeaway: order.isTakeaway,
-          notes: null,
+          notes: notes ?? null,
           total,
           items: {
             create: items.map((item) => {
@@ -243,7 +244,7 @@ export async function addOrderItems(req: Request, res: Response): Promise<void> 
           createdById: req.user!.userId,
           status: 'PENDING',
           isTakeaway: order.isTakeaway,
-          notes: null,
+          notes: notes ?? null,
           total,
           items: {
             create: items.map((item) => {
@@ -276,7 +277,12 @@ export async function addOrderItems(req: Request, res: Response): Promise<void> 
       return;
     }
 
-    // Order is PENDING — add items directly
+    // Order is PENDING — add items directly, updating notes if provided
+    if (notes) {
+      await prisma.order.update({ where: { id: orderId }, data: { notes } });
+    }
+    const effectiveNotes = notes ?? order.notes;
+
     const newItems = await prisma.$transaction(
       items.map((item) => {
         const menuItem = menuItemMap.get(item.menuItemId)!;
@@ -301,7 +307,7 @@ export async function addOrderItems(req: Request, res: Response): Promise<void> 
       code: order.code,
       tableNumber: order.table?.number ?? null,
       isTakeaway: order.isTakeaway,
-      notes: order.notes,
+      notes: effectiveNotes,
       items: newItems.map((item) => ({
         id: item.id,
         name: item.menuItem.name,

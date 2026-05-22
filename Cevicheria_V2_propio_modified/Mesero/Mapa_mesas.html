@@ -1,215 +1,273 @@
 <!DOCTYPE html><html lang="es"><head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>Cevicheria Belsy - Mapa de Mesas</title>
+    <title>RestaurantOS - Mapa de Mesas</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
     <script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        "primary-container": "#1e40af", "primary": "#00288e", "outline-variant": "#c4c5d5",
-                        "surface-container-low": "#f0f4f8", "on-primary-fixed-variant": "#173bab",
-                        "on-tertiary-fixed": "#370e00", "primary-fixed": "#dde1ff", "on-primary-fixed": "#001453",
-                        "on-surface": "#171c1f", "on-primary": "#ffffff", "secondary": "#006a61",
-                        "on-background": "#171c1f", "tertiary-container": "#872d00", "surface-container": "#eaeef2",
-                        "on-surface-variant": "#444653", "surface": "#f6fafe", "inverse-primary": "#b8c4ff",
-                        "surface-container-high": "#e4e9ed", "background": "#f6fafe",
-                        "surface-container-lowest": "#ffffff", "surface-variant": "#dfe3e7",
-                        "secondary-fixed-dim": "#6bd8cb", "on-tertiary-container": "#ffa582",
-                        "tertiary-fixed": "#ffdbce", "secondary-fixed": "#89f5e7",
-                        "on-tertiary-fixed-variant": "#7f2b00", "secondary-container": "#86f2e4",
-                        "outline": "#757684", "surface-tint": "#3755c3", "on-tertiary": "#ffffff",
-                        "on-secondary": "#ffffff", "tertiary": "#611e00", "on-primary-container": "#a8b8ff",
-                        "tertiary-fixed-dim": "#ffb599", "primary-fixed-dim": "#b8c4ff"
-                    },
-                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
-                    spacing: { "touch-target-min": "48px", "container-max-width": "1280px", "margin": "32px", "unit": "8px", "gutter": "24px" },
-                    fontFamily: { "headline-md": ["Inter"], "label-md": ["Inter"], "body-lg": ["Inter"], "display-lg": ["Inter"], "headline-lg": ["Inter"], "body-md": ["Inter"], "label-lg": ["Inter"] },
-                    fontSize: {
-                        "headline-md": ["24px", { lineHeight: "32px", fontWeight: "600" }],
-                        "label-md": ["12px", { lineHeight: "16px", fontWeight: "500" }],
-                        "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }],
-                        "display-lg": ["40px", { lineHeight: "48px", letterSpacing: "-0.02em", fontWeight: "700" }],
-                        "headline-lg": ["32px", { lineHeight: "40px", fontWeight: "600" }],
-                        "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }],
-                        "label-lg": ["14px", { lineHeight: "20px", fontWeight: "600" }]
+            tailwind.config = {
+                darkMode: "class",
+                theme: {
+                    extend: {
+                        colors: {
+                            "inverse-surface": "#2c3134",
+                            "on-secondary-container": "#006f66",
+                            "error": "#ba1a1a",
+                            "on-error": "#ffffff",
+                            "surface-container-highest": "#dfe3e7",
+                            "tertiary-fixed-dim": "#ffb599",
+                            "primary-fixed-dim": "#b8c4ff",
+                            "primary-container": "#1e40af",
+                            "primary": "#00288e",
+                            "outline-variant": "#c4c5d5",
+                            "surface-container-low": "#f0f4f8",
+                            "on-primary-fixed-variant": "#173bab",
+                            "on-tertiary-fixed": "#370e00",
+                            "primary-fixed": "#dde1ff",
+                            "on-primary-fixed": "#001453",
+                            "on-surface": "#171c1f",
+                            "on-secondary-fixed-variant": "#005049",
+                            "on-primary": "#ffffff",
+                            "secondary": "#006a61",
+                            "on-background": "#171c1f",
+                            "tertiary-container": "#872d00",
+                            "surface-dim": "#d6dade",
+                            "surface-container": "#eaeef2",
+                            "on-surface-variant": "#444653",
+                            "surface": "#f6fafe",
+                            "inverse-primary": "#b8c4ff",
+                            "surface-container-high": "#e4e9ed",
+                            "background": "#f6fafe",
+                            "surface-container-lowest": "#ffffff",
+                            "surface-variant": "#dfe3e7",
+                            "on-secondary-fixed": "#00201d",
+                            "secondary-fixed-dim": "#6bd8cb",
+                            "surface-bright": "#f6fafe",
+                            "on-tertiary-container": "#ffa582",
+                            "on-error-container": "#93000a",
+                            "tertiary-fixed": "#ffdbce",
+                            "error-container": "#ffdad6",
+                            "secondary-fixed": "#89f5e7",
+                            "on-tertiary-fixed-variant": "#7f2b00",
+                            "secondary-container": "#86f2e4",
+                            "outline": "#757684",
+                            "surface-tint": "#3755c3",
+                            "inverse-on-surface": "#edf1f5",
+                            "on-tertiary": "#ffffff",
+                            "on-secondary": "#ffffff",
+                            "tertiary": "#611e00",
+                            "on-primary-container": "#a8b8ff"
+                        },
+                        borderRadius: {
+                            "DEFAULT": "0.25rem",
+                            "lg": "0.5rem",
+                            "xl": "0.75rem",
+                            "full": "9999px"
+                        },
+                        spacing: {
+                            "touch-target-min": "48px",
+                            "container-max-width": "1280px",
+                            "margin": "32px",
+                            "unit": "8px",
+                            "gutter": "24px"
+                        },
+                        fontFamily: {
+                            "headline-md": ["Inter"],
+                            "label-md": ["Inter"],
+                            "body-lg": ["Inter"],
+                            "display-lg": ["Inter"],
+                            "headline-lg": ["Inter"],
+                            "body-md": ["Inter"],
+                            "label-lg": ["Inter"]
+                        },
+                        fontSize: {
+                            "headline-md": ["24px", { lineHeight: "32px", fontWeight: "600" }],
+                            "label-md": ["12px", { lineHeight: "16px", fontWeight: "500" }],
+                            "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }],
+                            "display-lg": ["40px", { lineHeight: "48px", letterSpacing: "-0.02em", fontWeight: "700" }],
+                            "headline-lg": ["32px", { lineHeight: "40px", fontWeight: "600" }],
+                            "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+                            "label-lg": ["14px", { lineHeight: "20px", fontWeight: "600" }]
+                        }
                     }
                 }
             }
-        }
-    </script>
-    <style>body { font-family: 'Inter', sans-serif; }</style>
+        </script>
+    <style>
+            body { font-family: 'Inter', sans-serif; }
+        </style>
     <script src="https://cdn.socket.io/4.7.5/socket.io.min.js" crossorigin="anonymous"></script>
-    <script src="../Login/js/auth.js"></script>
+<script src="../Login/js/auth.js"></script>
 </head>
-<body class="bg-background text-on-background min-h-screen flex flex-col">
+    <body class="bg-background text-on-background min-h-screen flex flex-col">
     <!-- TopNavBar -->
-    <nav class="flex justify-between items-center w-full px-margin py-4 h-touch-target-min shadow-sm bg-surface top-0 z-50">
-        <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-lg bg-primary-container flex items-center justify-center">
-                <span class="material-symbols-outlined text-on-primary-container" style="font-variation-settings: 'FILL' 1;">restaurant</span>
-            </div>
-            <span class="font-headline-md text-headline-md font-bold text-primary">Cevicheria Belsy</span>
-        </div>
-        <div class="hidden md:block absolute left-1/2 transform -translate-x-1/2">
-            <h1 class="font-headline-lg text-headline-lg text-on-surface">Mapa de Mesas</h1>
-        </div>
-        <div class="flex items-center gap-6">
-            <div class="hidden sm:flex items-center gap-2">
-                <span class="material-symbols-outlined text-outline">person</span>
-                <span class="font-label-lg text-label-lg text-on-surface-variant" id="user-label">Mesero</span>
-            </div>
-            <button id="btn-cocina" class="font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-high transition-colors h-touch-target-min px-4 rounded-full items-center gap-2 hidden">
-                <span class="material-symbols-outlined text-[18px]">restaurant</span> Cocina
-            </button>
-            <button id="btn-logout" class="font-label-lg text-label-lg text-primary hover:bg-surface-container-high transition-colors h-touch-target-min px-4 rounded-full flex items-center gap-2">
-                <span class="">Cerrar sesión</span>
-                <span class="material-symbols-outlined">logout</span>
-            </button>
-        </div>
+    <nav class="flex justify-between items-center w-full px-margin py-4 h-touch-target-min shadow-sm bg-surface docked full-width top-0 z-50">
+    <!-- Logo & Brand -->
+    <div class="flex items-center gap-3">
+    <div class="w-10 h-10 rounded-lg bg-primary-container flex items-center justify-center">
+    <span class="material-symbols-outlined text-on-primary-container" style="font-variation-settings: 'FILL' 1;">restaurant</span>
+    </div>
+    <span class="font-headline-md text-headline-md font-bold text-primary">Cevicheria Belsy</span>
+    </div>
+    <!-- Page Title (Desktop) -->
+    <div class="hidden md:block absolute left-1/2 transform -translate-x-1/2">
+    <h1 class="font-headline-lg text-headline-lg text-on-surface">Mapa de Mesas</h1>
+    </div>
+    <!-- Actions -->
+    <div class="flex items-center gap-6">
+    <div class="hidden sm:flex items-center gap-2">
+    <span class="material-symbols-outlined text-outline">person</span>
+    <span class="font-label-lg text-label-lg text-on-surface-variant">Mesero</span>
+    </div>
+    <button id="btn-monitor" class="font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-high transition-colors h-touch-target-min px-4 rounded-full flex items-center gap-2">
+    <span class="material-symbols-outlined">monitor_heart</span>
+    <span class="hidden sm:inline">Monitor</span>
+    </button>
+    <button class="font-label-lg text-label-lg text-primary hover:bg-surface-container-high transition-colors h-touch-target-min px-4 rounded-full flex items-center gap-2">
+    <span class="">Cerrar sesión</span>
+    <span class="material-symbols-outlined">logout</span>
+    </button>
+    </div>
     </nav>
     <!-- Main Canvas -->
     <main class="flex-1 p-margin w-full max-w-container-max-width mx-auto flex flex-col gap-gutter">
-        <div class="md:hidden mb-4">
-            <h1 class="font-headline-lg text-headline-lg text-on-surface">Mapa de Mesas</h1>
-        </div>
-        <div class="flex-1 bg-surface-container-low rounded-xl p-8 border border-outline-variant shadow-sm relative overflow-hidden">
-            <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(#c4c5d5 1px, transparent 1px); background-size: 24px 24px;"></div>
-            <div class="relative z-10 flex flex-col gap-gutter">
-                <!-- Loading state -->
-                <div id="tables-loading" class="flex items-center justify-center py-12">
-                    <span class="font-body-md text-on-surface-variant">Cargando mesas...</span>
-                </div>
-                <!-- Tables grid (populated by JS) -->
-                <div id="tables-grid" class="grid grid-cols-2 md:grid-cols-4 gap-gutter justify-items-center hidden"></div>
-                <!-- Divider -->
-                <div id="section-divider" class="w-full border-t-2 border-dashed border-outline-variant my-4 hidden"></div>
-                <!-- Para Llevar -->
-                <div id="takeaway-section" class="flex justify-end w-full hidden">
-                    <button id="btn-takeaway" class="w-full md:w-[300px] h-[120px] bg-primary-fixed rounded-xl shadow-sm hover:shadow-md transition-all flex items-center justify-between p-6 relative group hover:-translate-y-1 border border-primary-fixed-dim">
-                        <div class="flex flex-col items-start gap-2">
-                            <span class="font-headline-md text-headline-md text-on-primary-fixed-variant">Para Llevar</span>
-                            <span class="font-label-md text-label-md text-on-primary-fixed-variant flex items-center gap-1">
-                                <span class="material-symbols-outlined text-[14px]">info</span> Clientes sin mesa
-                            </span>
-                        </div>
-                        <div class="w-16 h-16 rounded-full bg-primary-container flex items-center justify-center shadow-inner">
-                            <span class="material-symbols-outlined text-[32px] text-on-primary-container">shopping_bag</span>
-                        </div>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </main>
-
+    <!-- Page Title (Mobile) -->
+    <div class="md:hidden mb-4">
+    <h1 class="font-headline-lg text-headline-lg text-on-surface">Mapa de Mesas</h1>
+    </div>
+    <!-- Floor Plan Grid -->
+    <div class="flex-1 bg-surface-container-low rounded-xl p-8 border border-outline-variant shadow-sm relative overflow-hidden">
+    <!-- Subtle background pattern to simulate floor -->
+    <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(#c4c5d5 1px, transparent 1px); background-size: 24px 24px;"></div>
+    <div class="relative z-10 flex flex-col gap-gutter">
+    <!-- Row 1: 4 Tables -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-gutter justify-items-center">
+    <!-- Mesa 1 (Libre) -->
+    <button class="w-full max-w-[220px] aspect-square bg-surface-container-lowest rounded-xl shadow-sm hover:shadow-md transition-all flex flex-col items-center justify-center p-4 relative group hover:-translate-y-1">
+    <span class="material-symbols-outlined absolute top-4 right-4 text-outline group-hover:text-primary transition-colors">table_restaurant</span>
+    <span class="font-display-lg text-display-lg text-on-surface mb-3">1</span>
+    <div class="bg-[#86efac] text-[#14532d] px-4 py-1.5 rounded-full font-label-md text-label-md uppercase tracking-wide">
+                                Libre
+                            </div>
+    </button>
+    <!-- Mesa 2 (Ocupada) - Permite añadir más ítems al pedido activo (Hme-01 criterio 3) -->
+    <button class="w-full max-w-[220px] aspect-square bg-tertiary-fixed rounded-xl shadow-md flex flex-col items-center justify-center p-4 relative transform scale-[1.02] ring-2 ring-tertiary-fixed-dim border-transparent group hover:shadow-lg transition-all" title="Añadir ítems al pedido de esta mesa">
+    <span class="material-symbols-outlined absolute top-4 right-4 text-on-tertiary-fixed-variant" style="font-variation-settings: 'FILL' 1;">table_restaurant</span>
+    <span class="font-display-lg text-display-lg text-on-tertiary-fixed-variant mb-3">2</span>
+    <div class="flex flex-col items-center gap-1.5">
+    <div class="bg-tertiary text-on-tertiary px-4 py-1.5 rounded-full font-label-md text-label-md uppercase tracking-wide shadow-sm">
+                                    Ocupada
+                                </div>
+    <span class="font-label-md text-label-md text-on-tertiary-fixed-variant flex items-center gap-1">
+    <span class="material-symbols-outlined text-[14px]">add_circle</span> Añadir pedido
+                                </span>
+    </div>
+    </button>
+    <!-- Mesa 3 (Libre) -->
+    <button class="w-full max-w-[220px] aspect-square bg-surface-container-lowest rounded-xl shadow-sm hover:shadow-md transition-all flex flex-col items-center justify-center p-4 relative group hover:-translate-y-1">
+    <span class="material-symbols-outlined absolute top-4 right-4 text-outline group-hover:text-primary transition-colors">table_restaurant</span>
+    <span class="font-display-lg text-display-lg text-on-surface mb-3">3</span>
+    <div class="bg-[#86efac] text-[#14532d] px-4 py-1.5 rounded-full font-label-md text-label-md uppercase tracking-wide">
+                                Libre
+                            </div>
+    </button>
+    <!-- Mesa 4 (Ocupada) - Permite añadir más ítems al pedido activo (Hme-01 criterio 3) -->
+    <button class="w-full max-w-[220px] aspect-square bg-tertiary-fixed rounded-xl shadow-md flex flex-col items-center justify-center p-4 relative transform scale-[1.02] ring-2 ring-tertiary-fixed-dim border-transparent group hover:shadow-lg transition-all" title="Añadir ítems al pedido de esta mesa">
+    <span class="material-symbols-outlined absolute top-4 right-4 text-on-tertiary-fixed-variant" style="font-variation-settings: 'FILL' 1;">table_restaurant</span>
+    <span class="font-display-lg text-display-lg text-on-tertiary-fixed-variant mb-3">4</span>
+    <div class="flex flex-col items-center gap-1.5">
+    <div class="bg-tertiary text-on-tertiary px-4 py-1.5 rounded-full font-label-md text-label-md uppercase tracking-wide shadow-sm">
+                                    Ocupada
+                                </div>
+    <span class="font-label-md text-label-md text-on-tertiary-fixed-variant flex items-center gap-1">
+    <span class="material-symbols-outlined text-[14px]">add_circle</span> Añadir pedido
+                                </span>
+    </div>
+    </button>
+    </div>
+    <!-- Row 2: 3 Tables (Centered) -->
+    <div class="flex justify-center w-full">
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-gutter justify-items-center w-full max-w-[850px]">
+    <!-- Mesa 5 (Libre) -->
+    <button class="w-full max-w-[220px] aspect-square bg-surface-container-lowest rounded-xl shadow-sm hover:shadow-md transition-all flex flex-col items-center justify-center p-4 relative group hover:-translate-y-1">
+    <span class="material-symbols-outlined absolute top-4 right-4 text-outline group-hover:text-primary transition-colors">table_restaurant</span>
+    <span class="font-display-lg text-display-lg text-on-surface mb-3">5</span>
+    <div class="bg-[#86efac] text-[#14532d] px-4 py-1.5 rounded-full font-label-md text-label-md uppercase tracking-wide">
+                                    Libre
+                                </div>
+    </button>
+    <!-- Mesa 6 (Libre) -->
+    <button class="w-full max-w-[220px] aspect-square bg-surface-container-lowest rounded-xl shadow-sm hover:shadow-md transition-all flex flex-col items-center justify-center p-4 relative group hover:-translate-y-1">
+    <span class="material-symbols-outlined absolute top-4 right-4 text-outline group-hover:text-primary transition-colors">table_restaurant</span>
+    <span class="font-display-lg text-display-lg text-on-surface mb-3">6</span>
+    <div class="bg-[#86efac] text-[#14532d] px-4 py-1.5 rounded-full font-label-md text-label-md uppercase tracking-wide">
+                                    Libre
+                                </div>
+    </button>
+    <!-- Mesa 7 (Ocupada) - Permite añadir más ítems al pedido activo (Hme-01 criterio 3) -->
+    <button class="w-full max-w-[220px] aspect-square bg-tertiary-fixed rounded-xl shadow-md flex flex-col items-center justify-center p-4 relative transform scale-[1.02] ring-2 ring-tertiary-fixed-dim border-transparent md:col-auto col-span-2 group hover:shadow-lg transition-all" title="Añadir ítems al pedido de esta mesa">
+    <span class="material-symbols-outlined absolute top-4 right-4 text-on-tertiary-fixed-variant" style="font-variation-settings: 'FILL' 1;">table_restaurant</span>
+    <span class="font-display-lg text-display-lg text-on-tertiary-fixed-variant mb-3">7</span>
+    <div class="flex flex-col items-center gap-1.5">
+    <div class="bg-tertiary text-on-tertiary px-4 py-1.5 rounded-full font-label-md text-label-md uppercase tracking-wide shadow-sm">
+                                        Ocupada
+                                    </div>
+    <span class="font-label-md text-label-md text-on-tertiary-fixed-variant flex items-center gap-1">
+    <span class="material-symbols-outlined text-[14px]">add_circle</span> Añadir pedido
+                                    </span>
+    </div>
+    </button>
+    </div>
+    </div>
+    <!-- Row 3: 3 Tables (Centered) -->
+    
+    <!-- Divider -->
+    <div class="w-full border-t-2 border-dashed border-outline-variant my-4"></div>
+    <!-- Special Section -->
+    <div class="flex justify-end w-full">
+    <!-- Para Llevar (sin estado - no requiere mesa, Hme-01 criterio 1) -->
+    <button class="w-full md:w-[300px] h-[120px] bg-primary-fixed rounded-xl shadow-sm hover:shadow-md transition-all flex items-center justify-between p-6 relative group hover:-translate-y-1 border border-primary-fixed-dim">
+    <div class="flex flex-col items-start gap-2">
+    <span class="font-headline-md text-headline-md text-on-primary-fixed-variant">Para Llevar</span>
+    <span class="font-label-md text-label-md text-on-primary-fixed-variant flex items-center gap-1">
+    <span class="material-symbols-outlined text-[14px]">info</span> Clientes sin mesa
+</span>
+</div>
+<div class="w-16 h-16 rounded-full bg-primary-container flex items-center justify-center shadow-inner">
+<span class="material-symbols-outlined text-[32px] text-on-primary-container">shopping_bag</span>
+</div>
+</button>
+</div>
+</div>
+</div>
+</main>
 <script>
 (function () {
-  if (!CB.protectPage(['mesero', 'admin'])) return;
-
-  var sess = CB.getSession();
-  var userLabel = document.getElementById('user-label');
-  if (sess && userLabel) userLabel.textContent = sess.rol.charAt(0).toUpperCase() + sess.rol.slice(1);
-
-  // Show kitchen link for admin
-  if (sess && sess.rol === 'admin') {
-    var btnCocina = document.getElementById('btn-cocina');
-    if (btnCocina) {
-      btnCocina.classList.remove('hidden');
-      btnCocina.classList.add('flex');
-      btnCocina.addEventListener('click', function () {
-        window.location.href = '../Cocinero/Monitor_cocinero.html';
-      });
+  if (!CB.protectPage(["mesero", "admin"])) return;
+  document.querySelectorAll('button, a').forEach(function (el) {
+    if (/Cerrar sesi/i.test(el.textContent)) {
+      el.addEventListener('click', function (e) { e.preventDefault(); CB.logout(); });
     }
-  }
+  });
 
-  document.getElementById('btn-logout').addEventListener('click', function () { CB.logout(); });
-
-  function apiFetch(path) {
-    var token = sessionStorage.getItem(CB.CONFIG.STORAGE_KEY_TOKEN);
-    return fetch(CB.CONFIG.API_BASE + path, {
-      headers: { 'Authorization': 'Bearer ' + token }
-    }).then(function (r) { return r.json(); });
-  }
-
-  function renderTables(tableData) {
-    var loading = document.getElementById('tables-loading');
-    var grid = document.getElementById('tables-grid');
-    var divider = document.getElementById('section-divider');
-    var takeawaySection = document.getElementById('takeaway-section');
-
-    loading.classList.add('hidden');
-    grid.innerHTML = '';
-
-    var realTables = tableData.filter(function (t) { return t.id !== 'takeaway'; });
-    var hasTakeaway = tableData.some(function (t) { return t.id === 'takeaway'; });
-
-    if (realTables.length > 0) {
-      grid.classList.remove('hidden');
-      realTables.forEach(function (table) {
-        var isFree = table.status === 'FREE';
-        var card = document.createElement('button');
-        if (isFree) {
-          card.className = 'w-full max-w-[220px] aspect-square bg-surface-container-lowest rounded-xl shadow-sm hover:shadow-md transition-all flex flex-col items-center justify-center p-4 relative group hover:-translate-y-1';
-          card.innerHTML =
-            '<span class="material-symbols-outlined absolute top-4 right-4 text-outline group-hover:text-primary transition-colors">table_restaurant</span>' +
-            '<span class="font-display-lg text-display-lg text-on-surface mb-3">' + table.number + '</span>' +
-            '<div class="bg-[#86efac] text-[#14532d] px-4 py-1.5 rounded-full font-label-md text-label-md uppercase tracking-wide">Libre</div>';
-          card.addEventListener('click', function () {
-            window.location.href = 'carta_pedido.html?tableId=' + table.id + '&tableNumber=' + table.number;
-          });
-        } else {
-          card.className = 'w-full max-w-[220px] aspect-square bg-tertiary-fixed rounded-xl shadow-md flex flex-col items-center justify-center p-4 relative transform scale-[1.02] ring-2 ring-tertiary-fixed-dim border-transparent group hover:shadow-lg transition-all';
-          card.innerHTML =
-            '<span class="material-symbols-outlined absolute top-4 right-4 text-on-tertiary-fixed-variant" style="font-variation-settings: \'FILL\' 1;">table_restaurant</span>' +
-            '<span class="font-display-lg text-display-lg text-on-tertiary-fixed-variant mb-3">' + table.number + '</span>' +
-            '<div class="flex flex-col items-center gap-1.5">' +
-              '<div class="bg-tertiary text-on-tertiary px-4 py-1.5 rounded-full font-label-md text-label-md uppercase tracking-wide shadow-sm">Ocupada</div>' +
-              '<span class="font-label-md text-label-md text-on-tertiary-fixed-variant flex items-center gap-1">' +
-                '<span class="material-symbols-outlined text-[14px]">add_circle</span> Añadir pedido' +
-              '</span>' +
-            '</div>';
-          card.addEventListener('click', (function (t) {
-            return function () {
-              var url = 'carta_pedido.html?tableId=' + t.id + '&tableNumber=' + t.number;
-              if (t.activeOrderId) url += '&orderId=' + t.activeOrderId;
-              window.location.href = url;
-            };
-          })(table));
-        }
-        grid.appendChild(card);
-      });
-    }
-
-    if (hasTakeaway) {
-      divider.classList.remove('hidden');
-      takeawaySection.classList.remove('hidden');
-    } else {
-      divider.classList.add('hidden');
-      takeawaySection.classList.add('hidden');
-    }
-  }
-
-  function loadTables() {
-    apiFetch('/tables').then(renderTables).catch(function (err) {
-      CB.debug('Error cargando mesas:', err);
-      document.getElementById('tables-loading').textContent = 'Error al cargar mesas. Verifica la conexión.';
+  var btnMonitor = document.getElementById('btn-monitor');
+  if (btnMonitor) {
+    btnMonitor.addEventListener('click', function () {
+      window.location.href = '../Mesero/Monitor_mesero.html';
     });
   }
 
-  loadTables();
-
-  document.getElementById('btn-takeaway').addEventListener('click', function () {
-    window.location.href = 'carta_pedido.html?isTakeaway=true';
+  document.querySelectorAll('main button').forEach(function (btn) {
+    var t = btn.textContent;
+    if (/Libre|Ocupada|Añadir pedido|Para Llevar/i.test(t)) {
+      btn.style.cursor = 'pointer';
+      btn.addEventListener('click', function () {
+        window.location.href = '../Mesero/carta_pedido.html';
+      });
+    }
   });
-
-  if (CB.socket) {
-    CB.socket.emit('join:room', 'waiters');
-    CB.socket.on('tables:updated', function (data) { renderTables(data); });
-  }
 })();
 </script>
 </body></html>
