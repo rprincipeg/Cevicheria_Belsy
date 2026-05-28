@@ -197,9 +197,10 @@
 
     var itemsHtml = order.items.map(function (item) {
       var isDone = item.status === 'READY';
-      return '<li class="flex items-center gap-2 ' + (isDone ? 'bg-secondary/10 opacity-70' : 'bg-surface-container-low/60') + ' px-2 py-2 rounded-md">' +
+      var doneStyle = isDone && !isReady ? 'bg-secondary/10 opacity-70' : isDone ? 'bg-secondary/10' : 'bg-surface-container-low/60';
+      return '<li class="flex items-center gap-2 ' + doneStyle + ' px-2 py-2 rounded-md">' +
         '<span class="font-bold ' + (isDone ? 'text-secondary' : headerClass) + '">' + item.quantity + 'x</span>' +
-        '<span class="flex-1 ' + (isDone ? 'line-through text-on-surface-variant' : '') + '">' + escHtml(item.name) + '</span>' +
+        '<span class="flex-1 ' + (isDone && !isReady ? 'line-through text-on-surface-variant' : '') + '">' + escHtml(item.name) + '</span>' +
         (item.isTakeaway ? '<span class="material-symbols-outlined text-outline text-[16px]" title="Para llevar">takeout_dining</span>' : '') +
         (isDone
           ? '<span class="text-secondary font-label-md flex items-center gap-1"><span class="material-symbols-outlined fill-icon text-[16px]">check_circle</span> Listo</span>'
@@ -299,8 +300,20 @@
 
   function renderKanban() {
     var pending = orders.filter(function (o) { return o.status === 'PENDING'; });
-    var inProgress = orders.filter(function (o) { return o.status === 'IN_PROGRESS'; });
-    var ready = orders.filter(function (o) { return o.status === 'READY'; });
+
+    // EN PROCESO: pedidos con ítems IN_PROGRESS (solo muestra esos ítems)
+    var inProgress = [];
+    orders.filter(function (o) { return o.status === 'IN_PROGRESS'; }).forEach(function (o) {
+      var ip = o.items.filter(function (i) { return i.status === 'IN_PROGRESS'; });
+      if (ip.length > 0) inProgress.push(Object.assign({}, o, { items: ip }));
+    });
+
+    // LISTO: cualquier pedido con ítems READY (solo muestra esos ítems)
+    var ready = [];
+    orders.forEach(function (o) {
+      var rdy = o.items.filter(function (i) { return i.status === 'READY'; });
+      if (rdy.length > 0) ready.push(Object.assign({}, o, { items: rdy }));
+    });
 
     document.getElementById('count-pending').textContent = pending.length;
     document.getElementById('count-inprogress').textContent = inProgress.length;

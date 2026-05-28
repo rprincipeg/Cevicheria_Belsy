@@ -193,33 +193,4 @@ CB.debug = function () {
   console.log.apply(console, args);
 };
 
-CB.renderDebugPanel = function () {
-  if (!CB.CONFIG.DEBUG) return;
-  if (document.getElementById('cb-debug-panel')) return;
-  if (!CB.getSession()) return;
-  var panel = document.createElement('div');
-  panel.id = 'cb-debug-panel';
-  panel.style.cssText = 'position:fixed;bottom:12px;right:12px;background:rgba(15,23,42,.92);color:#e2e8f0;font:12px/1.4 monospace;padding:10px 12px;border-radius:8px;z-index:9999;box-shadow:0 4px 12px rgba(0,0,0,.3);max-width:280px;';
-  function refresh() {
-    var sess = CB.getSession();
-    if (!sess) { panel.remove(); return; }
-    var elapsed = ((Date.now() - sess.lastActivity) / 60000);
-    var remaining = (CB.CONFIG.SESSION_TIMEOUT_MIN - elapsed).toFixed(1);
-    panel.innerHTML = ''
-      + '<div style="font-weight:700;color:#fbbf24;margin-bottom:4px;">[CB-DEBUG]</div>'
-      + '<div>Modo: <b>' + (CB.CONFIG.API_MODE ? 'API REST' : 'Mockup local') + '</b></div>'
-      + '<div>Usuario: <b>' + sess.usuario + '</b></div>'
-      + '<div>Rol: <b>' + sess.rol + '</b></div>'
-      + '<div>Expira en: <b>' + remaining + ' min</b></div>'
-      + '<button id="cb-debug-logout" style="margin-top:6px;background:#dc2626;color:#fff;border:none;padding:4px 8px;border-radius:4px;cursor:pointer;">Cerrar sesi&oacute;n</button>';
-    var btn = panel.querySelector('#cb-debug-logout');
-    if (btn) btn.onclick = function () { CB.logout(); };
-  }
-  refresh();
-  setInterval(refresh, 5000);
-  document.body.appendChild(panel);
-};
-if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', CB.renderDebugPanel); }
-else { CB.renderDebugPanel(); }
-
 CB.initSocket();

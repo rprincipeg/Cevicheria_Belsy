@@ -1,356 +1,408 @@
 <!DOCTYPE html><html class="light" lang="es"><head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>Monitor de Cocina — Cevicheria Belsy</title>
+    <title>Monitor de Cocina — RestaurantOS</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
     <style>
-        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
-        .fill-icon { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
-        body { font-family: 'Inter', sans-serif; }
-    </style>
+            .material-symbols-outlined {
+                font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            }
+            .fill-icon {
+                font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            }
+        </style>
     <script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        "primary-container": "#1e40af", "primary": "#00288e", "outline-variant": "#c4c5d5",
-                        "surface-container-low": "#f0f4f8", "on-primary-fixed-variant": "#173bab",
-                        "on-primary-fixed": "#001453", "on-surface": "#171c1f", "on-primary": "#ffffff",
-                        "secondary": "#006a61", "on-background": "#171c1f", "tertiary-container": "#872d00",
-                        "surface-container": "#eaeef2", "on-surface-variant": "#444653", "surface": "#f6fafe",
-                        "surface-container-high": "#e4e9ed", "background": "#f6fafe",
-                        "surface-container-lowest": "#ffffff", "surface-variant": "#dfe3e7",
-                        "on-secondary-container": "#006f66", "secondary-fixed-dim": "#6bd8cb",
-                        "on-tertiary-container": "#ffa582", "secondary-container": "#86f2e4",
-                        "on-secondary-fixed-variant": "#005049", "on-secondary-fixed": "#00201d",
-                        "outline": "#757684", "surface-tint": "#3755c3", "on-tertiary": "#ffffff",
-                        "on-secondary": "#ffffff", "tertiary": "#611e00", "on-primary-container": "#a8b8ff",
-                        "primary-fixed": "#dde1ff", "error": "#ba1a1a", "error-container": "#ffdad6",
-                        "on-error-container": "#93000a", "surface-container-highest": "#dfe3e7"
-                    },
-                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
-                    spacing: { "touch-target-min": "48px", "container-max-width": "1280px", "margin": "32px", "unit": "8px", "gutter": "24px" },
-                    fontFamily: { "headline-md": ["Inter"], "label-md": ["Inter"], "body-lg": ["Inter"], "display-lg": ["Inter"], "headline-lg": ["Inter"], "body-md": ["Inter"], "label-lg": ["Inter"] },
-                    fontSize: {
-                        "headline-md": ["24px", { lineHeight: "32px", fontWeight: "600" }],
-                        "label-md": ["12px", { lineHeight: "16px", fontWeight: "500" }],
-                        "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }],
-                        "display-lg": ["40px", { lineHeight: "48px", letterSpacing: "-0.02em", fontWeight: "700" }],
-                        "headline-lg": ["32px", { lineHeight: "40px", fontWeight: "600" }],
-                        "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }],
-                        "label-lg": ["14px", { lineHeight: "20px", fontWeight: "600" }]
+            tailwind.config = {
+                darkMode: "class",
+                theme: {
+                    extend: {
+                        "colors": {
+                            "inverse-surface": "#2c3134",
+                            "on-secondary-container": "#006f66",
+                            "error": "#ba1a1a",
+                            "on-error": "#ffffff",
+                            "surface-container-highest": "#dfe3e7",
+                            "tertiary-fixed-dim": "#ffb599",
+                            "primary-fixed-dim": "#b8c4ff",
+                            "primary-container": "#1e40af",
+                            "primary": "#00288e",
+                            "outline-variant": "#c4c5d5",
+                            "surface-container-low": "#f0f4f8",
+                            "on-primary-fixed-variant": "#173bab",
+                            "on-tertiary-fixed": "#370e00",
+                            "primary-fixed": "#dde1ff",
+                            "on-primary-fixed": "#001453",
+                            "on-surface": "#171c1f",
+                            "on-secondary-fixed-variant": "#005049",
+                            "on-primary": "#ffffff",
+                            "secondary": "#006a61",
+                            "on-background": "#171c1f",
+                            "tertiary-container": "#872d00",
+                            "surface-dim": "#d6dade",
+                            "surface-container": "#eaeef2",
+                            "on-surface-variant": "#444653",
+                            "surface": "#f6fafe",
+                            "inverse-primary": "#b8c4ff",
+                            "surface-container-high": "#e4e9ed",
+                            "background": "#f6fafe",
+                            "surface-container-lowest": "#ffffff",
+                            "surface-variant": "#dfe3e7",
+                            "on-secondary-fixed": "#00201d",
+                            "secondary-fixed-dim": "#6bd8cb",
+                            "surface-bright": "#f6fafe",
+                            "on-tertiary-container": "#ffa582",
+                            "on-error-container": "#93000a",
+                            "tertiary-fixed": "#ffdbce",
+                            "error-container": "#ffdad6",
+                            "secondary-fixed": "#89f5e7",
+                            "on-tertiary-fixed-variant": "#7f2b00",
+                            "secondary-container": "#86f2e4",
+                            "outline": "#757684",
+                            "surface-tint": "#3755c3",
+                            "inverse-on-surface": "#edf1f5",
+                            "on-tertiary": "#ffffff",
+                            "on-secondary": "#ffffff",
+                            "tertiary": "#611e00",
+                            "on-primary-container": "#a8b8ff"
+                        },
+                        "borderRadius": {
+                            "DEFAULT": "0.25rem",
+                            "lg": "0.5rem",
+                            "xl": "0.75rem",
+                            "full": "9999px"
+                        },
+                        "spacing": {
+                            "touch-target-min": "48px",
+                            "container-max-width": "1280px",
+                            "margin": "32px",
+                            "unit": "8px",
+                            "gutter": "24px"
+                        },
+                        "fontFamily": {
+                            "headline-md": ["Inter"],
+                            "label-md": ["Inter"],
+                            "body-lg": ["Inter"],
+                            "display-lg": ["Inter"],
+                            "headline-lg": ["Inter"],
+                            "body-md": ["Inter"],
+                            "label-lg": ["Inter"]
+                        },
+                        "fontSize": {
+                            "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                            "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+                            "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                            "display-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                            "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "600" }],
+                            "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                            "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "600" }]
+                        }
                     }
                 }
             }
-        }
-    </script>
+        </script>
     <script src="https://cdn.socket.io/4.7.5/socket.io.min.js" crossorigin="anonymous"></script>
-    <script src="../Login/js/auth.js"></script>
+<script src="../Login/js/auth.js"></script>
 </head>
-<body class="bg-surface-container-low text-on-surface h-screen flex flex-col overflow-hidden font-body-md">
-    <!-- TopNavBar -->
-    <header class="bg-surface shadow-sm flex justify-between items-center w-full px-margin py-4 h-touch-target-min shrink-0 z-10">
-        <div class="flex items-center gap-4">
-            <span class="material-symbols-outlined text-primary text-3xl">restaurant</span>
-            <h1 class="font-display-lg text-display-lg font-bold text-primary tracking-tight">Cevicheria Belsy</h1>
-            <span class="font-headline-md text-headline-md text-on-surface-variant ml-4 border-l-2 border-outline-variant pl-4">Monitor de Cocina</span>
-        </div>
-        <div class="flex items-center gap-6">
-            <div class="flex items-center gap-2 text-on-surface-variant">
-                <span class="material-symbols-outlined">person</span>
-                <span class="font-label-lg text-label-lg" id="topbar-user-label">Cocinero</span>
-            </div>
-            <button id="btn-volver-admin" class="font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container px-4 py-2 rounded-full transition-colors h-touch-target-min items-center gap-2 hidden">
-                <span class="material-symbols-outlined text-[20px]">arrow_back</span>
-                Volver
-            </button>
-            <button id="btn-logout" class="font-label-lg text-label-lg text-error hover:bg-error-container hover:text-on-error-container px-4 py-2 rounded-full transition-colors h-touch-target-min flex items-center justify-center">
-                Cerrar sesión
-            </button>
-        </div>
+    <body class="bg-surface-container-low text-on-surface h-screen flex flex-col overflow-hidden font-body-md">
+    <!-- TopNavBar (Adapted from JSON) -->\n    <header class="bg-surface shadow-sm flex justify-between items-center w-full px-margin py-4 h-touch-target-min shrink-0 z-10">
+    <div class="flex items-center gap-4">
+    <span class="material-symbols-outlined text-primary text-3xl">restaurant</span>
+    <h1 class="font-display-lg text-display-lg font-bold text-primary tracking-tight">Cevicheria Belsy</h1>
+    <span class="font-headline-md text-headline-md text-on-surface-variant ml-4 border-l-2 border-outline-variant pl-4">Monitor de Cocina</span>
+    </div>
+    <div class="flex items-center gap-6">
+    <div class="flex items-center gap-2 text-on-surface-variant">
+    <span class="material-symbols-outlined">person</span>
+    <span class="font-label-lg text-label-lg" id="topbar-user-label">Cocinero</span>
+    </div>
+    <button id="btn-volver-admin" class="font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container px-4 py-2 rounded-full transition-colors h-touch-target-min items-center gap-2 hidden">
+    <span class="material-symbols-outlined text-[20px]">arrow_back</span>
+                    Volver
+                </button>
+    <button class="font-label-lg text-label-lg text-error hover:bg-error-container hover:text-on-error-container px-4 py-2 rounded-full transition-colors h-touch-target-min flex items-center justify-center">
+                    Cerrar sesión
+                </button>
+    </div>
     </header>
-
     <!-- Main Kanban View -->
     <main class="flex-1 overflow-hidden p-gutter">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter h-full max-w-container-max-width mx-auto">
-            <!-- Column 1: PENDIENTE -->
-            <section class="flex flex-col h-full bg-surface-container rounded-xl overflow-hidden shadow-sm border border-outline-variant/20">
-                <header class="bg-primary-container text-on-primary-container p-4 flex justify-between items-center shrink-0">
-                    <h2 class="font-headline-md text-headline-md flex items-center gap-2">
-                        <span class="material-symbols-outlined">pending_actions</span>
-                        PENDIENTE
-                    </h2>
-                    <span id="count-pending" class="bg-on-primary-container text-primary-container font-label-lg text-label-lg px-3 py-1 rounded-full">0</span>
-                </header>
-                <div class="flex-1 overflow-y-auto p-4 space-y-4 bg-surface/50" id="col-pending">
-                    <p class="text-center text-on-surface-variant font-label-md py-4">Sin pedidos pendientes</p>
-                </div>
-            </section>
-            <!-- Column 2: EN PROCESO -->
-            <section class="flex flex-col h-full bg-surface-container rounded-xl overflow-hidden shadow-sm border border-outline-variant/20">
-                <header class="bg-tertiary-container text-on-tertiary-container p-4 flex justify-between items-center shrink-0">
-                    <h2 class="font-headline-md text-headline-md flex items-center gap-2">
-                        <span class="material-symbols-outlined">skillet</span>
-                        EN PROCESO
-                    </h2>
-                    <span id="count-inprogress" class="bg-on-tertiary-container text-tertiary-container font-label-lg text-label-lg px-3 py-1 rounded-full">0</span>
-                </header>
-                <div class="flex-1 overflow-y-auto p-4 space-y-4 bg-surface/50" id="col-inprogress">
-                    <p class="text-center text-on-surface-variant font-label-md py-4">Sin pedidos en proceso</p>
-                </div>
-            </section>
-            <!-- Column 3: LISTO -->
-            <section class="flex flex-col h-full bg-surface-container rounded-xl overflow-hidden shadow-sm border border-outline-variant/20">
-                <header class="bg-secondary-container text-on-secondary-container p-4 flex justify-between items-center shrink-0">
-                    <h2 class="font-headline-md text-headline-md flex items-center gap-2">
-                        <span class="material-symbols-outlined">room_service</span>
-                        LISTO
-                    </h2>
-                    <span id="count-ready" class="bg-on-secondary-container text-secondary-container font-label-lg text-label-lg px-3 py-1 rounded-full">0</span>
-                </header>
-                <div class="flex-1 overflow-y-auto p-4 space-y-4 bg-surface/50" id="col-ready">
-                    <p class="text-center text-on-surface-variant font-label-md py-4">Sin pedidos listos</p>
-                    <div class="bg-surface-container-low border border-dashed border-outline-variant rounded-lg p-3 flex items-start gap-2">
-                        <span class="material-symbols-outlined text-[18px] text-outline mt-0.5">info</span>
-                        <p class="font-label-md text-label-md text-on-surface-variant">
-                            Los pedidos marcados como "Listo" aparecen aquí y se eliminan automáticamente a los 5 minutos.
-                        </p>
-                    </div>
-                </div>
-            </section>
-        </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter h-full max-w-container-max-width mx-auto">
+    <!-- Column 1: PENDIENTE -->
+    <section class="flex flex-col h-full bg-surface-container rounded-xl overflow-hidden shadow-sm border border-outline-variant/20">
+    <header class="bg-primary-container text-on-primary-container p-4 flex justify-between items-center shrink-0">
+    <h2 class="font-headline-md text-headline-md flex items-center gap-2">
+    <span class="material-symbols-outlined">pending_actions</span>
+                            PENDIENTE
+                        </h2>
+    <span class="bg-on-primary-container text-primary-container font-label-lg text-label-lg px-3 py-1 rounded-full">4</span>
+    </header>
+    <div class="flex-1 overflow-y-auto p-4 space-y-4 bg-surface/50">
+    <!-- Ticket Card 1 (HCoc-01: cada ítem se puede marcar como listo individualmente y muestra progreso) -->
+    <article class="bg-surface rounded-lg shadow-sm border border-surface-variant p-4 flex flex-col gap-4">
+    <div class="flex justify-between items-start border-b border-surface-variant pb-3">
+    <div>
+    <span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Mesa</span>
+    <div class="font-display-lg text-display-lg text-primary leading-none">04</div>
+    </div>
+    <div class="text-right">
+    <span class="font-label-md text-label-md text-on-surface-variant">Hace 2 min</span>
+    <div class="font-headline-md text-headline-md text-on-surface">14:32</div>
+    </div>
+    </div>
+    <!-- Progreso del pedido (HCoc-01 criterio 8) -->
+    <div class="flex items-center justify-between bg-surface-container-low rounded-md px-3 py-1.5">
+    <span class="font-label-md text-label-md text-on-surface-variant flex items-center gap-1">
+    <span class="material-symbols-outlined text-[16px]">checklist</span> Progreso
+                            </span>
+    <span class="font-label-md text-label-md text-primary font-bold">0/2 ítems listos</span>
+    </div>
+    <ul class="font-body-lg text-body-lg text-on-surface space-y-2">
+    <li class="flex items-center gap-2 bg-surface-container-low/60 px-2 py-2 rounded-md">
+    <span class="font-bold text-primary">2x</span>
+    <span class="flex-1">Ceviche Mixto</span>
+    <button class="text-secondary hover:bg-secondary-container px-2 py-1 rounded-md font-label-md text-label-md flex items-center gap-1 transition-colors" title="Marcar este ítem como listo">
+    <span class="material-symbols-outlined text-[16px]">check_circle</span> Listo
+    </button>
+    </li>
+    <li class="flex items-center gap-2 bg-surface-container-low/60 px-2 py-2 rounded-md">
+    <span class="font-bold text-primary">1x</span>
+    <span class="flex-1">Jalea de Mariscos</span>
+    <span class="material-symbols-outlined text-outline" title="Para llevar">takeout_dining</span>
+    <button class="text-secondary hover:bg-secondary-container px-2 py-1 rounded-md font-label-md text-label-md flex items-center gap-1 transition-colors" title="Marcar este ítem como listo">
+    <span class="material-symbols-outlined text-[16px]">check_circle</span> Listo
+    </button>
+    </li>
+    </ul>
+    <div class="bg-surface-container-highest text-on-surface font-label-md text-label-md p-3 rounded-md flex items-start gap-2">
+    <span class="material-symbols-outlined text-tertiary text-sm">edit_note</span>
+    <span class="">Sin ají el ceviche, por favor.</span>
+    </div>
+    <button class="mt-2 bg-primary text-on-primary h-[56px] rounded-lg font-label-lg text-label-lg flex items-center justify-center gap-2 w-full hover:bg-surface-tint transition-colors shadow-sm">
+    <span class="material-symbols-outlined">play_arrow</span>
+                                Iniciar preparación
+                            </button>
+    </article>
+    <!-- Ticket Card 2 (HCoc-01: cada ítem puede marcarse listo + progreso) -->
+    <article class="bg-surface rounded-lg shadow-sm border border-surface-variant p-4 flex flex-col gap-4">
+    <div class="flex justify-between items-start border-b border-surface-variant pb-3">
+    <div>
+    <span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Mesa</span>
+    <div class="font-display-lg text-display-lg text-primary leading-none">05</div>
+    </div>
+    <div class="text-right">
+    <span class="font-label-md text-label-md text-on-surface-variant">Hace 5 min</span>
+    <div class="font-headline-md text-headline-md text-on-surface">14:29</div>
+    </div>
+    </div>
+    <div class="flex items-center justify-between bg-surface-container-low rounded-md px-3 py-1.5">
+    <span class="font-label-md text-label-md text-on-surface-variant flex items-center gap-1">
+    <span class="material-symbols-outlined text-[16px]">checklist</span> Progreso
+                            </span>
+    <span class="font-label-md text-label-md text-primary font-bold">0/2 ítems listos</span>
+    </div>
+    <ul class="font-body-lg text-body-lg text-on-surface space-y-2">
+    <li class="flex items-center gap-2 bg-surface-container-low/60 px-2 py-2 rounded-md">
+    <span class="font-bold text-primary">4x</span>
+    <span class="flex-1">Chicha Morada (Jarra)</span>
+    <button class="text-secondary hover:bg-secondary-container px-2 py-1 rounded-md font-label-md text-label-md flex items-center gap-1 transition-colors" title="Marcar este ítem como listo">
+    <span class="material-symbols-outlined text-[16px]">check_circle</span> Listo
+    </button>
+    </li>
+    <li class="flex items-center gap-2 bg-surface-container-low/60 px-2 py-2 rounded-md">
+    <span class="font-bold text-primary">1x</span>
+    <span class="flex-1">Arroz con Mariscos</span>
+    <button class="text-secondary hover:bg-secondary-container px-2 py-1 rounded-md font-label-md text-label-md flex items-center gap-1 transition-colors" title="Marcar este ítem como listo">
+    <span class="material-symbols-outlined text-[16px]">check_circle</span> Listo
+    </button>
+    </li>
+    </ul>
+    <button class="mt-2 bg-primary text-on-primary h-[56px] rounded-lg font-label-lg text-label-lg flex items-center justify-center gap-2 w-full hover:bg-surface-tint transition-colors shadow-sm">
+    <span class="material-symbols-outlined">play_arrow</span>
+                                Iniciar preparación
+                            </button>
+    </article>
+    </div>
+    </section>
+    <!-- Column 2: EN PROCESO -->
+    <section class="flex flex-col h-full bg-surface-container rounded-xl overflow-hidden shadow-sm border border-outline-variant/20">
+    <header class="bg-tertiary-container text-on-tertiary-container p-4 flex justify-between items-center shrink-0">
+    <h2 class="font-headline-md text-headline-md flex items-center gap-2">
+    <span class="material-symbols-outlined">skillet</span>
+                            EN PROCESO
+                        </h2>
+    <span class="bg-on-tertiary-container text-tertiary-container font-label-lg text-label-lg px-3 py-1 rounded-full">2</span>
+    </header>
+    <div class="flex-1 overflow-y-auto p-4 space-y-4 bg-surface/50">
+    <!-- Ticket Card 3 (HCoc-01: progreso parcial + ítems individuales con estado) -->
+    <article class="bg-surface rounded-lg shadow-sm border border-tertiary/30 p-4 flex flex-col gap-4 relative overflow-hidden">
+    <div class="absolute top-0 left-0 w-1 h-full bg-tertiary"></div>
+    <div class="flex justify-between items-start border-b border-surface-variant pb-3 pl-2">
+    <div>
+    <span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Mesa</span>
+    <div class="font-display-lg text-display-lg text-tertiary leading-none">06</div>
+    </div>
+    <div class="text-right">
+    <span class="font-label-md text-label-md text-error font-bold animate-pulse">Hace 15 min</span>
+    <div class="font-headline-md text-headline-md text-on-surface">14:19</div>
+    </div>
+    </div>
+    <div class="flex items-center justify-between bg-surface-container-low rounded-md px-3 py-1.5 ml-1">
+    <span class="font-label-md text-label-md text-on-surface-variant flex items-center gap-1">
+    <span class="material-symbols-outlined text-[16px]">checklist</span> Progreso
+                            </span>
+    <span class="font-label-md text-label-md text-tertiary font-bold">1/2 ítems listos</span>
+    </div>
+    <ul class="font-body-lg text-body-lg text-on-surface space-y-2 pl-2">
+    <li class="flex items-center gap-2 bg-secondary/10 px-2 py-2 rounded-md opacity-70">
+    <span class="font-bold text-secondary">1x</span>
+    <span class="flex-1 line-through text-on-surface-variant">Parihuela</span>
+    <span class="text-secondary font-label-md text-label-md flex items-center gap-1">
+    <span class="material-symbols-outlined text-[16px]">check_circle</span> Listo
+    </span>
+    </li>
+    <li class="flex items-center gap-2 bg-surface-container-low/60 px-2 py-2 rounded-md">
+    <span class="font-bold text-tertiary">2x</span>
+    <span class="flex-1">Causa Limeña</span>
+    <button class="text-secondary hover:bg-secondary-container px-2 py-1 rounded-md font-label-md text-label-md flex items-center gap-1 transition-colors" title="Marcar este ítem como listo">
+    <span class="material-symbols-outlined text-[16px]">check_circle</span> Listo
+    </button>
+    </li>
+    </ul>
+    <button class="mt-2 bg-secondary text-on-secondary h-[56px] rounded-lg font-label-lg text-label-lg flex items-center justify-center gap-2 w-full hover:bg-on-secondary-container hover:text-secondary-container transition-colors shadow-sm ml-1">
+    <span class="material-symbols-outlined">check_circle</span>
+                                Marcar todo el pedido como Listo
+                            </button>
+    </article>
+    <!-- Ticket Card 4 (HCoc-01: ítem individual marcable + progreso) -->
+    <article class="bg-surface rounded-lg shadow-sm border border-tertiary/30 p-4 flex flex-col gap-4 relative overflow-hidden">
+    <div class="absolute top-0 left-0 w-1 h-full bg-tertiary"></div>
+    <div class="flex justify-between items-start border-b border-surface-variant pb-3 pl-2">
+    <div>
+    <span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Mesa</span>
+    <div class="font-display-lg text-display-lg text-tertiary leading-none">02</div>
+    </div>
+    <div class="text-right">
+    <span class="font-label-md text-label-md text-on-surface-variant">Hace 8 min</span>
+    <div class="font-headline-md text-headline-md text-on-surface">14:26</div>
+    </div>
+    </div>
+    <div class="flex items-center justify-between bg-surface-container-low rounded-md px-3 py-1.5 ml-1">
+    <span class="font-label-md text-label-md text-on-surface-variant flex items-center gap-1">
+    <span class="material-symbols-outlined text-[16px]">checklist</span> Progreso
+                            </span>
+    <span class="font-label-md text-label-md text-tertiary font-bold">0/1 ítems listos</span>
+    </div>
+    <ul class="font-body-lg text-body-lg text-on-surface space-y-2 pl-2">
+    <li class="flex items-center gap-2 bg-surface-container-low/60 px-2 py-2 rounded-md">
+    <span class="font-bold text-tertiary">3x</span>
+    <span class="flex-1">Tiradito al Rocoto</span>
+    <button class="text-secondary hover:bg-secondary-container px-2 py-1 rounded-md font-label-md text-label-md flex items-center gap-1 transition-colors" title="Marcar este ítem como listo">
+    <span class="material-symbols-outlined text-[16px]">check_circle</span> Listo
+    </button>
+    </li>
+    </ul>
+    <button class="mt-2 bg-secondary text-on-secondary h-[56px] rounded-lg font-label-lg text-label-lg flex items-center justify-center gap-2 w-full hover:bg-on-secondary-container hover:text-secondary-container transition-colors shadow-sm ml-1">
+    <span class="material-symbols-outlined">check_circle</span>
+                                Marcar todo el pedido como Listo
+                            </button>
+    </article>
+    </div>
+    </section>
+    <!-- Column 3: LISTO (HCoc-01 criterio 5: los pedidos listos permanecen aquí y desaparecen automáticamente tras 5 min) -->
+    <section class="flex flex-col h-full bg-surface-container rounded-xl overflow-hidden shadow-sm border border-outline-variant/20">
+    <header class="bg-secondary-container text-on-secondary-container p-4 flex justify-between items-center shrink-0">
+    <h2 class="font-headline-md text-headline-md flex items-center gap-2">
+    <span class="material-symbols-outlined">room_service</span>
+                            LISTO
+                        </h2>
+    <span class="bg-on-secondary-container text-secondary-container font-label-lg text-label-lg px-3 py-1 rounded-full">1</span>
+    </header>
+    <div class="flex-1 overflow-y-auto p-4 space-y-4 bg-surface/50">
+    <!-- Ticket Listo: ejemplo con cuenta regresiva (HCoc-01 criterio 5: 5 minutos antes de desaparecer) -->
+    <article class="bg-surface rounded-lg shadow-sm border border-secondary/40 p-4 flex flex-col gap-4 relative overflow-hidden">
+    <div class="absolute top-0 left-0 w-1 h-full bg-secondary"></div>
+    <div class="flex justify-between items-start border-b border-surface-variant pb-3 pl-2">
+    <div>
+    <span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Mesa</span>
+    <div class="font-display-lg text-display-lg text-secondary leading-none">01</div>
+    </div>
+    <div class="text-right">
+    <span class="font-label-md text-label-md text-on-surface-variant">Listo hace 1 min</span>
+    <div class="font-headline-md text-headline-md text-on-surface">14:33</div>
+    </div>
+    </div>
+    <div class="flex items-center justify-between bg-secondary/10 rounded-md px-3 py-1.5 ml-1 border border-secondary/20">
+    <span class="font-label-md text-label-md text-secondary flex items-center gap-1">
+    <span class="material-symbols-outlined text-[16px] fill-icon">check_circle</span> Pedido completo
+                            </span>
+    <span class="font-label-md text-label-md text-secondary font-bold">2/2 ítems listos</span>
+    </div>
+    <ul class="font-body-lg text-body-lg text-on-surface space-y-2 pl-2">
+    <li class="flex items-center gap-2 bg-secondary/5 px-2 py-2 rounded-md opacity-80">
+    <span class="font-bold text-secondary">1x</span>
+    <span class="flex-1 line-through text-on-surface-variant">Chicharrón de Pescado</span>
+    <span class="text-secondary font-label-md text-label-md flex items-center gap-1">
+    <span class="material-symbols-outlined text-[16px] fill-icon">check_circle</span> Listo
+    </span>
+    </li>
+    <li class="flex items-center gap-2 bg-secondary/5 px-2 py-2 rounded-md opacity-80">
+    <span class="font-bold text-secondary">1x</span>
+    <span class="flex-1 line-through text-on-surface-variant">Yuca frita</span>
+    <span class="text-secondary font-label-md text-label-md flex items-center gap-1">
+    <span class="material-symbols-outlined text-[16px] fill-icon">check_circle</span> Listo
+    </span>
+    </li>
+    </ul>
+    <div class="mt-2 bg-secondary text-on-secondary h-[48px] rounded-lg font-label-lg text-label-lg flex items-center justify-center gap-2 w-full shadow-sm ml-1">
+    <span class="material-symbols-outlined fill-icon">room_service</span>
+                                Listo para entregar
+                            </div>
+    <div class="bg-surface-container-highest text-on-surface-variant font-label-md text-label-md p-2 rounded-md flex items-center gap-2 ml-1">
+    <span class="material-symbols-outlined text-[16px]">timer</span>
+    <span class="">Desaparece automáticamente en <strong class="text-on-surface">4:00 min</strong> (tope de 5 min tras marcarse como Listo).</span>
+    </div>
+    </article>
+    <!-- Aviso informativo (siempre visible al final de la columna) -->
+    <div class="bg-surface-container-low border border-dashed border-outline-variant rounded-lg p-3 flex items-start gap-2 mt-2">
+    <span class="material-symbols-outlined text-[18px] text-outline mt-0.5">info</span>
+    <p class="font-label-md text-label-md text-on-surface-variant">
+                                    Los pedidos marcados como "Listo" aparecen aquí y se eliminan automáticamente a los 5 minutos para dejar espacio a los siguientes.
+                                </p>
+    </div>
+    </div>
+    </section>
+    </div>
     </main>
-
 <script>
 (function () {
-  if (!CB.protectPage(['cocinero', 'admin'])) return;
+  if (!CB.protectPage(["cocinero", "admin"])) return;
 
+  // Mostrar nombre de rol en topbar
   var sess = CB.getSession();
   var userLabel = document.getElementById('topbar-user-label');
-  if (sess && userLabel) userLabel.textContent = sess.rol.charAt(0).toUpperCase() + sess.rol.slice(1);
+  if (sess && userLabel) {
+    userLabel.textContent = sess.rol.charAt(0).toUpperCase() + sess.rol.slice(1);
+  }
 
+  // Mostrar botón Volver solo para admin
   var btnVolver = document.getElementById('btn-volver-admin');
   if (sess && sess.rol === 'admin' && btnVolver) {
     btnVolver.classList.remove('hidden');
     btnVolver.classList.add('flex');
-    btnVolver.addEventListener('click', function () { window.location.href = '../Mesero/Mapa_mesas.html'; });
-  }
-
-  document.getElementById('btn-logout').addEventListener('click', function () { CB.logout(); });
-
-  // API helper
-  function apiReq(method, path, body) {
-    var token = sessionStorage.getItem(CB.CONFIG.STORAGE_KEY_TOKEN);
-    var opts = { method: method, headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token } };
-    if (body) opts.body = JSON.stringify(body);
-    return fetch(CB.CONFIG.API_BASE + path, opts).then(function (r) {
-      return r.json().then(function (data) { return { ok: r.ok, data: data }; });
+    btnVolver.addEventListener('click', function () {
+      window.history.back();
     });
   }
 
-  function escHtml(str) {
-    return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-  }
-
-  function elapsedLabel(isoDate) {
-    var diff = Math.floor((Date.now() - new Date(isoDate).getTime()) / 60000);
-    if (diff < 1) return 'Hace menos de 1 min';
-    if (diff === 1) return 'Hace 1 min';
-    return 'Hace ' + diff + ' min';
-  }
-
-  function timeLabel(isoDate) {
-    var d = new Date(isoDate);
-    return d.getHours().toString().padStart(2, '0') + ':' + d.getMinutes().toString().padStart(2, '0');
-  }
-
-  function readyCountdown(readyAt) {
-    if (!readyAt) return '';
-    var remainSec = Math.max(0, Math.floor((new Date(readyAt).getTime() + 5 * 60000 - Date.now()) / 1000));
-    var m = Math.floor(remainSec / 60);
-    var s = remainSec % 60;
-    return m + ':' + s.toString().padStart(2, '0') + ' min';
-  }
-
-  var orders = [];
-
-  function renderOrder(order, colType) {
-    var isPending = colType === 'pending';
-    var isInProgress = colType === 'inprogress';
-    var isReady = colType === 'ready';
-
-    var readyItems = order.items.filter(function (i) { return i.status === 'READY'; }).length;
-    var totalItems = order.items.length;
-
-    var headerClass = isPending ? 'text-primary' : isInProgress ? 'text-tertiary' : 'text-secondary';
-    var elapsed = elapsedLabel(order.createdAt);
-    var elapsedClass = (Date.now() - new Date(order.createdAt).getTime() > 10 * 60000) ? 'text-error font-bold animate-pulse' : 'text-on-surface-variant';
-
-    var tableLabel = order.isTakeaway ? '<span class="font-label-md text-on-surface-variant uppercase tracking-wider">Para Llevar</span>' :
-      '<span class="font-label-md text-on-surface-variant uppercase tracking-wider">Mesa</span><div class="font-display-lg text-display-lg ' + headerClass + ' leading-none">' + String(order.tableNumber || '?').padStart(2, '0') + '</div>';
-
-    var progressColor = isPending ? 'text-primary' : isInProgress ? 'text-tertiary' : 'text-secondary';
-
-    var itemsHtml = order.items.map(function (item) {
-      var isDone = item.status === 'READY';
-      return '<li class="flex items-center gap-2 ' + (isDone ? 'bg-secondary/10 opacity-70' : 'bg-surface-container-low/60') + ' px-2 py-2 rounded-md">' +
-        '<span class="font-bold ' + (isDone ? 'text-secondary' : headerClass) + '">' + item.quantity + 'x</span>' +
-        '<span class="flex-1 ' + (isDone ? 'line-through text-on-surface-variant' : '') + '">' + escHtml(item.name) + '</span>' +
-        (item.isTakeaway ? '<span class="material-symbols-outlined text-outline text-[16px]" title="Para llevar">takeout_dining</span>' : '') +
-        (isDone
-          ? '<span class="text-secondary font-label-md flex items-center gap-1"><span class="material-symbols-outlined fill-icon text-[16px]">check_circle</span> Listo</span>'
-          : (!isReady
-              ? '<button class="text-secondary hover:bg-secondary-container px-2 py-1 rounded-md font-label-md flex items-center gap-1 transition-colors item-ready-btn" data-order="' + escHtml(order.id) + '" data-item="' + escHtml(item.id) + '" title="Marcar este ítem como listo"><span class="material-symbols-outlined text-[16px]">check_circle</span> Listo</button>'
-              : '')) +
-        '</li>';
-    }).join('');
-
-    var notesHtml = order.notes
-      ? '<div class="bg-surface-container-highest text-on-surface font-label-md p-3 rounded-md flex items-start gap-2"><span class="material-symbols-outlined text-tertiary text-sm">edit_note</span><span>' + escHtml(order.notes) + '</span></div>'
-      : '';
-
-    var actionHtml = '';
-    if (isPending) {
-      actionHtml = '<button class="mt-2 bg-primary text-on-primary h-[56px] rounded-lg font-label-lg flex items-center justify-center gap-2 w-full hover:bg-surface-tint transition-colors shadow-sm start-btn" data-order="' + escHtml(order.id) + '">' +
-        '<span class="material-symbols-outlined">play_arrow</span>Iniciar preparación</button>';
-    } else if (isInProgress) {
-      actionHtml = '<button class="mt-2 bg-secondary text-on-secondary h-[56px] rounded-lg font-label-lg flex items-center justify-center gap-2 w-full hover:bg-on-secondary-container hover:text-secondary-container transition-colors shadow-sm all-ready-btn" data-order="' + escHtml(order.id) + '">' +
-        '<span class="material-symbols-outlined">check_circle</span>Marcar todo el pedido como Listo</button>';
-    } else if (isReady) {
-      actionHtml = '<div class="mt-2 bg-secondary text-on-secondary h-[48px] rounded-lg font-label-lg flex items-center justify-center gap-2 w-full shadow-sm">' +
-        '<span class="material-symbols-outlined fill-icon">room_service</span>Listo para entregar</div>' +
-        '<div class="bg-surface-container-highest text-on-surface-variant font-label-md p-2 rounded-md flex items-center gap-2">' +
-        '<span class="material-symbols-outlined text-[16px]">timer</span>' +
-        '<span>Desaparece en <strong class="text-on-surface countdown-label" data-ready="' + escHtml(order.items[0] && order.items[0].readyAt || '') + '">' + readyCountdown(order.items[0] && order.items[0].readyAt) + '</strong></span></div>';
+  document.querySelectorAll('button, a').forEach(function (el) {
+    if (/Cerrar sesi/i.test(el.textContent)) {
+      el.addEventListener('click', function (e) { e.preventDefault(); CB.logout(); });
     }
+  });
 
-    var borderClass = isInProgress ? 'border border-tertiary/30 relative overflow-hidden' : isReady ? 'border border-secondary/40 relative overflow-hidden' : 'border border-surface-variant';
-    var leftBar = (isInProgress || isReady) ? '<div class="absolute top-0 left-0 w-1 h-full ' + (isInProgress ? 'bg-tertiary' : 'bg-secondary') + '"></div>' : '';
-    var pl = (isInProgress || isReady) ? ' pl-2' : '';
-
-    var article = document.createElement('article');
-    article.className = 'bg-surface rounded-lg shadow-sm ' + borderClass + ' p-4 flex flex-col gap-4';
-    article.innerHTML = leftBar +
-      '<div class="flex justify-between items-start border-b border-surface-variant pb-3' + pl + '">' +
-        '<div>' + tableLabel + '</div>' +
-        '<div class="text-right"><span class="font-label-md ' + elapsedClass + '">' + elapsed + '</span><div class="font-headline-md text-on-surface">' + timeLabel(order.createdAt) + '</div></div>' +
-      '</div>' +
-      '<div class="flex items-center justify-between bg-surface-container-low rounded-md px-3 py-1.5' + (pl ? ' ml-1' : '') + '">' +
-        '<span class="font-label-md text-on-surface-variant flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">checklist</span> Progreso</span>' +
-        '<span class="font-label-md ' + progressColor + ' font-bold">' + readyItems + '/' + totalItems + ' ítems listos</span>' +
-      '</div>' +
-      '<ul class="font-body-lg text-on-surface space-y-2' + (pl ? ' pl-2' : '') + '">' + itemsHtml + '</ul>' +
-      notesHtml +
-      (pl ? actionHtml.replace(/w-full/g, 'w-full ml-1') : actionHtml);
-
-    return article;
-  }
-
-  function renderColumn(colId, colOrders, colType, emptyMsg) {
-    var col = document.getElementById(colId);
-    col.innerHTML = '';
-    if (colOrders.length === 0) {
-      var p = document.createElement('p');
-      p.className = 'text-center text-on-surface-variant font-label-md py-4';
-      p.textContent = emptyMsg;
-      col.appendChild(p);
-    } else {
-      colOrders.forEach(function (o) { col.appendChild(renderOrder(o, colType)); });
-    }
-
-    if (colType === 'ready') {
-      var infoDiv = document.createElement('div');
-      infoDiv.className = 'bg-surface-container-low border border-dashed border-outline-variant rounded-lg p-3 flex items-start gap-2 mt-2';
-      infoDiv.innerHTML = '<span class="material-symbols-outlined text-[18px] text-outline mt-0.5">info</span><p class="font-label-md text-on-surface-variant">Los pedidos marcados como "Listo" aparecen aquí y se eliminan automáticamente a los 5 minutos.</p>';
-      col.appendChild(infoDiv);
-    }
-
-    // Wire up item-level "Listo" buttons
-    col.querySelectorAll('.item-ready-btn').forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        updateItemStatus(btn.dataset.order, btn.dataset.item, 'READY');
-      });
-    });
-
-    // Wire up "Iniciar preparación" buttons
-    col.querySelectorAll('.start-btn').forEach(function (btn) {
-      btn.addEventListener('click', function () { startOrder(btn.dataset.order); });
-    });
-
-    // Wire up "Marcar todo Listo" buttons
-    col.querySelectorAll('.all-ready-btn').forEach(function (btn) {
-      btn.addEventListener('click', function () { markOrderAllReady(btn.dataset.order); });
-    });
-  }
-
-  function renderKanban() {
-    var pending = orders.filter(function (o) { return o.status === 'PENDING'; });
-    var inProgress = orders.filter(function (o) { return o.status === 'IN_PROGRESS'; });
-    var ready = orders.filter(function (o) { return o.status === 'READY'; });
-
-    document.getElementById('count-pending').textContent = pending.length;
-    document.getElementById('count-inprogress').textContent = inProgress.length;
-    document.getElementById('count-ready').textContent = ready.length;
-
-    renderColumn('col-pending', pending, 'pending', 'Sin pedidos pendientes');
-    renderColumn('col-inprogress', inProgress, 'inprogress', 'Sin pedidos en proceso');
-    renderColumn('col-ready', ready, 'ready', 'Sin pedidos listos');
-  }
-
-  function loadOrders() {
-    apiReq('GET', '/kitchen/orders').then(function (res) {
-      if (!res.ok) { CB.debug('Error cargando pedidos:', res.data); return; }
-      orders = res.data;
-      renderKanban();
-    }).catch(function (err) { CB.debug('Error de red:', err); });
-  }
-
-  function updateItemStatus(orderId, itemId, status) {
-    apiReq('PATCH', '/kitchen/orders/' + orderId + '/items/' + itemId + '/status', { status: status })
-      .then(function (res) {
-        if (!res.ok) { CB.debug('Error actualizando ítem:', res.data); return; }
-        loadOrders();
-      });
-  }
-
-  function startOrder(orderId) {
-    var order = orders.find(function (o) { return o.id === orderId; });
-    if (!order) return;
-    var pending = order.items.filter(function (i) { return i.status === 'PENDING'; });
-    if (pending.length === 0) return;
-    Promise.all(pending.map(function (item) {
-      return apiReq('PATCH', '/kitchen/orders/' + orderId + '/items/' + item.id + '/status', { status: 'IN_PROGRESS' });
-    })).then(loadOrders);
-  }
-
-  function markOrderAllReady(orderId) {
-    var order = orders.find(function (o) { return o.id === orderId; });
-    if (!order) return;
-    var notReady = order.items.filter(function (i) { return i.status !== 'READY'; });
-    if (notReady.length === 0) return;
-    Promise.all(notReady.map(function (item) {
-      return apiReq('PATCH', '/kitchen/orders/' + orderId + '/items/' + item.id + '/status', { status: 'READY' });
-    })).then(loadOrders);
-  }
-
-  loadOrders();
-
-  // Socket: join kitchen room and listen for updates
-  if (CB.socket) {
-    CB.socket.emit('join:room', 'kitchen');
-    CB.socket.on('orders:new', function () { loadOrders(); });
-    CB.socket.on('orders:updated', function () { loadOrders(); });
-  }
-
-  // Update countdowns for READY orders every 10s
-  setInterval(function () {
-    document.querySelectorAll('.countdown-label[data-ready]').forEach(function (el) {
-      el.textContent = readyCountdown(el.dataset.ready);
-    });
-  }, 10000);
 })();
 </script>
 </body></html>
