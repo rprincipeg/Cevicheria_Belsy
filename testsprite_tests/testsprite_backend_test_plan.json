@@ -1,0 +1,177 @@
+[
+  {
+    "id": "TC001",
+    "title": "auth_login_valid_credentials",
+    "description": "POST /api/auth/login with {username:'admin', password:'12345'}. Expect 200 with a non-empty 'token' string, role 'ADMIN', and username 'admin'."
+  },
+  {
+    "id": "TC002",
+    "title": "auth_login_invalid_credentials",
+    "description": "POST /api/auth/login with {username:'admin', password:'wrongpass'}. Expect 401 with a JSON 'error' field and no token."
+  },
+  {
+    "id": "TC003",
+    "title": "auth_login_missing_fields",
+    "description": "POST /api/auth/login with empty body {}. Expect 400 (Zod validation) with a JSON 'error' field."
+  },
+  {
+    "id": "TC004",
+    "title": "auth_protected_route_without_token",
+    "description": "GET /api/tables with NO Authorization header. Expect 401 (authenticate middleware blocks the request)."
+  },
+  {
+    "id": "TC005",
+    "title": "auth_protected_route_invalid_token",
+    "description": "GET /api/tables with header Authorization 'Bearer invalid.token.value'. Expect 401 (JWT verification fails)."
+  },
+  {
+    "id": "TC006",
+    "title": "authz_mesero_blocked_from_admin_route",
+    "description": "Login mesero/123456 (MESERO token). Call GET /api/users (ADMIN-only) with that token. Expect 403 Forbidden."
+  },
+  {
+    "id": "TC007",
+    "title": "menu_get_categories_as_mesero",
+    "description": "Login mesero/123456. GET /api/menu/categories with the token. Expect 200 and a JSON array of categories; each category has an 'items' array whose items expose 'id','name','price','isPreparable','stockStatus'."
+  },
+  {
+    "id": "TC008",
+    "title": "tables_get_list_as_mesero",
+    "description": "Login mesero/123456. GET /api/tables. Expect 200 and a JSON array. NOTE: the array also contains a synthetic takeaway pseudo-entry {id:'takeaway', type:'takeaway'} that has NO 'status'. Validate ONLY the real tables: for every element that has a 'number' field, assert it has 'id' and 'status' and status is one of FREE/OCCUPIED/MERGED. Ignore the takeaway entry."
+  },
+  {
+    "id": "TC009",
+    "title": "orders_create_validation_error",
+    "description": "Login mesero/123456. POST /api/orders with body {isTakeaway:false, items:[]} (empty items, no tableId). Expect 400 with a JSON 'error' field."
+  },
+  {
+    "id": "TC010",
+    "title": "e2e_order_kitchen_payment_lifecycle",
+    "description": "Full end-to-end happy path across roles. Credentials: admin/12345, mesero/123456, cocinero/123456 (admin password is 12345, NOT 123456). Response shapes: kitchen order items are at order.items[] with ONLY {id,name,quantity,status,isTakeaway} (no menuItemId) and already contain only preparable items, so take order.items[0].id. The table bill is {tableId, tableNumber, grandTotal:number, paidAmount, remainingBalance, orders:[{...,items:[{id,name,quantity,unitPrice,subtotal}]}]}. Steps: (1) login all three roles. (2) GET /api/tables as MESERO, pick a table whose status=='FREE'; capture id as tableId (skip gracefully if none free). (3) GET /api/menu/categories as MESERO, pick a menu item with isPreparable==true; capture id as menuItemId. (4) POST /api/orders as MESERO {tableId, isTakeaway:false, items:[{menuItemId, quantity:1}]}; expect 200/201, capture order id. (5) GET /api/kitchen/orders as COCINERO, find order by id, take items[0].id as itemId. (6) PATCH /api/kitchen/orders/{orderId}/items/{itemId}/status {status:'IN_PROGRESS'} -> 200. (7) same with {status:'READY'} -> 200. (8) PATCH /api/orders/{orderId}/deliver as MESERO -> 200. (9) GET /api/payments/tables/{tableId}/bill as ADMIN -> 200; read grandTotal and collect all orders[].items[].id into orderItemIds. (10) POST /api/payments/tables/{tableId} as ADMIN {receivedAmount: grandTotal, orderItemIds, documentType:'BOLETA', customerDocument:'12345678'} -> 200/201 with a 'payment' object. (11) PATCH /api/payments/tables/{tableId}/release as ADMIN -> 200. (12) GET /api/tables as MESERO, assert that table status is back to 'FREE'."
+  },
+  {
+    "id": "TC011",
+    "title": "auth_logout_valid_token",
+    "description": "Login admin/12345, then POST /api/auth/logout with Authorization Bearer token. Expect 200 with a JSON 'message' field."
+  },
+  {
+    "id": "TC012",
+    "title": "tables_get_active_items",
+    "description": "Login mesero/123456. GET /api/tables and find a table whose status=='OCCUPIED' (capture its id). Then GET /api/tables/{id}/active-items. Expect 200 with a JSON response (array or object) describing the table's active items. If no OCCUPIED table exists, pick any real table id and accept 200 or 404."
+  },
+  {
+    "id": "TC013",
+    "title": "menu_admin_list_categories",
+    "description": "Login admin/12345. GET /api/menu/admin/categories. Expect 200 with a JSON array of categories (admin view), each with an 'items' array."
+  },
+  {
+    "id": "TC014",
+    "title": "menu_category_crud_lifecycle",
+    "description": "Login admin/12345. (1) POST /api/menu/admin/categories {name:'QA_TEST_CAT_'+<timestamp>, sortOrder:99}. Expect 200/201; capture the new category id. (2) PATCH /api/menu/admin/categories/{id} {name:'QA_TEST_CAT_UPD_'+<timestamp>}. Expect 200. (3) DELETE /api/menu/admin/categories/{id}. Expect 200/204 (cleanup). Each step asserts its status code."
+  },
+  {
+    "id": "TC015",
+    "title": "menu_item_crud_and_stock_lifecycle",
+    "description": "Login admin/12345. (1) POST /api/menu/admin/categories {name:'QA_TEST_CAT_ITEM_'+<timestamp>, sortOrder:98} -> capture categoryId. (2) POST /api/menu/admin/items {name:'QA_TEST_ITEM_'+<timestamp>, price:12.5, categoryId, isPreparable:true} -> expect 200/201, capture item id. (3) PATCH /api/menu/admin/items/{id} {price:15} -> 200. (4) PATCH /api/menu/admin/items/{id}/stock {stockStatus:'OUT_OF_STOCK'} -> 200. (5) DELETE /api/menu/admin/items/{id} -> 200/204. (6) DELETE /api/menu/admin/categories/{categoryId} -> 200/204 (cleanup). Each step asserts its status code."
+  },
+  {
+    "id": "TC016",
+    "title": "menu_item_create_validation_error",
+    "description": "Login admin/12345. POST /api/menu/admin/items {name:'QA_BAD', price:-5, categoryId:'nonexistent'} (negative price and invalid category). Expect 400 (validation) or 404. Must NOT return 200/201."
+  },
+  {
+    "id": "TC017",
+    "title": "menu_mesero_cannot_create_category",
+    "description": "Login mesero/123456. POST /api/menu/admin/categories {name:'QA_FORBIDDEN'}. Expect 403 (ADMIN-only route)."
+  },
+  {
+    "id": "TC018",
+    "title": "orders_get_active_list",
+    "description": "Login mesero/123456. GET /api/orders/active. Expect 200 with a JSON array of active orders."
+  },
+  {
+    "id": "TC019",
+    "title": "orders_add_items_to_existing_order",
+    "description": "Login mesero/123456 and cocinero/123456. (1) GET /api/tables, pick a FREE table (skip gracefully if none). (2) GET /api/menu/categories, pick a preparable item id. (3) POST /api/orders {tableId, isTakeaway:false, items:[{menuItemId, quantity:1}]} -> capture orderId. (4) POST /api/orders/{orderId}/items {items:[{menuItemId, quantity:1}]} -> expect 200/201. (5) GET /api/orders/{orderId} -> expect 200 and that it now reflects more than one item. NOTE: this leaves an open order on a table; that is acceptable for this test."
+  },
+  {
+    "id": "TC020",
+    "title": "kitchen_get_orders_as_cocinero",
+    "description": "Login cocinero/123456. GET /api/kitchen/orders. Expect 200 with a JSON array; if non-empty, each order has 'id' and an 'items' array."
+  },
+  {
+    "id": "TC021",
+    "title": "kitchen_mesero_forbidden",
+    "description": "Login mesero/123456. GET /api/kitchen/orders. Expect 403 because kitchen routes require COCINERO (or ADMIN)."
+  },
+  {
+    "id": "TC022",
+    "title": "payments_summary_as_admin",
+    "description": "Login admin/12345. GET /api/payments/summary. Expect 200 with a JSON object containing a 'tables' array and a 'takeaway' section."
+  },
+  {
+    "id": "TC023",
+    "title": "payments_bill_no_active_orders_404",
+    "description": "Login admin/12345. GET /api/tables, find a table whose status=='FREE' (no active orders), capture its id. GET /api/payments/tables/{id}/bill. Expect 404 with a JSON 'error' field ('No hay pedidos activos en esta mesa')."
+  },
+  {
+    "id": "TC024",
+    "title": "users_list_as_admin",
+    "description": "Login admin/12345. GET /api/users. Expect 200 with a JSON array of users; assert none has role 'ADMIN' and none exposes a 'passwordHash' field. Each user has 'id','username','role','status'."
+  },
+  {
+    "id": "TC025",
+    "title": "users_crud_lifecycle",
+    "description": "Login admin/12345. (1) POST /api/users {fullName:'QA Tester', username:'qa_test_'+<timestamp>, password:'123456', role:'MESERO'}. Expect 201, capture user id and username. (2) PATCH /api/users/{id} {fullName:'QA Tester Updated'}. Expect 200. (3) PATCH /api/users/{id}/status {status:'INACTIVE'}. Expect 200 (no delete endpoint exists; deactivation is the cleanup). Each step asserts its status code."
+  },
+  {
+    "id": "TC026",
+    "title": "users_create_duplicate_username_conflict",
+    "description": "Login admin/12345. POST /api/users {fullName:'Dup User', username:'admin', password:'123456', role:'MESERO'} using an already-existing username 'admin'. Expect 409 Conflict with a JSON 'error' field."
+  },
+  {
+    "id": "TC027",
+    "title": "users_create_validation_short_password",
+    "description": "Login admin/12345. POST /api/users {fullName:'Bad', username:'qa_bad_'+<timestamp>, password:'123', role:'MESERO'} (password under 6 chars). Expect 400 with a JSON 'error' field."
+  },
+  {
+    "id": "TC028",
+    "title": "reports_daily_as_admin",
+    "description": "Login admin/12345. GET /api/reports/daily (optionally with ?date=YYYY-MM-DD for today). Expect 200 with a JSON object containing 'totalSales', 'totalOrders' and 'topItems'."
+  },
+  {
+    "id": "TC029",
+    "title": "reports_daily_export_xlsx",
+    "description": "Login admin/12345. GET /api/reports/daily/export. Expect 200 and a binary spreadsheet response (Content-Type containing 'spreadsheet' or 'excel', or a non-empty body). Do not parse as JSON."
+  },
+  {
+    "id": "TC030",
+    "title": "reports_payments_history_missing_params_400",
+    "description": "Login admin/12345. GET /api/reports/payments WITHOUT startDate/endDate query params. Expect 400 with a JSON 'error' field mentioning required startDate and endDate."
+  },
+  {
+    "id": "TC031",
+    "title": "reports_payments_history_valid_range",
+    "description": "Login admin/12345. GET /api/reports/payments?startDate=2026-06-01&endDate=2026-06-30. Expect 200 with a JSON object containing 'startDate','endDate','totalAmount','totalPayments' and a payments array."
+  },
+  {
+    "id": "TC032",
+    "title": "reports_dashboard_as_admin",
+    "description": "Login admin/12345. GET /api/reports/dashboard. Expect 200 with a JSON object containing 'totalSoldToday' and 'lowStockAlerts'."
+  },
+  {
+    "id": "TC033",
+    "title": "reports_weekly_and_monthly",
+    "description": "Login admin/12345. GET /api/reports/weekly -> expect 200 with a daily series and a week total. Then GET /api/reports/monthly -> expect 200 with a daily series and a month total. Assert status 200 on both."
+  },
+  {
+    "id": "TC034",
+    "title": "reports_closures_list_as_admin",
+    "description": "Login admin/12345. GET /api/reports/closures. Expect 200 with a JSON array of daily closures (may be empty)."
+  },
+  {
+    "id": "TC035",
+    "title": "reports_mesero_forbidden",
+    "description": "Login mesero/123456. GET /api/reports/daily. Expect 403 because all report routes are ADMIN-only."
+  }
+]

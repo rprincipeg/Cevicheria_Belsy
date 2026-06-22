@@ -1,4 +1,4 @@
-/* ==========================================================================
+﻿/* ==========================================================================
    US-01 — Acceso al sistema por rol  |  Cevicheria Belsy — Sprint 1
    --------------------------------------------------------------------------
    TAREAS 1-8 implementadas usando el stack acordado (herramientas.docx):
@@ -24,6 +24,115 @@ CB.CONFIG = {
   STORAGE_KEY_ACTIVITY: 'cb_lastActivity',
   STORAGE_KEY_TOKEN: 'cb_token',
   DEBUG: true
+};
+
+/* Construye una URL absoluta para recursos servidos por el backend (imágenes en
+   /uploads). Necesario para que las imágenes carguen siempre, aunque la página
+   se abra como archivo local (file://) o desde un origen distinto al del servidor. */
+CB.assetUrl = function (url) {
+  if (!url) return '';
+  if (/^(https?:|data:|blob:)/i.test(url)) return url; // ya es absoluta o embebida
+  if (url.charAt(0) === '/') return CB.CONFIG.SOCKET_URL + url; // raíz → prepender el servidor
+  return CB.CONFIG.SOCKET_URL + '/' + url;
+};
+
+/* ── Diálogos propios ───────────────────────────────────────────────────────
+   Reemplazan a alert()/confirm() nativos del navegador, que muestran el prefijo
+   "localhost:3001 dice:". Disponibles globalmente como CB.alert y CB.confirm. */
+CB._escapeDialog = function (str) {
+  return String(str == null ? '' : str)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;')
+    .replace(/\n/g, '<br>');
+};
+
+CB.alert = function (message, opts) {
+  opts = opts || {};
+  var overlay = document.createElement('div');
+  overlay.className = 'fixed inset-0 z-[1200] flex items-center justify-center bg-black/40 p-4';
+  overlay.innerHTML =
+    '<div class="bg-surface rounded-xl shadow-lg max-w-sm w-full p-6 flex flex-col gap-4">' +
+      '<div class="flex items-start gap-3">' +
+        '<span class="material-symbols-outlined text-' + (opts.tone || 'error') + ' mt-0.5" style="font-variation-settings:\'FILL\' 1">' + (opts.icon || 'error') + '</span>' +
+        '<p class="font-body-md text-body-md text-on-surface flex-1">' + CB._escapeDialog(message) + '</p>' +
+      '</div>' +
+      '<div class="flex justify-end">' +
+        '<button data-act="ok" class="h-11 px-5 rounded-full font-label-lg text-label-lg bg-primary text-on-primary hover:opacity-90 transition-opacity">Entendido</button>' +
+      '</div>' +
+    '</div>';
+  function close() { overlay.remove(); }
+  overlay.addEventListener('click', function (e) {
+    if (e.target === overlay || e.target.getAttribute('data-act') === 'ok') close();
+  });
+  document.body.appendChild(overlay);
+  var okBtn = overlay.querySelector('[data-act="ok"]');
+  if (okBtn) okBtn.focus();
+};
+
+/* Uso flexible:
+     • Promesa:  if (!(await CB.confirm('¿...?'))) return;
+     • Callback: CB.confirm('¿...?', function(){ ... }, { confirmLabel: 'Sí' });
+   El 2.º argumento puede ser la función onConfirm o el objeto de opciones. */
+CB.confirm = function (message, onConfirm, opts) {
+  if (onConfirm && typeof onConfirm === 'object') { opts = onConfirm; onConfirm = null; }
+  opts = opts || {};
+  return new Promise(function (resolve) {
+    var settled = false;
+    function finish(result) {
+      if (settled) return;
+      settled = true;
+      overlay.remove();
+      if (result && typeof onConfirm === 'function') onConfirm();
+      if (!result && typeof opts.onCancel === 'function') opts.onCancel();
+      resolve(result);
+    }
+    var overlay = document.createElement('div');
+    overlay.className = 'fixed inset-0 z-[1200] flex items-center justify-center bg-black/40 p-4';
+    overlay.innerHTML =
+      '<div class="bg-surface rounded-xl shadow-lg max-w-sm w-full p-6 flex flex-col gap-4">' +
+        '<div class="flex items-start gap-3">' +
+          '<span class="material-symbols-outlined text-primary mt-0.5" style="font-variation-settings:\'FILL\' 1">' + (opts.icon || 'help') + '</span>' +
+          '<p class="font-body-md text-body-md text-on-surface flex-1">' + CB._escapeDialog(message) + '</p>' +
+        '</div>' +
+        '<div class="flex justify-end gap-2">' +
+          '<button data-act="cancel" class="h-11 px-5 rounded-full font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-high transition-colors">' + CB._escapeDialog(opts.cancelLabel || 'Cancelar') + '</button>' +
+          '<button data-act="ok" class="h-11 px-5 rounded-full font-label-lg text-label-lg bg-primary text-on-primary hover:opacity-90 transition-opacity">' + CB._escapeDialog(opts.confirmLabel || 'Confirmar') + '</button>' +
+        '</div>' +
+      '</div>';
+    overlay.addEventListener('click', function (e) {
+      if (e.target === overlay || e.target.getAttribute('data-act') === 'cancel') finish(false);
+      else if (e.target.getAttribute('data-act') === 'ok') finish(true);
+    });
+    document.body.appendChild(overlay);
+  });
+};
+
+CB._decodeJwtPayload = function (token) {
+  try {
+    var part = String(token || '').split('.')[1];
+    if (!part) return null;
+    part = part.replace(/-/g, '+').replace(/_/g, '/');
+    while (part.length % 4) part += '=';
+    return JSON.parse(atob(part));
+  } catch (_err) {
+    return null;
+  }
+};
+
+CB.hasValidToken = function () {
+  var token = sessionStorage.getItem(CB.CONFIG.STORAGE_KEY_TOKEN);
+  if (!token) return false;
+  var payload = CB._decodeJwtPayload(token);
+  if (!payload || typeof payload.exp !== 'number') return false;
+  return Date.now() < (payload.exp * 1000) - 5000;
+};
+
+CB.clearAuthSession = function () {
+  sessionStorage.removeItem(CB.CONFIG.STORAGE_KEY_USER);
+  sessionStorage.removeItem(CB.CONFIG.STORAGE_KEY_ROL);
+  sessionStorage.removeItem(CB.CONFIG.STORAGE_KEY_LOGIN);
+  sessionStorage.removeItem(CB.CONFIG.STORAGE_KEY_ACTIVITY);
+  sessionStorage.removeItem(CB.CONFIG.STORAGE_KEY_TOKEN);
 };
 
 /* -------- TAREA 2/3: Modelo de datos (replica de la BD para modo mockup) -------- */
@@ -53,12 +162,43 @@ CB.DB = {
 
 /* -------- TAREA 4: Socket.io (real-time) -------- */
 CB.socket = null;
+CB._rooms = [];                  // salas a las que (re)unirse en cada conexión
+CB._reconnectCbs = [];           // callbacks para recargar datos tras reconectar
+CB._socketConnectedBefore = false;
+
+/* Une el socket a una sala y la recuerda para re-unirse tras CADA (re)conexión.
+   El servidor pierde la membresía de la sala al reconectar, por eso no basta
+   con emitir 'join:room' una sola vez al cargar la página. */
+CB.joinRoom = function (room) {
+  if (!room) return;
+  if (CB._rooms.indexOf(room) === -1) CB._rooms.push(room);
+  if (CB.socket && CB.socket.connected) CB.socket.emit('join:room', room);
+};
+
+/* Registra un callback que se ejecuta cuando el socket se RECONECTA (no en la
+   primera conexión). Permite que cada pantalla recargue sus datos para recuperar
+   los eventos que pudieron emitirse mientras estuvo desconectada. */
+CB.onReconnect = function (cb) {
+  if (typeof cb === 'function') CB._reconnectCbs.push(cb);
+};
+
 CB.initSocket = function () {
   if (typeof io === 'undefined') { CB.debug('Socket.io no disponible (se omite)'); return null; }
   try {
     var token = sessionStorage.getItem(CB.CONFIG.STORAGE_KEY_TOKEN);
     CB.socket = io(CB.CONFIG.SOCKET_URL, { autoConnect: true, reconnection: true, auth: token ? { token: token } : {} });
-    CB.socket.on('connect',    function () { CB.debug('Socket conectado:', CB.socket.id); });
+    CB.socket.on('connect', function () {
+      CB.debug('Socket conectado:', CB.socket.id);
+      // Re-unirse a todas las salas recordadas (membresía perdida al reconectar).
+      CB._rooms.forEach(function (r) { CB.socket.emit('join:room', r); });
+      // Tras una RECONEXIÓN, recargar datos para recuperar eventos perdidos.
+      if (CB._socketConnectedBefore) {
+        CB._reconnectCbs.forEach(function (cb) {
+          try { cb(); } catch (e) { CB.debug('reconnect cb error:', e); }
+        });
+      }
+      CB._socketConnectedBefore = true;
+    });
     CB.socket.on('disconnect', function () { CB.debug('Socket desconectado'); });
     CB.socket.on('auth:forceLogout', function (data) { CB.debug('Logout remoto:', data); CB.logout(true); });
     return CB.socket;
@@ -68,10 +208,10 @@ CB.initSocket = function () {
 /* -------- TAREA 5: Lógica del negocio -------- */
 CB.homeFor = function (rol) {
   switch (rol) {
-    case 'admin':    return '../Mesero/Mapa_mesas.html';
-    case 'cocinero': return '../Cocinero/Monitor_cocinero.html';
-    case 'mesero':   return '../Mesero/Mapa_mesas.html';
-    default:         return '../Login/Login.html';
+    case 'admin':    return '../Admin/Had-01_cobro-mesas.html';
+    case 'cocinero': return '../Cocinero/HCoc-01_gestion-cocina.html';
+    case 'mesero':   return '../Mesero/Hme-01_mapa-mesas.html';
+    default:         return '../Login/acceso-por-rol.html';
   }
 };
 
@@ -128,11 +268,11 @@ CB.logout = async function (silent) {
     try { await fetch(CB.CONFIG.API_BASE + '/auth/logout', { method: 'POST', headers: { 'Authorization': 'Bearer ' + token } }); } catch (e) {}
   }
   if (CB.socket && u) CB.socket.emit('auth:logout', { username: u });
-  sessionStorage.clear();
+  CB.clearAuthSession();
   if (!silent) {
     var path = window.location.pathname.toLowerCase();
     var prefix = (path.indexOf('/admin/') !== -1 || path.indexOf('/mesero/') !== -1 || path.indexOf('/cocinero/') !== -1)
-      ? '../Login/Login.html' : 'Login.html';
+      ? '../Login/acceso-por-rol.html' : 'acceso-por-rol.html';
     window.location.href = prefix;
   }
 };
@@ -146,7 +286,9 @@ CB.getSession = function () {
   return { usuario: u, rol: r, loginTime: t, lastActivity: a };
 };
 
-CB.isAuthenticated = function () { return !!CB.getSession(); };
+CB.isAuthenticated = function () {
+  return !!CB.getSession() && CB.hasValidToken();
+};
 
 CB.hasRole = function (rolesPermitidos) {
   var s = CB.getSession();
@@ -160,6 +302,11 @@ CB.touchActivity = function () { sessionStorage.setItem(CB.CONFIG.STORAGE_KEY_AC
 CB.checkSessionTimeout = function () {
   var s = CB.getSession();
   if (!s) return false;
+  if (!CB.hasValidToken()) {
+    CB.debug('Sesión inválida por token expirado o corrupto');
+    CB.logout();
+    return true;
+  }
   var elapsedMin = (Date.now() - s.lastActivity) / 60000;
   if (elapsedMin >= CB.CONFIG.SESSION_TIMEOUT_MIN) {
     CB.debug('Sesión expirada por inactividad (' + elapsedMin.toFixed(1) + ' min)');
@@ -174,7 +321,7 @@ CB.protectPage = function (rolesPermitidos) {
   if (!CB.isAuthenticated() || CB.checkSessionTimeout() || !CB.hasRole(rolesPermitidos || [])) {
     var path = window.location.pathname.toLowerCase();
     var prefix = (path.indexOf('/admin/') !== -1 || path.indexOf('/mesero/') !== -1 || path.indexOf('/cocinero/') !== -1)
-      ? '../Login/Login.html' : 'Login.html';
+      ? '../Login/acceso-por-rol.html' : 'acceso-por-rol.html';
     window.location.href = prefix;
     return false;
   }

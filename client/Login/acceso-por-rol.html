@@ -1,0 +1,68 @@
+﻿<!DOCTYPE html>
+
+<html lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Login - RestaurantOS</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="../css/estilos.css" rel="stylesheet">
+<script src="../js/tailwind-config.js"></script>
+<script src="https://cdn.socket.io/4.7.5/socket.io.min.js" crossorigin="anonymous"></script>
+<script src="js/auth.js"></script>
+</head>
+<body class="bg-primary-container min-h-screen flex items-center justify-center p-gutter relative overflow-hidden text-on-surface">
+<!-- Subtle Marine Background Texture / Pattern mapping -->
+<div class="absolute inset-0 opacity-20 pointer-events-none" style="background-image: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.1) 2px, transparent 2px); background-size: 32px 32px;"></div>
+<div class="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-primary blur-[120px] pointer-events-none"></div>
+<div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-surface-tint blur-[100px] pointer-events-none opacity-50"></div>
+<!-- Login Card -->
+<main class="w-full max-w-[480px] bg-surface-container-lowest rounded-xl shadow-lg relative z-10 flex flex-col p-margin gap-gutter">
+<!-- Header -->
+<header class="flex flex-col items-center text-center gap-unit">
+<div class="flex items-center justify-center gap-unit mb-2">
+<span class="material-symbols-outlined text-primary text-[40px]" data-weight="fill" style="font-variation-settings: 'FILL' 1;">restaurant</span>
+<h1 class="font-display-lg text-display-lg text-primary">Cevicheria Belsy</h1>
+</div>
+</header>
+<!-- Form -->
+<form id="loginForm" class="flex flex-col gap-6 w-full mt-4">
+<!-- Error Zone (oculta por defecto, se muestra al fallar el login) -->
+<div id="errorBox" class="bg-error-container p-4 rounded-lg flex items-start gap-3 border border-error hidden">
+<span class="material-symbols-outlined text-error mt-0.5">error</span>
+<p class="font-body-md text-body-md text-on-error-container">
+                    Credenciales incorrectas
+                </p>
+</div>
+<!-- Input Group: Usuario -->
+<div class="flex flex-col gap-2">
+<label class="font-label-lg text-label-lg text-on-surface" for="usuario">Usuario</label>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-4 text-outline pointer-events-none">person</span>
+<input class="w-full min-h-[56px] pl-12 pr-4 bg-surface-container border border-outline-variant rounded-lg font-body-lg text-body-lg text-on-surface focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-shadow" id="usuario" name="usuario" placeholder="Ingresa tu usuario" type="text" autocomplete="username"/>
+</div>
+</div>
+<!-- Input Group: Contraseña -->
+<div class="flex flex-col gap-2">
+<label class="font-label-lg text-label-lg text-on-surface" for="password">Contraseña</label>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-4 text-outline pointer-events-none">lock</span>
+<input class="w-full min-h-[56px] pl-12 pr-12 bg-surface-container border border-outline-variant rounded-lg font-body-lg text-body-lg text-on-surface focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-shadow" id="password" name="password" placeholder="Ingresa tu contraseña" type="password" autocomplete="current-password"/>
+<button id="togglePass" aria-label="Mostrar contraseña" class="absolute right-4 text-outline hover:text-on-surface focus:outline-none flex items-center justify-center p-2 rounded-full hover:bg-surface-variant transition-colors" type="button">
+<span class="material-symbols-outlined">visibility</span>
+</button>
+</div>
+</div>
+<!-- Submit Button -->
+<button class="w-full min-h-[56px] mt-2 bg-tertiary-container hover:bg-tertiary text-on-tertiary-container hover:text-on-tertiary rounded-lg font-headline-md text-headline-md shadow-sm flex items-center justify-center transition-colors" type="submit">
+                Ingresar
+            </button>
+</form>
+<!-- Footer Note -->
+<footer class="mt-4 pt-4 border-t border-surface-variant text-center">
+<p class="font-label-md text-label-md text-outline">
+La sesi&oacute;n expirar&aacute; autom&aacute;ticamente tras 30 minutos de inactividad.
+</p>
+</footer>
+</main>
+<script src="js/acceso-por-rol.js"></script>
+</body></html>

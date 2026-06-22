@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Cevicheria Belsy - Notificaciones de Entrega</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="../css/estilos.css" rel="stylesheet">
+    <script src="../js/tailwind-config.js"></script>
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js" crossorigin="anonymous"></script>
+    <script src="../Login/js/auth.js"></script>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col">
+    <!-- TopNavBar -->
+    <nav class="flex justify-between items-center w-full px-margin py-4 h-touch-target-min shadow-sm bg-surface top-0 z-50">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg bg-primary-container flex items-center justify-center">
+                <span class="material-symbols-outlined text-on-primary-container" style="font-variation-settings: 'FILL' 1;">restaurant</span>
+            </div>
+            <span class="font-headline-md text-headline-md font-bold text-primary">Cevicheria Belsy</span>
+        </div>
+        <div class="hidden md:flex items-center gap-4 absolute left-1/2 transform -translate-x-1/2">
+            <h1 class="font-headline-lg text-headline-lg text-on-surface">Notificaciones de Entrega</h1>
+        </div>
+        <div class="flex items-center gap-3">
+            <a href="Hme-01_mapa-mesas.html" class="font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-high transition-colors h-touch-target-min px-4 rounded-full flex items-center gap-2">
+                <span class="material-symbols-outlined text-[18px]">table_restaurant</span>
+                <span class="hidden sm:inline">Mapa</span>
+            </a>
+            <button id="btn-logout" class="font-label-lg text-label-lg text-primary hover:bg-surface-container-high transition-colors h-touch-target-min px-4 rounded-full flex items-center gap-2">
+                <span>Cerrar sesión</span>
+                <span class="material-symbols-outlined">logout</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Notification Banner (hidden by default) -->
+    <div class="hidden fixed top-16 left-0 right-0 z-40 mx-margin mt-2 bg-secondary text-on-secondary rounded-xl px-gutter py-3 shadow-lg flex items-center gap-3" id="notify-banner">
+        <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">notifications_active</span>
+        <span class="font-label-lg text-label-lg flex-1" id="notify-text">Pedido listo</span>
+        <button class="text-on-secondary opacity-70 hover:opacity-100" id="notify-close">
+            <span class="material-symbols-outlined text-[18px]">close</span>
+        </button>
+    </div>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-margin w-full max-w-container-max-width mx-auto flex flex-col gap-gutter">
+        <!-- Mobile title -->
+        <div class="md:hidden">
+            <h1 class="font-headline-lg text-headline-lg text-on-surface">Notificaciones de Entrega</h1>
+        </div>
+
+        <!-- Ready to deliver -->
+        <section>
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-3">
+                    <span class="material-symbols-outlined text-secondary" style="font-variation-settings:'FILL' 1;">check_circle</span>
+                    <h2 class="font-headline-md text-headline-md text-on-surface">Listos para entregar</h2>
+                    <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-secondary text-on-secondary font-label-md text-label-md" id="ready-count">0</span>
+                </div>
+                <button class="font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-high transition-colors px-4 py-2 rounded-lg flex items-center gap-2" id="refresh-btn">
+                    <span class="material-symbols-outlined text-[18px]">refresh</span> Actualizar
+                </button>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-gutter" id="ready-list">
+                <p class="col-span-full text-on-surface-variant text-body-md">Cargando...</p>
+            </div>
+        </section>
+
+        <!-- In progress -->
+        <section>
+            <div class="flex items-center gap-3 mb-4">
+                <span class="material-symbols-outlined text-on-surface-variant">pending</span>
+                <h2 class="font-headline-md text-headline-md text-on-surface">En preparación</h2>
+                <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-surface-container text-on-surface-variant font-label-md text-label-md" id="pending-count">0</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-gutter" id="pending-list">
+                <p class="col-span-full text-on-surface-variant text-body-md">Cargando...</p>
+            </div>
+        </section>
+    </main>
+
+    <script src="js/Hme-03_notificaciones-entrega.js"></script>
+</body>
+</html>

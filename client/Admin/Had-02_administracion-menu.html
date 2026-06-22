@@ -1,0 +1,312 @@
+﻿<!-- -POR HACERv2 -->
+<!-- Had-02 — Administración del menú: panel HTML del admin/cajero -->
+<!-- Endpoints disponibles:
+     GET    /api/menu/admin/categories          → listar categorías con sus platos
+     POST   /api/menu/admin/categories          → crear categoría
+     PATCH  /api/menu/admin/categories/:id      → editar categoría
+     DELETE /api/menu/admin/categories/:id      → eliminar categoría (falla si tiene platos)
+     POST   /api/menu/admin/items               → crear plato (JSON)
+     PATCH  /api/menu/admin/items/:id           → editar plato (JSON)
+     DELETE /api/menu/admin/items/:id           → eliminar plato
+     PATCH  /api/menu/admin/items/:id/stock     → marcar disponible/agotado (stockStatus)
+     PATCH  /api/menu/admin/items/:id/image     → subir imagen (multipart/form-data, campo: "image")
+     DELETE /api/menu/admin/items/:id/image     → quitar imagen
+   Socket.io: escuchar 'menu:updated' para refrescar la vista -->
+<!DOCTYPE html><html class="light" lang="es" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Cevicheria Belsy - Admin Menu Management</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed": "#a0f1e6",
+                        "primary-fixed-dim": "#b8c4ff",
+                        "outline": "#757684",
+                        "on-tertiary": "#ffffff",
+                        "on-surface-variant": "#444653",
+                        "on-error-container": "#93000a",
+                        "surface-bright": "#fbf8ff",
+                        "inverse-on-surface": "#f1f0f9",
+                        "tertiary-fixed": "#ffdbce",
+                        "outline-variant": "#c5c5d4",
+                        "on-primary": "#ffffff",
+                        "on-secondary-container": "#0d6f66",
+                        "on-tertiary-container": "#e6835b",
+                        "surface-container-high": "#e4e9ed",
+                        "background": "#f6fafe",
+                        "surface-container": "#eaeef2",
+                        "inverse-surface": "#2f3037",
+                        "surface": "#f6fafe",
+                        "on-surface": "#1a1b22",
+                        "secondary": "#016a61",
+                        "on-background": "#1a1b22",
+                        "on-tertiary-fixed-variant": "#7a300f",
+                        "on-secondary-fixed": "#00201d",
+                        "tertiary-fixed-dim": "#ffb59a",
+                        "primary-fixed": "#dde1ff",
+                        "inverse-primary": "#b8c4ff",
+                        "surface-dim": "#dad9e2",
+                        "primary-container": "#1e40af",
+                        "on-primary-fixed-variant": "#213da0",
+                        "surface-container-lowest": "#ffffff",
+                        "primary": "#00175c",
+                        "error-container": "#ffdad6",
+                        "error": "#ba1a1a",
+                        "secondary-fixed-dim": "#84d5ca",
+                        "tertiary": "#3e1000",
+                        "on-error": "#ffffff",
+                        "surface-container-highest": "#dfe3e7",
+                        "on-tertiary-fixed": "#370e00",
+                        "on-primary-container": "#7e97fe",
+                        "on-secondary": "#ffffff",
+                        "tertiary-container": "#611e00",
+                        "surface-container-low": "#f0f4f8",
+                        "on-primary-fixed": "#001453",
+                        "surface-tint": "#3d57ba",
+                        "on-secondary-fixed-variant": "#005049",
+                        "surface-variant": "#e3e1ea",
+                        "secondary-container": "#9defe3"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "touch-target": "48px",
+                        "margin": "32px",
+                        "container-max": "1280px",
+                        "gutter": "24px",
+                        "unit": "8px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Inter"],
+                        "label-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "label-lg": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-md": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "label-lg": ["14px", {"lineHeight": "20px", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        /* Barra de desplazamiento visible para los ítems del menú */
+        .menu-scrollbar::-webkit-scrollbar { width: 12px; }
+        .menu-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .menu-scrollbar::-webkit-scrollbar-thumb {
+            background: #c4c7c5; border-radius: 9999px;
+            border: 3px solid transparent; background-clip: content-box;
+        }
+        .menu-scrollbar::-webkit-scrollbar-thumb:hover { background: #8e918f; background-clip: content-box; }
+        .menu-scrollbar { scrollbar-width: thin; scrollbar-color: #c4c7c5 transparent; }
+    </style>
+</head>
+<body class="bg-surface-container-low text-on-surface">
+<!-- Top Navigation Bar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin h-touch-target bg-surface dark:bg-surface-dim border-b border-outline-variant">
+<div class="flex items-center gap-4">
+<span class="font-headline-lg text-headline-md text-primary dark:text-primary-fixed-dim">Cevichería Belsy</span>
+<div class="h-6 w-[1px] bg-outline-variant mx-2"></div>
+<h1 class="font-headline-md text-headline-md text-on-surface">Administración del Menú</h1>
+</div>
+<div class="flex items-center gap-unit">
+<div class="flex items-center gap-2 px-2 text-on-surface-variant">
+<span class="material-symbols-outlined">account_circle</span>
+<span class="font-label-lg text-label-lg">Admin</span>
+</div>
+<button id="logoutBtn" class="font-label-lg text-label-lg text-primary hover:bg-surface-container-high transition-colors h-touch-target-min px-4 rounded-full flex items-center gap-2">
+<span>Cerrar sesión</span>
+<span class="material-symbols-outlined">logout</span>
+</button>
+</div>
+</header>
+<!-- Admin Navigation Sidebar -->
+<nav class="fixed top-[48px] left-0 w-64 h-[calc(100vh-48px)] bg-surface border-r border-outline-variant flex flex-col z-40 overflow-y-auto">
+<div class="p-3 flex-1 space-y-4">
+<div class="space-y-0.5">
+<p class="px-3 pt-2 pb-2 font-label-md text-label-md uppercase tracking-wider text-on-surface-variant">Caja</p>
+<a href="../Cajero/Had-01_cobro-mesas.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-on-surface-variant hover:bg-surface-container-highest">
+<span class="material-symbols-outlined text-[20px]">point_of_sale</span>
+<span class="font-label-lg text-label-lg">Cobro de Mesas</span>
+</a>
+</div>
+<div class="space-y-0.5">
+<p class="px-3 pt-2 pb-2 font-label-md text-label-md uppercase tracking-wider text-on-surface-variant">Admin</p>
+<a href="Had-02_administracion-menu.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors bg-secondary-container text-on-secondary-container">
+<span class="material-symbols-outlined text-[20px]">restaurant_menu</span>
+<span class="font-label-lg text-label-lg">Administración del Menú</span>
+</a>
+</div>
+<div class="space-y-0.5">
+
+<a href="Had-03_gestion-usuarios.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-on-surface-variant hover:bg-surface-container-highest">
+<span class="material-symbols-outlined text-[20px]">manage_accounts</span>
+<span class="font-label-lg text-label-lg">Gestión de Usuarios</span>
+</a>
+<a href="Had-04_reportes-ventas.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-on-surface-variant hover:bg-surface-container-highest">
+<span class="material-symbols-outlined text-[20px]">bar_chart</span>
+<span class="font-label-lg text-label-lg">Reportes de Ventas</span>
+</a>
+<a href="Had-07_historial-pagos.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-on-surface-variant hover:bg-surface-container-highest">
+<span class="material-symbols-outlined text-[20px]">receipt_long</span>
+<span class="font-label-lg text-label-lg">Historial de Pagos</span>
+</a>
+<a href="ver_cocina_admin.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-on-surface-variant hover:bg-surface-container-highest">
+<span class="material-symbols-outlined text-[20px]">skillet</span>
+<span class="font-label-lg text-label-lg">Gestión de Cocina</span>
+</a>
+<a href="ver_mapa_mesas_admin.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-on-surface-variant hover:bg-surface-container-highest">
+<span class="material-symbols-outlined text-[20px]">table_restaurant</span>
+<span class="font-label-lg text-label-lg">Mapa de Mesas</span>
+</a>
+</div>
+</div>
+</nav>
+<main class="pt-[48px] ml-64 h-screen flex overflow-hidden">
+<!-- Left Sidebar: Categories -->
+<aside class="w-72 bg-surface-container border-r border-outline-variant flex flex-col">
+<div class="p-4 border-b border-outline-variant flex items-center justify-between">
+<h2 class="font-label-lg text-label-lg uppercase tracking-wider text-on-surface-variant">Categorías</h2>
+<button class="w-8 h-8 flex items-center justify-center bg-primary text-on-primary rounded-lg hover:opacity-90 transition-opacity" id="addCategoryBtn">
+<span class="material-symbols-outlined text-[20px]" data-icon="add">add</span>
+</button>
+</div>
+<div class="flex-1 overflow-y-auto p-2 space-y-1 hide-scrollbar" id="categoryList">
+<!-- Dynamic Categories -->
+<div class="animate-pulse space-y-2">
+<div class="h-10 bg-surface-variant rounded-lg"></div>
+<div class="h-10 bg-surface-variant rounded-lg"></div>
+<div class="h-10 bg-surface-variant rounded-lg"></div>
+</div>
+</div>
+<div class="p-4 border-t border-outline-variant bg-surface-container-low">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-secondary-container" data-icon="badge">badge</span>
+</div>
+<div>
+<p class="font-label-lg text-label-lg text-on-surface">Admin Portal</p>
+<p class="text-xs text-on-surface-variant">Cevicheria Belsy</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Right Panel: Menu Items -->
+<section class="flex-1 min-h-0 flex flex-col bg-surface-container-low overflow-hidden">
+<header class="p-margin flex items-center justify-between">
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface" id="currentCategoryTitle">Cargando...</h2>
+<p class="text-on-surface-variant font-body-md text-body-md">Gestiona los ítems y precios de esta sección.</p>
+</div>
+<button class="flex items-center gap-2 px-6 h-touch-target bg-primary text-on-primary font-label-lg text-label-lg rounded-lg hover:shadow-lg transition-all active:scale-95" id="addItemBtn">
+<span class="material-symbols-outlined" data-icon="restaurant_menu">restaurant_menu</span>
+                    Nuevo ítem
+</button>
+</header>
+<div class="flex-1 min-h-0 overflow-y-auto px-margin pb-margin grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-gutter menu-scrollbar content-start auto-rows-max" id="itemsGrid">
+<!-- Dynamic Item Cards -->
+</div>
+</section>
+</main>
+<!-- Modals -->
+<div class="fixed inset-0 z-[100] hidden bg-black/60 flex items-center justify-center p-4 backdrop-blur-sm" id="categoryModal">
+<div class="bg-surface-container-lowest w-full max-w-md rounded-xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
+<div class="p-6 border-b border-outline-variant">
+<h3 class="font-headline-md text-headline-md" id="categoryModalTitle">Nueva Categoría</h3>
+</div>
+<form class="p-6 space-y-4" id="categoryForm">
+<input id="categoryId" type="hidden">
+<div>
+<label class="block font-label-lg text-label-lg mb-2">Nombre de la Categoría</label>
+<input class="w-full h-touch-target border border-outline rounded-lg px-4 focus:ring-2 focus:ring-primary outline-none text-body-md" id="categoryName" required="" type="text">
+</div>
+<div class="flex justify-end gap-3 pt-4">
+<button class="modal-close px-6 h-touch-target font-label-lg rounded-lg hover:bg-surface-container-high" type="button">Cancelar</button>
+<button class="px-6 h-touch-target bg-primary text-on-primary font-label-lg rounded-lg shadow-sm" type="submit">Guardar</button>
+</div>
+</form>
+</div>
+</div>
+<div class="fixed inset-0 z-[100] hidden bg-black/60 flex items-center justify-center p-4 backdrop-blur-sm" id="itemModal">
+<div class="bg-surface-container-lowest w-full max-w-2xl rounded-xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col animate-in fade-in zoom-in duration-200">
+<div class="p-6 border-b border-outline-variant">
+<h3 class="font-headline-md text-headline-md" id="itemModalTitle">Nuevo Ítem</h3>
+</div>
+<form class="p-6 space-y-4 overflow-y-auto" id="itemForm">
+<input id="itemId" type="hidden">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="space-y-4">
+<div>
+<label class="block font-label-lg text-label-lg mb-2">Nombre del Ítem</label>
+<input class="w-full h-touch-target border border-outline rounded-lg px-4 focus:ring-2 focus:ring-primary outline-none" id="itemName" required="" type="text">
+</div>
+<div>
+<label class="block font-label-lg text-label-lg mb-2">Precio (S/)</label>
+<input class="w-full h-touch-target border border-outline rounded-lg px-4 focus:ring-2 focus:ring-primary outline-none" id="itemPrice" required="" step="0.01" type="number">
+</div>
+<div>
+<label class="block font-label-lg text-label-lg mb-2">Categoría</label>
+<select class="w-full h-touch-target border border-outline rounded-lg px-4 focus:ring-2 focus:ring-primary outline-none bg-transparent" id="itemCategorySelect" required="">
+<!-- Dynamic Options -->
+</select>
+</div>
+</div>
+<div class="space-y-4">
+<div>
+<label class="block font-label-lg text-label-lg mb-2">Imagen</label>
+<div class="relative group cursor-pointer border-2 border-dashed border-outline-variant rounded-lg aspect-video flex flex-col items-center justify-center bg-surface-container-low hover:bg-surface-container transition-colors">
+<input accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer" id="itemImage" type="file">
+<span class="material-symbols-outlined text-4xl text-outline mb-2" data-icon="cloud_upload">cloud_upload</span>
+<span class="text-sm text-on-surface-variant">Click para subir</span>
+<img class="absolute inset-0 w-full h-full object-cover rounded-lg hidden" id="itemImagePreview">
+</div>
+</div>
+</div>
+</div>
+<div>
+<label class="block font-label-lg text-label-lg mb-2">Descripción</label>
+<textarea class="w-full border border-outline rounded-lg p-4 focus:ring-2 focus:ring-primary outline-none resize-none" id="itemDescription" rows="3"></textarea>
+</div>
+<div class="flex justify-end gap-3 pt-4 border-t border-outline-variant">
+<button class="modal-close px-6 h-touch-target font-label-lg rounded-lg hover:bg-surface-container-high" type="button">Cancelar</button>
+<button class="px-6 h-touch-target bg-primary text-on-primary font-label-lg rounded-lg shadow-sm" type="submit">Guardar Ítem</button>
+</div>
+</form>
+</div>
+</div>
+<!-- Scripts -->
+<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+<script src="../Login/js/auth.js"></script>
+<script src="js/Had-02_administracion-menu.js"></script>
+
+
+</body></html>
+
+
+
+
+

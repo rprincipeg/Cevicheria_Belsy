@@ -1,0 +1,87 @@
+﻿<!DOCTYPE html><html lang="es"><head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Cevicheria Belsy - Mapa de Mesas</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="../css/estilos.css" rel="stylesheet">
+    <script src="../js/tailwind-config.js"></script>
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js" crossorigin="anonymous"></script>
+    <script src="../Login/js/auth.js"></script>
+    <script src="../js/waiter-notifications.js"></script>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col">
+    <!-- TopNavBar -->
+    <nav class="flex justify-between items-center w-full px-margin py-4 h-touch-target-min shadow-sm bg-surface top-0 z-50">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg bg-primary-container flex items-center justify-center">
+                <span class="material-symbols-outlined text-on-primary-container" style="font-variation-settings: 'FILL' 1;">restaurant</span>
+            </div>
+            <span class="font-headline-md text-headline-md font-bold text-primary">Cevicheria Belsy</span>
+        </div>
+        <div class="hidden md:block absolute left-1/2 transform -translate-x-1/2">
+            <h1 class="font-headline-lg text-headline-lg text-on-surface">Mapa de Mesas</h1>
+        </div>
+        <div class="flex items-center gap-6">
+            <div class="hidden sm:flex items-center gap-2">
+                <span class="material-symbols-outlined text-outline">person</span>
+                <span class="font-label-lg text-label-lg text-on-surface-variant" id="user-label">Mesero</span>
+            </div>
+            <a href="Hme-03_notificaciones-entrega.html" class="font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-high transition-colors h-touch-target-min px-4 rounded-full flex items-center gap-2" id="btn-notifications">
+                <span class="material-symbols-outlined text-[18px]">notifications</span>
+                <span class="hidden sm:inline">Entregas</span>
+            </a>
+            <button id="btn-cocina" class="font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-high transition-colors h-touch-target-min px-4 rounded-full items-center gap-2 hidden">
+                <span class="material-symbols-outlined text-[18px]">restaurant</span> Cocina
+            </button>
+            <button id="btn-logout" class="font-label-lg text-label-lg text-primary hover:bg-surface-container-high transition-colors h-touch-target-min px-4 rounded-full flex items-center gap-2">
+                <span class="">Cerrar sesión</span>
+                <span class="material-symbols-outlined">logout</span>
+            </button>
+        </div>
+    </nav>
+    <!-- Main Canvas -->
+    <main class="flex-1 p-margin w-full max-w-container-max-width mx-auto flex flex-col gap-gutter">
+        <div class="md:hidden mb-4">
+            <h1 class="font-headline-lg text-headline-lg text-on-surface">Mapa de Mesas</h1>
+        </div>
+        <div class="flex items-center justify-between gap-3 flex-wrap">
+            <p class="font-label-md text-label-md text-on-surface-variant flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-[16px]">drag_pan</span>
+                Arrastra una mesa sobre otra para fusionarlas.
+            </p>
+            <button id="btn-mover-pedido" class="font-label-lg text-label-lg bg-primary-container text-on-primary-container hover:opacity-90 transition-opacity h-touch-target-min px-4 rounded-full flex items-center gap-2 shadow-sm">
+                <span class="material-symbols-outlined text-[18px]">move_up</span>
+                Mover pedido
+            </button>
+        </div>
+        <div class="flex-1 bg-surface-container-low rounded-xl p-8 border border-outline-variant shadow-sm relative overflow-hidden">
+            <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(#c4c5d5 1px, transparent 1px); background-size: 24px 24px;"></div>
+            <div class="relative z-10 flex flex-col gap-gutter">
+                <!-- Loading state -->
+                <div id="tables-loading" class="flex items-center justify-center py-12">
+                    <span class="font-body-md text-on-surface-variant">Cargando mesas...</span>
+                </div>
+                <!-- Tables grid (populated by JS) -->
+                <div id="tables-grid" class="grid grid-cols-2 md:grid-cols-4 gap-gutter justify-items-center hidden"></div>
+                <!-- Divider -->
+                <div id="section-divider" class="w-full border-t-2 border-dashed border-outline-variant my-4 hidden"></div>
+                <!-- Para Llevar -->
+                <div id="takeaway-section" class="flex justify-end w-full hidden">
+                    <button id="btn-takeaway" class="w-full md:w-[300px] h-[120px] bg-primary-fixed rounded-xl shadow-sm hover:shadow-md transition-all flex items-center justify-between p-6 relative group hover:-translate-y-1 border border-primary-fixed-dim">
+                        <div class="flex flex-col items-start gap-2">
+                            <span class="font-headline-md text-headline-md text-on-primary-fixed-variant">Para Llevar</span>
+                            <span class="font-label-md text-label-md text-on-primary-fixed-variant flex items-center gap-1">
+                                <span class="material-symbols-outlined text-[14px]">info</span> Clientes sin mesa
+                            </span>
+                        </div>
+                        <div class="w-16 h-16 rounded-full bg-primary-container flex items-center justify-center shadow-inner">
+                            <span class="material-symbols-outlined text-[32px] text-on-primary-container">shopping_bag</span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+<script src="js/Hme-01_mapa-mesas.js"></script>
+</body></html>

@@ -1,0 +1,87 @@
+﻿<!DOCTYPE html><html class="light" lang="es"><head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Monitor de Cocina — Cevicheria Belsy</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="../css/estilos.css" rel="stylesheet">
+    <script src="../js/tailwind-config.js"></script>
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js" crossorigin="anonymous"></script>
+    <script src="../Login/js/auth.js"></script>
+</head>
+<body class="bg-surface-container-low text-on-surface h-screen flex flex-col overflow-hidden font-body-md">
+    <!-- TopNavBar -->
+    <header class="bg-surface shadow-sm flex justify-between items-center w-full px-margin py-4 h-touch-target-min shrink-0 z-10">
+        <div class="flex items-center gap-4">
+            <span class="material-symbols-outlined text-primary text-3xl">restaurant</span>
+            <h1 class="font-display-lg text-display-lg font-bold text-primary tracking-tight">Cevicheria Belsy</h1>
+            <span class="font-headline-md text-headline-md text-on-surface-variant ml-4 border-l-2 border-outline-variant pl-4">Monitor de Cocina</span>
+        </div>
+        <div class="flex items-center gap-6">
+            <div class="flex items-center gap-2 text-on-surface-variant">
+                <span class="material-symbols-outlined">person</span>
+                <span class="font-label-lg text-label-lg" id="topbar-user-label">Cocinero</span>
+            </div>
+            <button id="btn-volver-admin" class="font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container px-4 py-2 rounded-full transition-colors h-touch-target-min items-center gap-2 hidden">
+                <span class="material-symbols-outlined text-[20px]">arrow_back</span>
+                Volver
+            </button>
+            <button id="btn-logout" class="font-label-lg text-label-lg text-primary hover:bg-surface-container-high transition-colors h-touch-target-min px-4 rounded-full flex items-center gap-2">
+                <span>Cerrar sesión</span>
+                <span class="material-symbols-outlined">logout</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Kanban View -->
+    <main class="flex-1 overflow-hidden p-gutter">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter h-full max-w-container-max-width mx-auto">
+            <!-- Column 1: PENDIENTE -->
+            <section class="flex flex-col h-full bg-surface-container rounded-xl overflow-hidden shadow-sm border border-outline-variant/20">
+                <header class="bg-primary-container text-on-primary-container p-4 flex justify-between items-center shrink-0">
+                    <h2 class="font-headline-md text-headline-md flex items-center gap-2">
+                        <span class="material-symbols-outlined">pending_actions</span>
+                        PENDIENTE
+                    </h2>
+                    <span id="count-pending" class="bg-on-primary-container text-primary-container font-label-lg text-label-lg px-3 py-1 rounded-full">0</span>
+                </header>
+                <div class="flex-1 overflow-y-auto p-4 space-y-4 bg-surface/50" id="col-pending">
+                    <p class="text-center text-on-surface-variant font-label-md py-4">Sin pedidos pendientes</p>
+                </div>
+            </section>
+            <!-- Column 2: EN PROCESO -->
+            <section class="flex flex-col h-full bg-surface-container rounded-xl overflow-hidden shadow-sm border border-outline-variant/20">
+                <header class="bg-tertiary-container text-on-tertiary-container p-4 flex justify-between items-center shrink-0">
+                    <h2 class="font-headline-md text-headline-md flex items-center gap-2">
+                        <span class="material-symbols-outlined">skillet</span>
+                        EN PROCESO
+                    </h2>
+                    <span id="count-inprogress" class="bg-on-tertiary-container text-tertiary-container font-label-lg text-label-lg px-3 py-1 rounded-full">0</span>
+                </header>
+                <div class="flex-1 overflow-y-auto p-4 space-y-4 bg-surface/50" id="col-inprogress">
+                    <p class="text-center text-on-surface-variant font-label-md py-4">Sin pedidos en proceso</p>
+                </div>
+            </section>
+            <!-- Column 3: LISTO -->
+            <section class="flex flex-col h-full bg-surface-container rounded-xl overflow-hidden shadow-sm border border-outline-variant/20">
+                <header class="bg-secondary-container text-on-secondary-container p-4 flex justify-between items-center shrink-0">
+                    <h2 class="font-headline-md text-headline-md flex items-center gap-2">
+                        <span class="material-symbols-outlined">room_service</span>
+                        LISTO
+                    </h2>
+                    <span id="count-ready" class="bg-on-secondary-container text-secondary-container font-label-lg text-label-lg px-3 py-1 rounded-full">0</span>
+                </header>
+                <div class="flex-1 overflow-y-auto p-4 space-y-4 bg-surface/50" id="col-ready">
+                    <p class="text-center text-on-surface-variant font-label-md py-4">Sin pedidos listos</p>
+                    <div class="bg-surface-container-low border border-dashed border-outline-variant rounded-lg p-3 flex items-start gap-2">
+                        <span class="material-symbols-outlined text-[18px] text-outline mt-0.5">info</span>
+                        <p class="font-label-md text-label-md text-on-surface-variant">
+                            Los pedidos marcados como "Listo" aparecen aquí y se eliminan automáticamente a los 5 minutos.
+                        </p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+<script src="js/HCoc-01_gestion-cocina.js"></script>
+</body></html>

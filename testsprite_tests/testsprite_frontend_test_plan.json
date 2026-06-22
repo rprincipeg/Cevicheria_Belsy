@@ -1,0 +1,1641 @@
+[
+  {
+    "id": "TC001",
+    "title": "Admin can log in and reach the authenticated area",
+    "description": "Verifies that an ADMIN user can sign in with valid credentials and access the authenticated experience.",
+    "category": "Authentication & Role Access",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the authenticated area is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the user is recognized with admin access"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC002",
+    "title": "Mesaero can view the table map and occupied table details",
+    "description": "Verifies that a MESERO user can open the table map and inspect the active items for an occupied table.",
+    "category": "Table Map",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the table map view"
+      },
+      {
+        "type": "action",
+        "description": "Open an occupied table"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the table statuses are displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the active items for the occupied table are displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC003",
+    "title": "Mesero can create and deliver an order from the active orders view",
+    "description": "Verifies that a MESERO user can create a table order, add items, and mark the order as delivered end to end.",
+    "category": "Orders / View Dishes",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the active orders view"
+      },
+      {
+        "type": "action",
+        "description": "Create a new order for a table"
+      },
+      {
+        "type": "action",
+        "description": "Add dishes to the order"
+      },
+      {
+        "type": "action",
+        "description": "Mark the order as delivered"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the order is shown as delivered"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the added items are displayed on the order"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC004",
+    "title": "Cashier reviews bills, pays a table, and releases it",
+    "description": "Verifies that a cashier can review pending table bills, complete payment, view the receipt, and release the table for reuse.",
+    "category": "Table Payment / Billing",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the payments summary view"
+      },
+      {
+        "type": "action",
+        "description": "Open a table bill from the pending list"
+      },
+      {
+        "type": "action",
+        "description": "Complete the table payment"
+      },
+      {
+        "type": "action",
+        "description": "Open the payment receipt"
+      },
+      {
+        "type": "action",
+        "description": "Release the table"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the receipt is displayed and the table is released"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC005",
+    "title": "User cannot sign in with invalid credentials",
+    "description": "Verifies that invalid login credentials are rejected and the user remains unable to access the app.",
+    "category": "Authentication & Role Access",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with invalid-user"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with invalid-password"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a login validation error is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the authenticated area is not displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC006",
+    "title": "Cook updates a table order through the kitchen queue",
+    "description": "Verifies that a cook can log in, view active kitchen orders, and advance an order and item to a prepared state.",
+    "category": "Kitchen Management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the kitchen orders view"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify active kitchen orders are displayed"
+      },
+      {
+        "type": "action",
+        "description": "Open an order from the kitchen list"
+      },
+      {
+        "type": "action",
+        "description": "Update the order status to a prepared state"
+      },
+      {
+        "type": "action",
+        "description": "Update one item status to a prepared state"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the updated order and item statuses are displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC007",
+    "title": "Cashier can access pending table payments after signing in",
+    "description": "Verifies that a cashier can sign in and reach the table payment summary used to start billing flows.",
+    "category": "Table Payment / Billing",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the payments summary view"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify pending table payments are displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC008",
+    "title": "Logged-in user can sign out",
+    "description": "Verifies that an authenticated user can end the session and return to the login experience.",
+    "category": "Authentication & Role Access",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the sign out control"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the login screen is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the authenticated area is no longer displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC009",
+    "title": "Cook can access the kitchen queue after signing in",
+    "description": "Verifies that a cook can sign in and reach the active kitchen orders screen without being blocked.",
+    "category": "Kitchen Management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the kitchen orders view"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify active kitchen orders are displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC010",
+    "title": "Admin logs in and manages users end to end",
+    "description": "Verifies that an admin can sign in, view the user list, create a user, update that user, and change the user status successfully.",
+    "category": "User Management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the admin username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the admin password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the user management page"
+      },
+      {
+        "type": "action",
+        "description": "Create a new user with valid data"
+      },
+      {
+        "type": "action",
+        "description": "Update the newly created user with valid changes"
+      },
+      {
+        "type": "action",
+        "description": "Change the newly created user's status"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the user list is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the created user appears in the user list"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC011",
+    "title": "Admin creates a menu category and item",
+    "description": "Verifies that an admin can create a category and then create a menu item under menu administration.",
+    "category": "Menu Administration",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the menu administration categories view"
+      },
+      {
+        "type": "action",
+        "description": "Create a new menu category"
+      },
+      {
+        "type": "action",
+        "description": "Create a new menu item in the category"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the new category and item are displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC012",
+    "title": "Cook updates an individual item from pending to in progress",
+    "description": "Verifies that a cook can change a single kitchen item from pending to in progress and see the update reflected in the UI.",
+    "category": "Kitchen Management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the kitchen orders view"
+      },
+      {
+        "type": "action",
+        "description": "Open an order from the kitchen list"
+      },
+      {
+        "type": "action",
+        "description": "Update one item status to in progress"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the item is shown in an in progress state"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC013",
+    "title": "Mesero can deliver a single item from an order",
+    "description": "Verifies that a MESERO user can open an order and mark one item as delivered while the order remains visible.",
+    "category": "Orders / View Dishes",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the active orders view"
+      },
+      {
+        "type": "action",
+        "description": "Open an order with items"
+      },
+      {
+        "type": "action",
+        "description": "Mark one item as delivered"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the item is shown as delivered"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the order details remain displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC014",
+    "title": "Admin views menu categories and items",
+    "description": "Verifies that an admin can sign in and see the full menu administration view with categories available for management.",
+    "category": "Menu Administration",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the menu administration categories view"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify menu categories are displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify menu items are displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC015",
+    "title": "Mesero can move an active order to another table",
+    "description": "Verifies that a MESERO user can move an occupied table's order to a valid destination table and see the table status update.",
+    "category": "Table Map",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the table map view"
+      },
+      {
+        "type": "action",
+        "description": "Move the active table to a free destination table"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the order is shown on the destination table"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the source table is shown as free"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC016",
+    "title": "Admin views daily sales and exports the report",
+    "description": "Verifies that an admin can open daily sales metrics and export the daily report as a spreadsheet file.",
+    "category": "Sales Reports",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the admin username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the admin password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the sales reports page"
+      },
+      {
+        "type": "action",
+        "description": "Open the daily report view"
+      },
+      {
+        "type": "action",
+        "description": "Export the daily report"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify daily sales metrics are displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a report export is available"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC017",
+    "title": "Admin updates a menu item image and availability",
+    "description": "Verifies that an admin can change a menu item's image and stock state so it becomes unavailable in administration.",
+    "category": "Menu Administration",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the menu administration items view"
+      },
+      {
+        "type": "action",
+        "description": "Open an existing menu item for editing"
+      },
+      {
+        "type": "action",
+        "description": "Update the item image"
+      },
+      {
+        "type": "action",
+        "description": "Mark the item as unavailable"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the updated item is displayed as unavailable"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC018",
+    "title": "Mesero can relocate an order to a free table",
+    "description": "Verifies that a MESERO user can relocate an active order from one table to another free table without losing the order state.",
+    "category": "Table Map",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the table map view"
+      },
+      {
+        "type": "action",
+        "description": "Relocate the active order to a free table"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the order is displayed on the new table"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the original table is no longer occupied by that order"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC019",
+    "title": "Waiter browses the customer-facing menu",
+    "description": "Verifies that a waiter can sign in and browse the categories and items available for ordering.",
+    "category": "Menu Administration",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the menu view"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify menu categories are displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify menu items are displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC020",
+    "title": "Admin closes the day and reviews closure exports",
+    "description": "Verifies that an admin can create a daily closure, review the closure list, and export a closure report.",
+    "category": "Sales Reports",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the admin username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the admin password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the sales reports page"
+      },
+      {
+        "type": "action",
+        "description": "Create the daily closure"
+      },
+      {
+        "type": "action",
+        "description": "Open the closures list"
+      },
+      {
+        "type": "action",
+        "description": "Export a closure report"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the closure list is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a closure export is available"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC021",
+    "title": "Cashier pays a takeaway bill",
+    "description": "Verifies that a cashier can open a takeaway bill and complete the takeaway payment flow successfully.",
+    "category": "Table Payment / Billing",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the takeaway billing view"
+      },
+      {
+        "type": "action",
+        "description": "Open the takeaway bill"
+      },
+      {
+        "type": "action",
+        "description": "Complete the takeaway payment"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a payment confirmation is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC022",
+    "title": "Admin manages inventory categories and stock entries",
+    "description": "Verifies that an admin can view inventory categories, create a category, create a supply, and register stock successfully.",
+    "category": "Warehouse / Inventory Control",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the admin username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the admin password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the inventory management page"
+      },
+      {
+        "type": "action",
+        "description": "Open the supply categories section"
+      },
+      {
+        "type": "action",
+        "description": "Create a valid supply category"
+      },
+      {
+        "type": "action",
+        "description": "Create a valid supply"
+      },
+      {
+        "type": "action",
+        "description": "Register stock for the newly created supply"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the new supply category is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the new supply is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC023",
+    "title": "Admin reviews dashboard, weekly sales, and monthly sales",
+    "description": "Verifies that an admin can access dashboard metrics along with weekly and monthly sales summaries.",
+    "category": "Sales Reports",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the admin username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the admin password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the sales reports page"
+      },
+      {
+        "type": "action",
+        "description": "Open the dashboard view"
+      },
+      {
+        "type": "action",
+        "description": "Open the weekly sales view"
+      },
+      {
+        "type": "action",
+        "description": "Open the monthly sales view"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify dashboard statistics are displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify weekly and monthly sales summaries are displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC024",
+    "title": "Mesero can unmerge a merged table",
+    "description": "Verifies that a MESERO user can split a merged table back into a free table state.",
+    "category": "Table Map",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the table map view"
+      },
+      {
+        "type": "action",
+        "description": "Open a merged table"
+      },
+      {
+        "type": "action",
+        "description": "Unmerge the table"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the table is displayed as free"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the merged state is no longer displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC025",
+    "title": "Admin sees payment history with a valid date range",
+    "description": "Verifies that an admin can filter payment history by a valid date range and see the resulting records.",
+    "category": "Sales Reports",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the admin username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the admin password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the sales reports page"
+      },
+      {
+        "type": "action",
+        "description": "Open the payment history view"
+      },
+      {
+        "type": "action",
+        "description": "Fill a valid start date into the date range filter"
+      },
+      {
+        "type": "action",
+        "description": "Fill a valid end date into the date range filter"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify payment history records are displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC026",
+    "title": "Admin updates an inventory category",
+    "description": "Verifies that an admin can edit an existing inventory category and see the updated category afterward.",
+    "category": "Warehouse / Inventory Control",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the admin username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the admin password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the inventory management page"
+      },
+      {
+        "type": "action",
+        "description": "Open an existing supply category for editing"
+      },
+      {
+        "type": "action",
+        "description": "Update the category with valid data"
+      },
+      {
+        "type": "action",
+        "description": "Save the category changes"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the updated category is displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC027",
+    "title": "Mesero sees a delivery state warning before the order is ready",
+    "description": "Verifies that a MESERO user cannot mark an order as delivered before it reaches the ready state.",
+    "category": "Orders / View Dishes",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the active orders view"
+      },
+      {
+        "type": "action",
+        "description": "Open an order that is not ready"
+      },
+      {
+        "type": "action",
+        "description": "Attempt to mark the order as delivered"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a delivery state warning is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the order is not marked as delivered"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC028",
+    "title": "Cashier sees validation for an incomplete payment",
+    "description": "Verifies that an incomplete table payment is rejected with a visible validation error.",
+    "category": "Table Payment / Billing",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the payments summary view"
+      },
+      {
+        "type": "action",
+        "description": "Open a table bill from the pending list"
+      },
+      {
+        "type": "action",
+        "description": "Attempt to submit an incomplete payment"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a validation error is displayed"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC029",
+    "title": "Mesero sees a validation message when moving to an invalid table",
+    "description": "Verifies that a MESERO user gets feedback when attempting to move a table to an invalid or unavailable destination.",
+    "category": "Table Map",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the table map view"
+      },
+      {
+        "type": "action",
+        "description": "Attempt to move an active table to an invalid destination"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a table move error is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the source table remains unchanged"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC030",
+    "title": "Cook sees validation when choosing an invalid kitchen status",
+    "description": "Verifies that invalid kitchen status changes are rejected with a visible validation error and no status change is shown.",
+    "category": "Kitchen Management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the kitchen orders view"
+      },
+      {
+        "type": "action",
+        "description": "Open an order from the kitchen list"
+      },
+      {
+        "type": "action",
+        "description": "Attempt to change the order status to an invalid value"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a validation error is displayed"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC031",
+    "title": "Admin cannot create a duplicate user",
+    "description": "Verifies that an admin sees a uniqueness validation error when trying to create a user with a username that already exists.",
+    "category": "User Management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the admin username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the admin password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the user management page"
+      },
+      {
+        "type": "action",
+        "description": "Create a user with a username that has already been used"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a uniqueness validation error is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the duplicate user is not added"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC032",
+    "title": "Admin cannot delete a supply that is in use",
+    "description": "Verifies that an admin sees a dependency error when deleting a supply that already has active usage.",
+    "category": "Warehouse / Inventory Control",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the admin username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the admin password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the inventory management page"
+      },
+      {
+        "type": "action",
+        "description": "Create a supply that will be used by inventory operations"
+      },
+      {
+        "type": "action",
+        "description": "Attempt to delete the supply"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a dependency error is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the supply remains available"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC033",
+    "title": "Admin cannot delete a category with active items",
+    "description": "Verifies that deleting a category with dependent items is blocked and a dependency error is shown.",
+    "category": "Menu Administration",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the menu administration categories view"
+      },
+      {
+        "type": "action",
+        "description": "Select a category that still has active items"
+      },
+      {
+        "type": "action",
+        "description": "Attempt to delete the selected category"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a dependency error is displayed"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC034",
+    "title": "Mesero sees a validation message when adding an invalid item payload",
+    "description": "Verifies that a MESERO user is shown a validation error when trying to add order items with invalid input.",
+    "category": "Orders / View Dishes",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the active orders view"
+      },
+      {
+        "type": "action",
+        "description": "Open an order for editing"
+      },
+      {
+        "type": "action",
+        "description": "Attempt to add an item with invalid input"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify an order item validation error is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify no invalid item is added to the order"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC035",
+    "title": "Admin sees validation feedback when editing a user with invalid data",
+    "description": "Verifies that an admin cannot save a user update with an invalid role or short password and sees validation feedback.",
+    "category": "User Management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the admin username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the admin password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the user management page"
+      },
+      {
+        "type": "action",
+        "description": "Open an existing user for editing"
+      },
+      {
+        "type": "action",
+        "description": "Enter an invalid role or a password that is too short"
+      },
+      {
+        "type": "action",
+        "description": "Save the user changes"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a validation error is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the user changes are not applied"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC036",
+    "title": "Admin sees validation when creating an incomplete menu item",
+    "description": "Verifies that required menu item fields are enforced and a validation error appears when data is incomplete.",
+    "category": "Menu Administration",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the menu administration items view"
+      },
+      {
+        "type": "action",
+        "description": "Start creating a new menu item"
+      },
+      {
+        "type": "action",
+        "description": "Submit the item form with missing required fields"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a validation error is displayed"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC037",
+    "title": "Non-admin users are blocked from the user list",
+    "description": "Verifies that a non-admin role cannot access user management and is denied access to the user list.",
+    "category": "User Management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the credentials for a non-admin user with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password for the non-admin user with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the user management page"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify an access denied message is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the user list is not displayed"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC038",
+    "title": "Check service health",
+    "description": "Verifies that a user can load the health endpoint and see a live status response for monitoring.",
+    "category": "Health Check",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /health"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a live service status is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a timestamp is displayed"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC039",
+    "title": "Admin sees validation feedback for an invalid payment report range",
+    "description": "Verifies that an admin sees a date range validation error when requesting payment history outside the allowed limits.",
+    "category": "Sales Reports",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the admin username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the admin password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the sales reports page"
+      },
+      {
+        "type": "action",
+        "description": "Open the payment history view"
+      },
+      {
+        "type": "action",
+        "description": "Fill an invalid start date into the date range filter"
+      },
+      {
+        "type": "action",
+        "description": "Fill an invalid end date into the date range filter"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a date range validation error is visible"
+      }
+    ],
+    "priority": "Low"
+  }
+]

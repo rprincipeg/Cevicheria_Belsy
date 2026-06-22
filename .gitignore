@@ -19,3 +19,15 @@ Thumbs.db
 # IDE
 .vscode/
 .idea/
+
+# Generated PDF receipts
+server/receipts/
+
+# Runtime-uploaded images (menu item photos) — no se versionan
+server/uploads/
+
+# TestSprite temp artifacts
+testsprite_tests/tmp/
+
+# Working documents at repo root
+/*.docx

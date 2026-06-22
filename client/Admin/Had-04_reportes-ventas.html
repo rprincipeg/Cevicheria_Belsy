@@ -1,0 +1,189 @@
+﻿<!DOCTYPE html><html class="light" lang="es" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Cevicheria Belsy - Reportes de Ventas</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed": "#a0f1e6",
+                        "primary-fixed-dim": "#b8c4ff",
+                        "outline": "#757684",
+                        "on-tertiary": "#ffffff",
+                        "on-surface-variant": "#444653",
+                        "on-error-container": "#93000a",
+                        "surface-bright": "#fbf8ff",
+                        "inverse-on-surface": "#f1f0f9",
+                        "tertiary-fixed": "#ffdbce",
+                        "outline-variant": "#c5c5d4",
+                        "on-primary": "#ffffff",
+                        "on-secondary-container": "#0d6f66",
+                        "on-tertiary-container": "#e6835b",
+                        "surface-container-high": "#e4e9ed",
+                        "background": "#f6fafe",
+                        "surface-container": "#eaeef2",
+                        "inverse-surface": "#2f3037",
+                        "surface": "#f6fafe",
+                        "on-surface": "#1a1b22",
+                        "secondary": "#016a61",
+                        "on-background": "#1a1b22",
+                        "on-tertiary-fixed-variant": "#7a300f",
+                        "on-secondary-fixed": "#00201d",
+                        "tertiary-fixed-dim": "#ffb59a",
+                        "primary-fixed": "#dde1ff",
+                        "inverse-primary": "#b8c4ff",
+                        "surface-dim": "#dad9e2",
+                        "primary-container": "#1e40af",
+                        "on-primary-fixed-variant": "#213da0",
+                        "surface-container-lowest": "#ffffff",
+                        "primary": "#00175c",
+                        "error-container": "#ffdad6",
+                        "error": "#ba1a1a",
+                        "secondary-fixed-dim": "#84d5ca",
+                        "tertiary": "#3e1000",
+                        "on-error": "#ffffff",
+                        "surface-container-highest": "#dfe3e7",
+                        "on-tertiary-fixed": "#370e00",
+                        "on-primary-container": "#7e97fe",
+                        "on-secondary": "#ffffff",
+                        "tertiary-container": "#611e00",
+                        "surface-container-low": "#f0f4f8",
+                        "on-primary-fixed": "#001453",
+                        "surface-tint": "#3d57ba",
+                        "on-secondary-fixed-variant": "#005049",
+                        "surface-variant": "#e3e1ea",
+                        "secondary-container": "#9defe3"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "touch-target": "48px",
+                        "margin": "32px",
+                        "container-max": "1280px",
+                        "gutter": "24px",
+                        "unit": "8px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Inter"],
+                        "label-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "label-lg": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-md": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "label-lg": ["14px", {"lineHeight": "20px", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-surface-container-low text-on-surface">
+<!-- Top Navigation Bar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin h-touch-target bg-surface dark:bg-surface-dim border-b border-outline-variant">
+<div class="flex items-center gap-4">
+<span class="font-headline-lg text-headline-md text-primary dark:text-primary-fixed-dim">Cevichería Belsy</span>
+<div class="h-6 w-[1px] bg-outline-variant mx-2"></div>
+<h1 class="font-headline-md text-headline-md text-on-surface">Reportes de Ventas</h1>
+</div>
+<div class="flex items-center gap-unit">
+<div class="flex items-center gap-2 px-2 text-on-surface-variant">
+<span class="material-symbols-outlined">account_circle</span>
+<span class="font-label-lg text-label-lg">Admin</span>
+</div>
+<button id="logoutBtn" class="font-label-lg text-label-lg text-primary hover:bg-surface-container-high transition-colors h-touch-target-min px-4 rounded-full flex items-center gap-2">
+<span>Cerrar sesión</span>
+<span class="material-symbols-outlined">logout</span>
+</button>
+</div>
+</header>
+<!-- Admin Navigation Sidebar -->
+<nav class="fixed top-[48px] left-0 w-64 h-[calc(100vh-48px)] bg-surface border-r border-outline-variant flex flex-col z-40 overflow-y-auto">
+<div class="p-3 flex-1 space-y-4">
+<div class="space-y-0.5">
+<p class="px-3 pt-2 pb-2 font-label-md text-label-md uppercase tracking-wider text-on-surface-variant">Caja</p>
+<a href="../Cajero/Had-01_cobro-mesas.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-on-surface-variant hover:bg-surface-container-highest">
+<span class="material-symbols-outlined text-[20px]">point_of_sale</span>
+<span class="font-label-lg text-label-lg">Cobro de Mesas</span>
+</a>
+</div>
+<div class="space-y-0.5">
+<p class="px-3 pt-2 pb-2 font-label-md text-label-md uppercase tracking-wider text-on-surface-variant">Admin</p>
+<a href="Had-02_administracion-menu.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-on-surface-variant hover:bg-surface-container-highest">
+<span class="material-symbols-outlined text-[20px]">restaurant_menu</span>
+<span class="font-label-lg text-label-lg">Administración del Menú</span>
+</a>
+</div>
+<div class="space-y-0.5">
+
+<a href="Had-03_gestion-usuarios.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-on-surface-variant hover:bg-surface-container-highest">
+<span class="material-symbols-outlined text-[20px]">manage_accounts</span>
+<span class="font-label-lg text-label-lg">Gestión de Usuarios</span>
+</a>
+<a href="Had-04_reportes-ventas.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors bg-secondary-container text-on-secondary-container">
+<span class="material-symbols-outlined text-[20px]">bar_chart</span>
+<span class="font-label-lg text-label-lg">Reportes de Ventas</span>
+</a>
+<a href="Had-07_historial-pagos.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-on-surface-variant hover:bg-surface-container-highest">
+<span class="material-symbols-outlined text-[20px]">receipt_long</span>
+<span class="font-label-lg text-label-lg">Historial de Pagos</span>
+</a>
+<a href="ver_cocina_admin.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-on-surface-variant hover:bg-surface-container-highest">
+<span class="material-symbols-outlined text-[20px]">skillet</span>
+<span class="font-label-lg text-label-lg">Gestión de Cocina</span>
+</a>
+<a href="ver_mapa_mesas_admin.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-on-surface-variant hover:bg-surface-container-highest">
+<span class="material-symbols-outlined text-[20px]">table_restaurant</span>
+<span class="font-label-lg text-label-lg">Mapa de Mesas</span>
+</a>
+</div>
+</div>
+</nav>
+<main class="pt-touch-target ml-64 min-h-screen p-margin">
+<div class="max-w-container-max mx-auto space-y-gutter">
+<section class="bg-surface-container-lowest p-gutter rounded-xl border border-outline-variant shadow-sm flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between"><div class="space-y-2"><p class="font-label-md text-label-md uppercase tracking-wider text-on-surface-variant">Caja y reportes</p><h1 class="font-display-lg text-display-lg text-on-surface">Reportes de Ventas</h1><p class="text-body-md text-on-surface-variant max-w-2xl">Consulta el reporte del día, exporta el detalle a Excel y ejecuta el cierre de caja con confirmación.</p></div><div class="flex flex-wrap gap-3"><button class="px-5 h-touch-target rounded-lg bg-primary text-on-primary font-label-lg shadow-sm" id="exportReportBtn">Exportar Excel</button><button class="px-5 h-touch-target rounded-lg border border-error text-error font-label-lg hover:bg-error-container" id="closeCashBtn">Cerrar caja</button></div></section>
+<section class="grid grid-cols-1 md:grid-cols-3 gap-gutter"><div class="bg-primary text-on-primary p-gutter rounded-xl shadow-md"><p class="font-label-lg text-label-lg opacity-80">Total vendido hoy</p><h2 class="font-headline-lg text-headline-lg" id="stat-total-sales">—</h2></div><div class="bg-secondary text-on-secondary p-gutter rounded-xl shadow-md"><p class="font-label-lg text-label-lg opacity-80">Mesas atendidas</p><h2 class="font-headline-lg text-headline-lg" id="stat-tables-served">—</h2></div><div class="bg-tertiary-container text-on-tertiary-container p-gutter rounded-xl shadow-md"><p class="font-label-lg text-label-lg opacity-80">Pedidos completados</p><h2 class="font-headline-lg text-headline-lg" id="stat-total-orders">—</h2></div></section>
+<section class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant overflow-hidden">
+  <div class="px-6 py-4 border-b border-outline-variant flex items-center justify-between">
+    <h2 class="font-headline-md text-headline-md">Detalle del día</h2>
+    <span class="font-label-md text-label-md uppercase tracking-wider text-on-surface-variant" id="report-row-count">—</span>
+  </div>
+  <div id="detail-chips" class="px-6 py-4 flex flex-wrap gap-3 border-b border-outline-variant"></div>
+  <div id="detail-categories" class="p-6 space-y-6">
+    <p class="text-on-surface-variant font-body-md text-body-md">Cargando...</p>
+  </div>
+</section>
+</div>
+</main>
+<!-- Scripts -->
+<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+<script src="../Login/js/auth.js"></script>
+<script src="js/Had-04_reportes-ventas.js"></script>
+</body></html>
+
+
+
+

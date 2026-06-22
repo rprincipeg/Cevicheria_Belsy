@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Cevicheria Belsy - Admin Portal</title>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48;
+        }
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+    </style>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-fixed-dim": "#84d5ca",
+                    "tertiary-fixed-dim": "#ffb59a",
+                    "surface-bright": "#fbf8ff",
+                    "error-container": "#ffdad6",
+                    "surface-container-low": "#f4f2fc",
+                    "primary-container": "#1e40af",
+                    "surface-container-highest": "#e3e1ea",
+                    "secondary-container": "#9defe3",
+                    "tertiary": "#3e1000",
+                    "background": "#f6fafe",
+                    "secondary": "#016a61",
+                    "on-background": "#1a1b22",
+                    "on-primary": "#ffffff",
+                    "on-surface-variant": "#444652",
+                    "surface": "#f6fafe",
+                    "on-error-container": "#93000a",
+                    "on-surface": "#171c1f",
+                    "tertiary-container": "#611e00",
+                    "on-primary-container": "#7e97fe",
+                    "primary": "#00175c",
+                    "on-secondary": "#ffffff",
+                    "surface-tint": "#3d57ba",
+                    "on-error": "#ffffff",
+                    "primary-fixed": "#dde1ff",
+                    "inverse-primary": "#b8c4ff",
+                    "secondary-fixed": "#a0f1e6",
+                    "on-primary-fixed": "#001453",
+                    "on-primary-fixed-variant": "#213da0",
+                    "inverse-surface": "#2f3037",
+                    "on-tertiary-fixed-variant": "#7a300f",
+                    "surface-dim": "#dad9e2",
+                    "primary-fixed-dim": "#b8c4ff",
+                    "surface-variant": "#e3e1ea",
+                    "surface-container": "#eaeef2",
+                    "on-tertiary-fixed": "#370e00",
+                    "tertiary-fixed": "#ffdbce",
+                    "surface-container-high": "#e4e9ed",
+                    "outline-variant": "#c5c5d4",
+                    "error": "#ba1a1a",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary-container": "#0d6f66",
+                    "outline": "#757684",
+                    "on-secondary-fixed": "#00201d",
+                    "on-secondary-fixed-variant": "#005049",
+                    "on-tertiary-container": "#e6835b",
+                    "surface-container-lowest": "#ffffff",
+                    "inverse-on-surface": "#f1f0f9"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "unit": "8px",
+                    "margin": "32px",
+                    "touch-target": "48px",
+                    "gutter": "24px",
+                    "container-max": "1280px"
+            },
+            "fontFamily": {
+                    "label-md": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "label-lg": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "body-md": ["Inter"]
+            },
+            "fontSize": {
+                    "label-md": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "display-lg": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+</head>
+<body class="h-screen flex flex-col overflow-hidden bg-surface-container-low font-body-md text-on-surface">
+<!-- TopNavBar (Shared Component Logic) -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin h-touch-target bg-surface border-b border-outline-variant shadow-sm">
+<div class="flex items-center gap-unit">
+<span class="material-symbols-outlined text-primary text-headline-lg">restaurant</span>
+<h1 class="font-display-lg text-display-lg text-primary tracking-tight">Cevicheria Belsy</h1>
+<div class="h-6 w-[1px] bg-outline-variant mx-4"></div>
+<h2 class="font-headline-md text-headline-md text-on-surface-variant">Panel de Control</h2>
+</div>
+<div class="flex items-center gap-gutter">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant">account_circle</span>
+<span class="font-label-lg text-label-lg">Administrador</span>
+</div>
+<button class="flex items-center gap-2 px-4 py-2 text-error border border-error rounded-full hover:bg-error-container transition-colors font-label-lg text-label-lg" id="logout-btn">
+<span class="material-symbols-outlined text-[20px]">logout</span>
+                Cerrar sesión
+            </button>
+</div>
+</header>
+<!-- Main Wrapper with margin-top for fixed header -->
+<div class="pt-touch-target flex-1 flex flex-col overflow-hidden">
+<!-- STOCK ALERTS BANNER -->
+<section class="flex flex-row items-center gap-unit px-margin py-2 bg-tertiary-fixed border-b border-tertiary-fixed-dim shrink-0" id="stock-alerts-banner">
+<span class="font-label-md text-label-md text-on-tertiary-fixed uppercase tracking-wider mr-2">Alertas de Inventario:</span>
+<!-- Alert Chip LOW -->
+<div class="flex items-center gap-1.5 px-3 py-1 bg-tertiary-fixed border border-tertiary rounded-full">
+<span class="material-symbols-outlined text-[18px] text-tertiary">warning</span>
+<span class="font-label-md text-label-md text-tertiary">Limón: 0.3 kg</span>
+</div>
+<!-- Alert Chip OUT -->
+<div class="flex items-center gap-1.5 px-3 py-1 bg-error-container border border-error rounded-full">
+<span class="material-symbols-outlined text-[18px] text-on-error-container">inventory_2</span>
+<span class="font-label-md text-label-md text-on-error-container">Ají amarillo: AGOTADO</span>
+</div>
+</section>
+<!-- MAIN CONTENT AREA -->
+<main class="flex-1 overflow-y-auto p-margin max-w-[1280px] mx-auto w-full flex flex-col gap-gutter">
+<!-- 3A. KPI CARDS -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<!-- Card 1: Total Sold -->
+<div class="bg-primary text-on-primary p-gutter rounded-xl shadow-md flex items-center gap-gutter" id="kpi-total-hoy">
+<div class="p-4 bg-primary-container/30 rounded-lg">
+<span class="material-symbols-outlined text-[48px]">payments</span>
+</div>
+<div>
+<p class="font-label-lg text-label-lg opacity-80">Total vendido hoy</p>
+<h3 class="font-headline-lg text-headline-lg" id="val-total-hoy">S/ 380.50</h3>
+</div>
+</div>
+<!-- Card 2: Active Tables -->
+<div class="bg-secondary text-on-secondary p-gutter rounded-xl shadow-md flex items-center gap-gutter" id="kpi-mesas">
+<div class="p-4 bg-secondary-container/20 rounded-lg">
+<span class="material-symbols-outlined text-[48px]">table_restaurant</span>
+</div>
+<div>
+<p class="font-label-lg text-label-lg opacity-80">Mesas activas</p>
+<h3 class="font-headline-lg text-headline-lg" id="val-mesas">3</h3>
+</div>
+</div>
+<!-- Card 3: Kitchen Orders -->
+<div class="bg-tertiary-container text-on-tertiary-container p-gutter rounded-xl shadow-md flex items-center gap-gutter" id="kpi-cocina">
+<div class="p-4 bg-tertiary/20 rounded-lg">
+<span class="material-symbols-outlined text-[48px]">skillet</span>
+</div>
+<div>
+<p class="font-label-lg text-label-lg opacity-80 text-on-tertiary-container/80">Pedidos en cocina</p>
+<h3 class="font-headline-lg text-headline-lg" id="val-cocina">5</h3>
+</div>
+</div>
+</section>
+<!-- 3B. CHARTS ROW -->
+<section class="grid grid-cols-1 lg:grid-cols-2 gap-gutter">
+<!-- Weekly Chart -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant overflow-hidden flex flex-col">
+<header class="bg-primary-container px-6 py-4 flex justify-between items-center text-on-primary">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined">bar_chart</span>
+<span class="font-label-lg text-label-lg uppercase">Ventas últimos 7 días</span>
+</div>
+<span class="bg-on-primary-container text-primary-container px-3 py-1 rounded-full font-label-md text-label-md">Total: S/ 2,150.00</span>
+</header>
+<div class="p-gutter flex-1 bg-white">
+<div class="chart-container">
+<canvas id="chart-weekly"></canvas>
+</div>
+</div>
+</div>
+<!-- Monthly Chart -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant overflow-hidden flex flex-col">
+<header class="bg-primary-container px-6 py-4 flex justify-between items-center text-on-primary">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined">calendar_month</span>
+<span class="font-label-lg text-label-lg uppercase">Ventas — Junio 2026</span>
+</div>
+<span class="bg-on-primary-container text-primary-container px-3 py-1 rounded-full font-label-md text-label-md">Total: S/ 9,420.00</span>
+</header>
+<div class="p-gutter flex-1 bg-white">
+<div class="chart-container">
+<canvas id="chart-monthly"></canvas>
+</div>
+</div>
+</div>
+</section>
+<!-- Decorative Illustration / Status Section -->
+<section class="bg-surface-container-high rounded-xl p-gutter flex flex-col md:flex-row items-center gap-margin mb-margin">
+<div class="flex-1 space-y-4">
+<h4 class="font-headline-md text-headline-md text-primary">Estado del Sistema</h4>
+<p class="font-body-md text-on-surface-variant max-w-lg">
+                        El servidor central está operando con normalidad. Se han procesado 42 pedidos en las últimas 4 horas. No se detectan anomalías en el sistema de facturación electrónica.
+                    </p>
+<div class="flex gap-2">
+<span class="flex items-center gap-1 text-secondary font-label-lg">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">check_circle</span> Conectado
+                        </span>
+<span class="text-outline mx-2">|</span>
+<span class="text-on-surface-variant font-label-lg">Actualizado hace: 2 min</span>
+</div>
+</div>
+<div class="w-full md:w-1/3 aspect-video rounded-lg overflow-hidden border-2 border-white shadow-lg">
+<img class="w-full h-full object-cover" data-alt="A professional restaurant kitchen dashboard background with blurred stainless steel equipment and warm lighting. The image conveys a sense of high-end culinary management and organized professionalism in a modern Peruvian cevicheria. The lighting is soft and corporate, matching the light-mode UI aesthetic with clean surfaces and subtle shadows." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC46zIELeX0_LDHAJ_kDubXKPnLHNPa8HdUTLiOPVumBXfWMNHzKVZqqJWH0wcI3iAiS9aJVe4lRWlhrwVNoY1U0a3jtPlsHVyfd_JCxDURHvsdwP0ss-hnQwcqNmUJ4UI7ZahCfwT9YauW8_qgYkEx3bX2CPH2V4qNhHQk5goF1_y7PApBdV9EFe5sFdyIVzDuisGhBNGBuMfS4jI1p2PNKRshk-hl1NjjaLLHHwoHdJdbMQMbYo8iuXFy1-rzRQZadYSJPEBsWaM"/>
+</div>
+</section>
+</main>
+</div>
+<!-- Scripts Section -->
+<script>
+        // Mocking CB helpers for the sake of the standalone demo
+        const CB = {
+            protectPage: (roles) => {
+                console.log(`Verifying permissions for roles: ${roles.join(', ')}`);
+                // Implementation would redirect if not admin
+            }
+        };
+
+        const apiReq = async (url, options) => {
+            console.log(`API Request to: ${url}`);
+            return { ok: true, data: {} };
+        };
+
+        const escHtml = (str) => String(str).replace(/[&<>"']/g, m => ({
+            '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+        }[m]));
+
+        // Initialize Admin Page
+        document.addEventListener('DOMContentLoaded', () => {
+            CB.protectPage(['admin']);
+
+            // 1. Initialize Weekly Chart (Bar)
+            const ctxWeekly = document.getElementById('chart-weekly').getContext('2d');
+            new Chart(ctxWeekly, {
+                type: 'bar',
+                data: {
+                    labels: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],
+                    datasets: [{
+                        label: 'Ventas Diarias (S/)',
+                        data: [250, 310, 280, 350, 420, 580, 480],
+                        backgroundColor: '#00175c', // primary
+                        borderRadius: 4,
+                        barThickness: 24,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true, grid: { color: '#eaeef2' } },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+
+            // 2. Initialize Monthly Chart (Area/Line)
+            const ctxMonthly = document.getElementById('chart-monthly').getContext('2d');
+            const gradient = ctxMonthly.createLinearGradient(0, 0, 0, 300);
+            gradient.addColorStop(0, 'rgba(1, 106, 97, 0.4)');
+            gradient.addColorStop(1, 'rgba(1, 106, 97, 0.0)');
+
+            new Chart(ctxMonthly, {
+                type: 'line',
+                data: {
+                    labels: ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4'],
+                    datasets: [{
+                        label: 'Ventas Semanales',
+                        data: [2100, 2450, 2150, 2720],
+                        borderColor: '#016a61', // secondary
+                        borderWidth: 3,
+                        pointBackgroundColor: '#016a61',
+                        fill: true,
+                        backgroundColor: gradient,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true, grid: { color: '#eaeef2' } },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+
+            // 3. Socket Mock Simulation
+            const simulateSocket = (event, data) => {
+                console.log(`Socket Received: ${event}`, data);
+                if (event === 'inventory:low_stock') {
+                    const banner = document.getElementById('stock-alerts-banner');
+                    banner.innerHTML += `
+                        <div class="flex items-center gap-1.5 px-3 py-1 bg-tertiary-fixed border border-tertiary rounded-full animate-pulse">
+                            <span class="material-symbols-outlined text-[18px] text-tertiary">warning</span>
+                            <span class="font-label-md text-label-md text-tertiary">${escHtml(data.item)}: ${escHtml(data.qty)}</span>
+                        </div>
+                    `;
+                }
+                if (event === 'orders:updated' || event === 'orders:new') {
+                    // Flash the KPI cards to show activity
+                    document.getElementById('kpi-cocina').classList.add('ring-2', 'ring-on-tertiary-container');
+                    setTimeout(() => {
+                        document.getElementById('kpi-cocina').classList.remove('ring-2', 'ring-on-tertiary-container');
+                    }, 1000);
+                }
+            };
+
+            // Logout Logic
+            document.getElementById('logout-btn').addEventListener('click', () => {
+                if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
+                    window.location.href = '/login';
+                }
+            });
+
+            // Demo Simulation
+            setTimeout(() => simulateSocket('inventory:low_stock', { item: 'Cebolla roja', qty: '1.2 kg' }), 3000);
+        });
+    </script>
+</body></html>

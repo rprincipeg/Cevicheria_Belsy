@@ -1,14 +1,18 @@
-import { createServer } from 'http';
+﻿import { createServer } from 'http';
 import { Server } from 'socket.io';
 import { prisma } from './lib/prisma';
 import app from './app';
-import { initSocket } from './services/socket.service';
-import { startKitchenJob } from './controllers/kitchen.controller';
+import { initSocket } from './shared/services/socket.service';
+import { startKitchenJob } from './modules/HCoc-01_gestion-cocina/HCoc-01_gestion-cocina.controller';
+import { isAllowedOrigin } from './shared/config/cors';
 
 const httpServer = createServer(app);
 
 const io = new Server(httpServer, {
-  cors: { origin: process.env.CLIENT_URL ?? 'http://localhost:3001', credentials: true },
+  cors: {
+    origin: (origin, callback) => callback(null, isAllowedOrigin(origin)),
+    credentials: true,
+  },
 });
 
 initSocket(io);
