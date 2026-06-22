@@ -3,6 +3,7 @@ import path from 'path';
 import { Request, Response } from 'express';
 import ExcelJS from 'exceljs';
 import { prisma } from '../../lib/prisma';
+import { RECEIPTS_DIR } from '../../shared/config/storage';
 
 // ─── HELPERS ──────────────────────────────────────────────────────────────────
 
@@ -334,7 +335,7 @@ export async function createDailyClosure(req: Request, res: Response): Promise<v
     const generatedAt  = new Date();
     const excelBuffer  = await buildDailyExcelBuffer(summary, reporterName, generatedAt);
 
-    const closuresDir = path.join(process.cwd(), 'receipts', 'cierres');
+    const closuresDir = path.join(RECEIPTS_DIR, 'cierres');
     fs.mkdirSync(closuresDir, { recursive: true });
     const filename  = `cierre_${dateLabel}_${generatedAt.getTime()}.xlsx`;
     const excelPath = path.join(closuresDir, filename);

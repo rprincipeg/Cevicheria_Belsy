@@ -1,6 +1,7 @@
 import PDFDocument from 'pdfkit';
 import fs from 'fs';
 import path from 'path';
+import { RECEIPTS_DIR } from '../config/storage';
 
 export interface ReceiptItem {
   name: string;
@@ -29,7 +30,7 @@ const RESTAURANT_SUBTITLE = 'Restaurante de Mariscos';
 
 export async function generateReceiptPdf(data: ReceiptData): Promise<string> {
   const dateStr = data.createdAt.toISOString().split('T')[0];
-  const storageDir = path.join(process.cwd(), 'receipts', dateStr);
+  const storageDir = path.join(RECEIPTS_DIR, dateStr as string);
   fs.mkdirSync(storageDir, { recursive: true });
 
   const filePath = path.join(storageDir, `${data.receiptId}.pdf`);

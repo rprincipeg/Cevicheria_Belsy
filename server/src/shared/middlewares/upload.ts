@@ -2,8 +2,7 @@ import multer from 'multer';
 import path from 'path';
 import crypto from 'crypto';
 import { Request } from 'express';
-
-const UPLOADS_DIR = path.join(__dirname, '..', '..', '..', 'uploads');
+import { UPLOADS_DIR } from '../config/storage';
 
 const storage = multer.diskStorage({
   destination: (_req, _file, cb) => cb(null, UPLOADS_DIR),

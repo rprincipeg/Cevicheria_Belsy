@@ -12,6 +12,7 @@ import paymentRoutes from './modules/Had-01_cobro-mesas/Had-01_cobro-mesas.route
 import usersRoutes from './modules/Had-03_gestion-usuarios/Had-03_gestion-usuarios.routes';         // Had-03
 import reportsRoutes from './modules/Had-04_reportes-ventas/Had-04_reportes-ventas.routes';   // Had-04
 import { isAllowedOrigin } from './shared/config/cors';
+import { UPLOADS_DIR } from './shared/config/storage';
 
 const app = express();
 
@@ -35,8 +36,7 @@ app.use('/api/users', usersRoutes);         // Had-03 -EDITADOv3
 app.use('/api/reports', reportsRoutes);     // Had-04 -EDITADOv3
 
 // Serve uploaded images (Had-02)
-const uploadsRoot = path.join(__dirname, '..', 'uploads');
-app.use('/uploads', express.static(uploadsRoot));
+app.use('/uploads', express.static(UPLOADS_DIR));
 
 // Serve frontend static files
 const clientRoot = path.join(__dirname, '..', '..', 'client');
